@@ -1,7 +1,7 @@
 {
   "name": "ghrun_executor",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,13 +10,27 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "@ant-design/icons": "^6.0.0",
+    "@reduxjs/toolkit": "^2.6.1",
+    "antd": "^5.26.2",
+    "axios": "^1.8.4",
+    "dayjs": "^1.11.13",
+    "i18next": "^24.2.3",
+    "less": "^4.2.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^15.5.3",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
+    "@tsconfig/node22": "^22.0.2",
+    "@types/i18next":"^13.0.0",
+    "@types/node": "^22.13.14",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "@types/react-i18next": "^8.1.0",
     "@vitejs/plugin-react-swc": "^3.10.2",
     "eslint": "^9.29.0",
     "eslint-plugin-react-hooks": "^5.2.0",
