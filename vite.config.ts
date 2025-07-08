@@ -24,7 +24,7 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: path => path.replace('', '')
       },
-      'management':{
+      '/management':{
         target: 'http://localhost:58889',
         changeOrigin: true,
         rewrite: path => path.replace('', '')
