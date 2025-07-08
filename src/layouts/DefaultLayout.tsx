@@ -3,8 +3,8 @@ import {Flex, Layout,} from 'antd';
 
 const {Header, Sider, Content} = Layout;
 // import {MenuLayout} from "@/layouts/SiderLayout.tsx";
-// import {HeaderComponent} from "@/layouts/HeaderLayout.tsx";
 import {Outlet} from "react-router-dom";
+import {HeaderComponent} from "@/layouts/HeaderComponent.tsx";
 
 const contentStyle: React.CSSProperties = {
     textAlign: 'center',
@@ -26,7 +26,7 @@ export const GlobalLayout: React.FC = () => {
             <Flex gap="middle" wrap>
                 <Layout>
                     <Header>
-                        {/*<HeaderComponent userInfoDetail={userInfoDetail}/>*/}
+                        <HeaderComponent/>
                     </Header>
                     <Layout>
                         <Sider style={siderStyle} collapsible collapsed={collapsed}
