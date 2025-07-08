@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-// import themeReducer from "./themeSlice";
-// import langReducer from "./lang.ts";
-// import userReducer from './userSlice.ts'
+import themeReducer from "@/store/theme/themeSlice";
+import settingReducer from "@/store/modules/settingSlice.ts";
+import authReducer from "@/store/modules/authSlice.ts";
 
 /**
  * @author gavinhaydy
@@ -9,7 +9,9 @@ import { configureStore } from "@reduxjs/toolkit";
  */
 export const store = configureStore({
     reducer: {
-        // theme: themeReducer,
+        theme: themeReducer,
+        setting: settingReducer,
+        auth: authReducer,
         // lang: langReducer,
         // user: userReducer,
     },
