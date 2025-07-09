@@ -1,6 +1,7 @@
-import axios from "axios";
+import axios, {type AxiosRequestConfig} from "axios";
 import {message} from "antd";
 import {store} from "@/store";
+import type {IApiResponse} from "@/types/commonType.ts";
 
 const service = axios.create({
     timeout: 5000
@@ -8,20 +9,20 @@ const service = axios.create({
 
 // request
 service.interceptors.request.use(
-    function (config) {
+    config=> {
         const state = store.getState();
-        const token = state.user.token;
+        const token = state.auth.token;
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = token;
         }
         if (config.method === 'post' || config.method === 'put') {
             if (!config.headers["Content-Type"]) {
                 config.headers["Content-Type"] = 'application/json';
             }
         }
-        if (config.method === 'get' && config.data) {
-            config.params = config.data;
-            delete config.data;
+        if (config.method === 'get' && config.data && config.url){
+            const queryString = new URLSearchParams(config.data).toString();
+            config.url += config.url.includes('?') ? `&${queryString}` : `?${queryString}`
         }
         return config;
     },
@@ -30,20 +31,23 @@ service.interceptors.request.use(
 
 // response
 service.interceptors.response.use(
-    function (response) {
-        if (response.data?.em?.toLowerCase().includes('token') || response.data?.em === 'must login') {
-            localStorage.clear();
-            message.error(response.data?.et || "登录失效").then(() => {
-                setTimeout(() => location.replace('/'), 1000);
-            });
+
+    response => {
+        if (response.data?.em?.toLowerCase().includes('token') || response.data["em"] === 'must login'){
+            localStorage.clear()
+            message.error(response.data["et"]).then(() => {
+                setTimeout(() =>{location.replace('/')},1000)
+            })
         }
-        return response.data;
-    },
-    function (error) {
-        void message.error(error.message || "网络异常，请稍后再试");
-        return Promise.reject(error);
+        return response
     }
-);
+)
+
+// 核心封装函数: 返回 IApiResponse<T>
+export function typedRequest<T = unknown>(config: AxiosRequestConfig): Promise<IApiResponse<T>> {
+    return service(config).then(response => response.data)
+
+}
 
 export const Method = {
     GET: 'get',
@@ -51,4 +55,4 @@ export const Method = {
     PUT: 'put',
     DELETE: 'delete'
 } as const;
-export default service;
+export default typedRequest;
