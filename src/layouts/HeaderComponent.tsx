@@ -1,42 +1,69 @@
-import React, {useCallback, useEffect} from "react";
-import {Button, Dropdown} from "antd";
+import React, {useCallback, useEffect, useState} from "react";
+import {Button, Dropdown, Input} from "antd";
 import {IconFont} from "@/pages/components/IconFont.ts";
 import "./header.less"
 import {getUserSettingService} from "@/api/setting.ts";
-import {useDispatch, useSelector} from "react-redux";
-import type {AppDispatch, RootState} from "@/store";
+import {useDispatch} from "react-redux";
+import type {AppDispatch} from "@/store";
 import {setSettings} from "@/store/modules/settingSlice.ts";
+import {ServiceTeamList} from "@/api/team.ts";
+import type {ITeam} from "@/types/teamType.ts";
+import {SearchOutlined} from "@ant-design/icons";
 
 export const HeaderComponent: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const {settings} = useSelector((state: RootState) => state.setting);
+
+    const [teamList, setTeamList] = useState<ITeam[]>([]);
+
     const handleGetUserSetting = useCallback(() => {
         getUserSettingService().then((res) => {
-            if (res.em === "success"){
+            if (res.em === "success") {
                 dispatch(setSettings(res.data))
                 console.log(res)
             }
         })
-    },[dispatch])
+    }, [dispatch])
+
+    const handleGetTeamList = () => {
+        ServiceTeamList().then(r => {
+            if (r.em === "success" && r.data.teams.length > 0) {
+                setTeamList(r.data.teams)
+            }
+        })
+    }
 
     useEffect(() => {
         handleGetUserSetting()
+        handleGetTeamList()
     }, [handleGetUserSetting]);
-
-    const customContent = (
-        <div style={{ padding: 8 }}>
-            <p>{settings.current_team_id}</p>
-            <button>点我</button>
-        </div>
-    );
 
     return (
         <div>
             <Dropdown className={"header-left"}
-            popupRender={() =>{
-
-                return customContent;
-            }}>
+                      overlayStyle={{width: '20%'}}
+                      popupRender={() => {
+                          return (
+                              <div>
+                                  <div className={"header-team-content"}>
+                                      <div>团队</div>
+                                      <Button>团队管理</Button>
+                                  </div>
+                                  <div>
+                                      <Input addonBefore={<SearchOutlined />}
+                                             style={{borderRadius: 999,
+                                                 overflow: 'hidden',
+                                                border: '1px solid'}}
+                                      ></Input>
+                                  </div>
+                                  {teamList.map((item: ITeam) => (
+                                      <div className={"header-team-body"}>
+                                          <div className={"header-body-left"}>{item.name}</div>
+                                          <div style={{color:"orange"}}>{item.cnt}</div>
+                                      </div>
+                                  ))}
+                              </div>
+                          );
+                      }}>
                 <Button>
                     gavin
                     <IconFont type={"icon-down"}/>
