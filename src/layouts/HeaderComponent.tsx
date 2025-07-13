@@ -9,9 +9,11 @@ import {setSettings} from "@/store/modules/settingSlice.ts";
 import {ServiceTeamList} from "@/api/team.ts";
 import type {ITeam} from "@/types/teamType.ts";
 import {SearchOutlined} from "@ant-design/icons";
+import {useTranslation} from "react-i18next";
 
 export const HeaderComponent: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
+    const {t} = useTranslation()
 
     const [teamList, setTeamList] = useState<ITeam[]>([]);
 
@@ -46,7 +48,7 @@ export const HeaderComponent: React.FC = () => {
                               <div>
                                   <div className={"header-team-content"}>
                                       <div>团队</div>
-                                      <Button>团队管理</Button>
+                                      <Button>{t("btn.teamManager")}</Button>
                                   </div>
                                   <div>
                                       <Input addonBefore={<SearchOutlined />}
