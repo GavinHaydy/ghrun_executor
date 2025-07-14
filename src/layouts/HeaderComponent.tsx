@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Button, Dropdown, Input} from "antd";
+import {Button, Dropdown, Input, Switch} from "antd";
 import {IconFont} from "@/pages/components/IconFont.ts";
 import "./header.less"
 import {getUserSettingService} from "@/api/setting.ts";
@@ -72,6 +72,12 @@ export const HeaderComponent: React.FC = () => {
                 </Button>
 
             </Dropdown>
+            <Switch
+                // checked={mode === 'dark'}
+                // onChange={(checked) => dispatch(setMode(checked ? 'dark' : "light"))}
+                checkedChildren="🌙"
+                unCheckedChildren="☀️"
+            />
         </div>
     )
 
