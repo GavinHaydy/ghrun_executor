@@ -1,14 +1,23 @@
 import {PREFIX} from "@/api/global.ts";
 import request, {Method} from "@/utils/request.ts";
-import type {ITeamList} from "@/types/teamType.ts";
 
 const API_TEAM_LIST = `${PREFIX}team/list`
+const API_TEAM_MEMBERS = `${PREFIX}team/members`
 
 
 // 获取团队列表
 export const ServiceTeamList = () => {
-  return request<ITeamList>({
-      url: API_TEAM_LIST,
-      method: Method.GET
-  })
+  return request(
+      API_TEAM_LIST,
+      Method.GET
+  )
+}
+
+// 获取团队成员列表
+export const ServiceTeamMembers = (data = {}) => {
+    return request(
+        API_TEAM_MEMBERS,
+        Method.GET,
+        data
+    )
 }
