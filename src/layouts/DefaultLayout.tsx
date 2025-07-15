@@ -25,7 +25,7 @@ export const GlobalLayout: React.FC = () => {
         return (
             <Flex gap="middle" wrap>
                 <Layout>
-                    <Header>
+                    <Header style={{padding: '9px 10px 9px 10px'}}>
                         <HeaderComponent/>
                     </Header>
                     <Layout>

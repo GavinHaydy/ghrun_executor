@@ -6,41 +6,60 @@ import {getUserSettingService} from "@/api/setting.ts";
 import {useDispatch} from "react-redux";
 import type {AppDispatch} from "@/store";
 import {setSettings} from "@/store/modules/settingSlice.ts";
-import {ServiceTeamList} from "@/api/team.ts";
-import type {ITeam} from "@/types/teamType.ts";
+import {ServiceTeamList, ServiceTeamMembers} from "@/api/team.ts";
+import type {ITeam, ITeamMemberList} from "@/types/teamType.ts";
 import {SearchOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
+import {useCurrentTeamId} from "@/hooks/useSettings.ts";
 
 export const HeaderComponent: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
+    const currentTeamId = useCurrentTeamId();
     const {t} = useTranslation()
 
+
     const [teamList, setTeamList] = useState<ITeam[]>([]);
+    const [teamMemberList, setTeamMemberList] = useState<ITeamMemberList>({members: [], total: 0})
 
-    const handleGetUserSetting = useCallback(() => {
-        getUserSettingService().then((res) => {
-            if (res.em === "success") {
-                dispatch(setSettings(res.data))
-                console.log(res)
-            }
-        })
-    }, [dispatch])
 
-    const handleGetTeamList = () => {
+
+    const handleGetTeamList = useCallback(() => {
         ServiceTeamList().then(r => {
             if (r.em === "success" && r.data.teams.length > 0) {
                 setTeamList(r.data.teams)
             }
         })
-    }
+    },[])
+
+    // 获取团队成员列表
+    const handleGetTeamMemberList = useCallback((teamId: string) => {
+        ServiceTeamMembers({team_id: currentTeamId || teamId}).then(r => {
+            if (r.em === "success" && r.data.members.length > 0) {
+                const tempTeamMemberList: ITeamMemberList = {members: [], total: 0}
+                tempTeamMemberList.members = r.data.members
+                tempTeamMemberList.total = r.data.total
+                setTeamMemberList(tempTeamMemberList)
+
+            }
+        })
+    },[currentTeamId])
+
+    const handleGetUserSetting = useCallback(() => {
+        getUserSettingService().then((res) => {
+            if (res.em === "success") {
+                dispatch(setSettings(res.data))
+                handleGetTeamList()
+                handleGetTeamMemberList(res.data.settings.current_team_id)
+            }
+        })
+    },[dispatch,handleGetTeamList,handleGetTeamMemberList])
 
     useEffect(() => {
         handleGetUserSetting()
-        handleGetTeamList()
-    }, [handleGetUserSetting]);
+    },[handleGetUserSetting]);
 
     return (
-        <div>
+        <div className={'header-container'}>
             <Dropdown className={"header-left"}
                       overlayStyle={{width: '20%'}}
                       popupRender={() => {
@@ -72,7 +91,9 @@ export const HeaderComponent: React.FC = () => {
                 </Button>
 
             </Dropdown>
+            <div>{teamMemberList.total}</div>
             <Switch
+                style={{float: "right"}}
                 // checked={mode === 'dark'}
                 // onChange={(checked) => dispatch(setMode(checked ? 'dark' : "light"))}
                 checkedChildren="🌙"
