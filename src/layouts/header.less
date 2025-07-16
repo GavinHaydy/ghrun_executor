@@ -9,9 +9,24 @@
   float: left;
 }
 
+.header-right{
+  display: flex;
+  align-items: center;
+  float: right;
+  >* {
+    margin-left: 12px;
+  }
+}
+
 .header-team-content{
   display: flex;
   justify-content: space-between;
+  height: 50px;
+  padding: 9px 10px 9px;
+  align-items: center;
+  font-size: 12px;
+  flex-direction: row;
+  position: relative;
 }
 
 .header-team-body{
@@ -22,4 +37,15 @@
 
 .header-body-left{
   flex: 1;
+}
+
+.header-member-num{
+  width: 30px;
+  height: 30px;
+  border: 1px solid;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
 }

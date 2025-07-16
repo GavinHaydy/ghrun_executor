@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Button, Dropdown, Input, Switch} from "antd";
+import {Avatar, Button, Dropdown, Input, Switch} from "antd";
 import {IconFont} from "@/pages/components/IconFont.ts";
 import "./header.less"
 import {getUserSettingService} from "@/api/setting.ts";
@@ -10,11 +10,13 @@ import {ServiceTeamList, ServiceTeamMembers} from "@/api/team.ts";
 import type {ITeam, ITeamMemberList} from "@/types/teamType.ts";
 import {SearchOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
-import {useCurrentTeamId} from "@/hooks/useSettings.ts";
+import {useCurrentTeamId, useUserInfo} from "@/hooks/useSettings.ts";
+import {setMode} from "@/store/theme/themeSlice.ts";
 
 export const HeaderComponent: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const currentTeamId = useCurrentTeamId();
+    const userInfo = useUserInfo();
     const {t} = useTranslation()
 
 
@@ -91,14 +93,23 @@ export const HeaderComponent: React.FC = () => {
                 </Button>
 
             </Dropdown>
-            <div>{teamMemberList.total}</div>
-            <Switch
-                style={{float: "right"}}
-                // checked={mode === 'dark'}
-                // onChange={(checked) => dispatch(setMode(checked ? 'dark' : "light"))}
-                checkedChildren="🌙"
-                unCheckedChildren="☀️"
-            />
+
+            <div className={'header-right'}>
+                <Avatar src={userInfo.avatar}/>
+                <div className={'header-member-num'}>
+                    <p>{teamMemberList.total}</p>
+                </div>
+                <Button>邀请</Button>
+                <Button>操作日志</Button>
+                <Switch
+                    // style={{float: "right"}}
+                    // checked={mode === 'dark'}
+                    onChange={(checked) => dispatch(setMode(checked ? 'dark' : "light"))}
+                    checkedChildren="🌙"
+                    unCheckedChildren="☀️"
+                />
+            </div>
+
         </div>
     )
 

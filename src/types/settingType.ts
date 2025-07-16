@@ -2,7 +2,7 @@ interface ISetting {
     current_team_id: string;
 }
 
-interface UserInfo {
+export interface IUserInfo {
     id: number;
     email: string;
     mobile: string;
@@ -19,5 +19,5 @@ interface UserInfo {
 
 export interface ISettings {
     settings: ISetting;
-    user_info: UserInfo;
+    user_info: IUserInfo;
 }
