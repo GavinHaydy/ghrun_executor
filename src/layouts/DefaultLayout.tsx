@@ -2,7 +2,7 @@ import React, { useState} from 'react';
 import {Flex, Layout,} from 'antd';
 
 const {Header, Sider, Content} = Layout;
-// import {MenuLayout} from "@/layouts/SiderLayout.tsx";
+import {MenuLayout} from "@/layouts/SiderLayout.tsx";
 import {Outlet} from "react-router-dom";
 import {HeaderComponent} from "@/layouts/HeaderComponent.tsx";
 
@@ -31,7 +31,7 @@ export const GlobalLayout: React.FC = () => {
                     <Layout>
                         <Sider style={siderStyle} collapsible collapsed={collapsed}
                                onCollapse={(value) => setCollapsed(value)}>
-                            {/*<MenuLayout/>*/}
+                            <MenuLayout/>
                         </Sider>
                         <Content style={contentStyle}>
                             <Outlet/>

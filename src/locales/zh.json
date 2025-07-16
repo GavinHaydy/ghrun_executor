@@ -1,5 +1,16 @@
 {
   "btn": {
     "teamManager": "团队管理"
+  },
+  "menu": {
+    "home": "首页",
+    "testObj": "测试对象",
+    "scene": "场景管理",
+    "performance": "性能测试",
+    "ui": "Web自动化",
+    "auto": "自动化测试",
+    "env": "环境管理",
+    "machine": "机器管理",
+    "mock": "Mock服务"
   }
 }

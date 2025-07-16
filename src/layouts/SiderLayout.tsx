@@ -2,13 +2,11 @@ import { Menu } from "antd";
 import type { MenuProps } from "antd";
 import { useTranslation } from 'react-i18next';
 import {
-    HomeOutlined,
-    UsergroupAddOutlined,
-    SwitcherOutlined,
-    SettingOutlined
+    HomeOutlined
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import {IconFont} from "@/pages/components/IconFont.ts";
 
 export const MenuLayout: React.FC = () => {
     const { t } = useTranslation();
@@ -38,10 +36,15 @@ export const MenuLayout: React.FC = () => {
     }
 
     const items: ItemType[] = [
-        getItem('menu.work', '/work', <HomeOutlined />),
-        getItem('menu.memberManager', '/member', <UsergroupAddOutlined />),
-        getItem('menu.roleManager', '/role', <SwitcherOutlined />),
-        getItem('menu.setting', '/settings', <SettingOutlined />),
+        getItem('menu.home', '/index', <HomeOutlined />),
+        getItem('menu.testObj', '/apis', <IconFont  type={"icon-connect"} />),
+        getItem('menu.scene', '/scene', <IconFont type={"icon-scene"} />),
+        getItem('menu.performance', '/performance', <IconFont type={"icon-performance"} />),
+        getItem('menu.ui', '/ui', <IconFont type={"icon-web-auto"} />),
+        getItem('menu.auto', '/auto', <IconFont type={"icon-auto"} />),
+        getItem('menu.env', '/env', <IconFont type={"icon-env"} />),
+        getItem('menu.machine', '/machine', <IconFont type={"icon-machine"} />),
+        getItem('menu.mock', '/mock', <IconFont type={"icon-MOCK"} />),
     ];
 
     const onClick: MenuProps['onClick'] = (e) => {

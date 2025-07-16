@@ -1,5 +1,16 @@
 {
   "btn": {
-    "teamManager": "teamManager"
+    "teamManager": "Team Management"
+  },
+  "menu": {
+    "home": "Home",
+    "testObj": "Test Object",
+    "scene": "Scene Management",
+    "performance": "Performance Testing",
+    "ui": "Web Automation",
+    "auto": "Automated Testing",
+    "env": "Environment Management",
+    "machine": "Machine Management",
+    "mock": "Mock Service"
   }
 }
