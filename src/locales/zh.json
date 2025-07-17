@@ -2,6 +2,12 @@
   "btn": {
     "teamManager": "团队管理"
   },
+  "label": {
+    "userHome": "个人主页",
+    "logout": "退出登录",
+    "invite": "邀请",
+    "history": "操作日志"
+  },
   "menu": {
     "home": "首页",
     "testObj": "测试对象",

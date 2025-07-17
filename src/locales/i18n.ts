@@ -4,6 +4,16 @@ import enTranslation from '@/locales/en.json'
 import zhTranslation from '@/locales/zh.json'
 
 
+const getLangFromPersist = (): 'zh' | 'en' => {
+    try {
+        const raw = localStorage.getItem('lang');
+        if (!raw) return 'zh';
+        const parsed = JSON.parse(raw);
+        return JSON.parse(parsed.lang);
+    } catch {
+        return 'zh';
+    }
+};
 
 i18n
     .use(initReactI18next) // 初始化 react-i18next
@@ -12,7 +22,7 @@ i18n
             en: {translation: enTranslation},
             zh: {translation: zhTranslation},
         }, // 翻译资源
-        lng: "zh", // 默认语言
+        lng: getLangFromPersist(), // 默认语言
         fallbackLng: "en", // 备用语言
         interpolation: {
             escapeValue: false, // 不转义 HTML

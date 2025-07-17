@@ -21,12 +21,21 @@ export const HeaderComponent: React.FC = () => {
     const userInfo = useUserInfo();
     const mode = useSelector((state: RootState) => state.theme.mode);
     const lang = useSelector((state: RootState) => state.lang.lang);
+
     const {t} = useTranslation()
 
 
     const [teamList, setTeamList] = useState<ITeam[]>([]);
     const [teamMemberList, setTeamMemberList] = useState<ITeamMemberList>({members: [], total: 0})
 
+    // 修改语言
+    const handleLanguageChange = (language: string) => {
+        // 处理切换事件
+        // 更新 i18next 语言
+        dispatch(setLang(language))
+        i18n.changeLanguage(language).then(() => {
+        });
+    };
 
     const handleGetTeamList = useCallback(() => {
         ServiceTeamList().then(r => {
@@ -63,15 +72,7 @@ export const HeaderComponent: React.FC = () => {
         handleGetUserSetting()
     }, [handleGetUserSetting]);
 
-    // 修改语言
-    const handleLanguageChange = (language: string) => {
-        // 处理切换事件
-        // 更新 i18next 语言
-        dispatch(setLang(language))
-        i18n.changeLanguage(language).then(() => {
-        });
 
-    };
 
     return (
         <div className={'header-container'}>
@@ -111,7 +112,6 @@ export const HeaderComponent: React.FC = () => {
 
             <div className={'header-right'}>
                 <Dropdown
-                    visible={true}
                     popupRender={() => {
                         return (
                             <Card className={'header-user-info'}>
@@ -132,8 +132,11 @@ export const HeaderComponent: React.FC = () => {
                 <div className={'header-member-num'}>
                     <p>{teamMemberList.total}</p>
                 </div>
-                <Button>邀请</Button>
-                <Button>操作日志</Button>
+                <Button type={"primary"}>
+                    <IconFont type={'icon-invite'}/>
+                    {t('label.invite')}
+                </Button>
+                <Button>{t('label.history')}</Button>
                 <Switch
                     // style={{float: "right"}}
                     // checked={mode === 'dark'}

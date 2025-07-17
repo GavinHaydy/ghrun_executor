@@ -2,6 +2,12 @@
   "btn": {
     "teamManager": "Team Management"
   },
+  "label": {
+    "userHome": "UserHome",
+    "logout": "Logout",
+    "invite": "Invite",
+    "history": "History"
+  },
   "menu": {
     "home": "Home",
     "testObj": "Test Object",
