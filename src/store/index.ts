@@ -17,8 +17,8 @@ import {configGenerator} from "@/store/persistPlugin.ts";
 const rootReducer = combineReducers({
     auth: persistReducer(configGenerator('auth'), authReducer),
     theme: persistReducer(configGenerator('theme'), themeReducer),
-    lang: langReducer,
-    setting: settingReducer,
+    lang: persistReducer(configGenerator('lang'), langReducer),
+    setting: persistReducer(configGenerator('settings'), settingReducer),
 })
 
 export const store = configureStore({

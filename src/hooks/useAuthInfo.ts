@@ -13,16 +13,16 @@ export function useAuthInfo() {
 
     // 更新 companyId，自动写 localStorage
     const updateCompanyId = useCallback(
-        (id: string) => {
-            dispatch(setCompanyId(id));
+        (companyId: string) => {
+            dispatch(setCompanyId(companyId));
         },
         [dispatch]
     );
 
     // 更新 uuid
     const updateUuid = useCallback(
-        (id: string) => {
-            dispatch(setUuid(id));
+        (uuid: string) => {
+            dispatch(setUuid(uuid));
         },
         [dispatch]
     );

@@ -5,10 +5,10 @@ import Cookies from "js-cookie"
 
 
 const initialState: IAuthState = {
-    companyId: localStorage.getItem('company_id'),
-    uuid: localStorage.getItem('uuid'),
+    companyId: Cookies.get('company_id'),
+    uuid: Cookies.get('uuid'),
     token: Cookies.get('token'),
-    teamId: localStorage.getItem('team_id')
+    teamId: Cookies.get('team_id')
 };
 
 const userSlice = createSlice({
@@ -17,19 +17,19 @@ const userSlice = createSlice({
     reducers: {
         setCompanyId: (state, action: PayloadAction<string>) => {
             state.companyId = action.payload;
-            localStorage.setItem('company_id', action.payload);
+            Cookies.set('company_id', action.payload);
         },
         setUuid: (state, action: PayloadAction<string>) => {
             state.uuid = action.payload;
-            localStorage.setItem('uuid', action.payload);
+            Cookies.set('uuid', action.payload);
         },
         setToken: (state, action: PayloadAction<string>) => {
             state.token = action.payload;
-            localStorage.setItem('token', action.payload);
+            Cookies.set('token', action.payload);
         },
         setTeamId: (state, action: PayloadAction<string>) => {
             state.teamId = action.payload;
-            localStorage.setItem('team_id', action.payload);
+            Cookies.set('team_id', action.payload);
         }
     },
 });

@@ -1,6 +1,6 @@
 export interface IAuthState {
-    companyId: string | null;
-    uuid: string | null;
+    companyId: string | undefined;
+    uuid: string | undefined;
     token: string | undefined;
-    teamId: string | null;
+    teamId: string | undefined;
 }
