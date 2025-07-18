@@ -16,6 +16,7 @@ export interface ITeamList {
 
 // 成员信息
 export interface ITeamMember {
+    key: string;
     account: string;
     avatar: string;
     company_role_level: number;

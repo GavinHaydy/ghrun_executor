@@ -6,7 +6,14 @@
     "userHome": "个人主页",
     "logout": "退出登录",
     "invite": "邀请",
-    "history": "操作日志"
+    "history": "操作日志",
+    "teamMemberList": "团队成员列表"
+  },
+  "table": {
+    "member": "成员",
+    "joinDate": "加入日期",
+    "inviter": "邀请人",
+    "roleName": "成员角色"
   },
   "menu": {
     "home": "首页",

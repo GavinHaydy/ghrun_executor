@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {Avatar, Button, Card, Divider, Dropdown, Input, Switch} from "antd";
 import {IconFont} from "@/pages/components/IconFont.ts";
 import "./header.less"
@@ -7,13 +7,15 @@ import {useDispatch, useSelector} from "react-redux";
 import type {AppDispatch, RootState} from "@/store";
 import {setSettings} from "@/store/modules/settingSlice.ts";
 import {ServiceTeamList, ServiceTeamMembers} from "@/api/team.ts";
-import type {ITeam, ITeamMemberList} from "@/types/teamType.ts";
+import type {ITeam, ITeamMember, ITeamMemberList} from "@/types/teamType.ts";
 import {SearchOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import {useCurrentTeamId, useUserInfo} from "@/hooks/useSettings.ts";
 import {setMode} from "@/store/theme/themeSlice.ts";
 import {setLang} from "@/store/lang.ts";
 import i18n from "@/locales/i18n.ts";
+import {TeamMemberComponent, type TeamMemberModalRef} from "@/layouts/UserInfoComponent/TeamMemberComponent.tsx";
+
 
 export const HeaderComponent: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -21,9 +23,11 @@ export const HeaderComponent: React.FC = () => {
     const userInfo = useUserInfo();
     const mode = useSelector((state: RootState) => state.theme.mode);
     const lang = useSelector((state: RootState) => state.lang.lang);
+    const teamMemberModalRef = useRef<TeamMemberModalRef>(null);
+    const queryParams = new URLSearchParams(window.location.search);
+    const teamId = queryParams.get("team_id");
 
     const {t} = useTranslation()
-
 
     const [teamList, setTeamList] = useState<ITeam[]>([]);
     const [teamMemberList, setTeamMemberList] = useState<ITeamMemberList>({members: [], total: 0})
@@ -50,6 +54,9 @@ export const HeaderComponent: React.FC = () => {
         ServiceTeamMembers({team_id: currentTeamId || teamId}).then(r => {
             if (r.em === "success" && r.data.members.length > 0) {
                 const tempTeamMemberList: ITeamMemberList = {members: [], total: 0}
+                r.data.members.map((item: ITeamMember) => {
+                    item.key = item.user_id
+                })
                 tempTeamMemberList.members = r.data.members
                 tempTeamMemberList.total = r.data.total
                 setTeamMemberList(tempTeamMemberList)
@@ -59,7 +66,7 @@ export const HeaderComponent: React.FC = () => {
     }, [currentTeamId])
 
     const handleGetUserSetting = useCallback(() => {
-        getUserSettingService().then((res) => {
+        getUserSettingService({"team_id": teamId}).then((res) => {
             if (res.em === "success") {
                 dispatch(setSettings(res.data))
                 handleGetTeamList()
@@ -73,6 +80,9 @@ export const HeaderComponent: React.FC = () => {
     }, [handleGetUserSetting]);
 
 
+    const handleOpenMembersModal = (teamId: string) => {
+        teamMemberModalRef.current?.open(teamId)
+    }
 
     return (
         <div className={'header-container'}>
@@ -129,7 +139,7 @@ export const HeaderComponent: React.FC = () => {
                     <Avatar src={userInfo.avatar}/>
                 </Dropdown>
 
-                <div className={'header-member-num'}>
+                <div onClick={() =>handleOpenMembersModal(currentTeamId)} className={'header-member-num'}>
                     <p>{teamMemberList.total}</p>
                 </div>
                 <Button type={"primary"}>
@@ -147,6 +157,7 @@ export const HeaderComponent: React.FC = () => {
                 />
             </div>
 
+            <TeamMemberComponent ref={teamMemberModalRef} data={teamMemberList}/>
         </div>
     )
 
