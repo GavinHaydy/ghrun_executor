@@ -48,21 +48,23 @@ export const HeaderComponent: React.FC = () => {
         })
     }, [])
 
-    // 获取团队成员列表
-    const handleGetTeamMemberList = useCallback((teamId: string) => {
-        ServiceTeamMembers({team_id: currentTeamId || teamId}).then(r => {
+    const handleTeamMemberList = (data = {}) => {
+        const tempTeamMemberList: ITeamMemberList = {members: [], total: 0}
+        ServiceTeamMembers({...data}).then(r => {
             if (r.em === "success" && r.data.members.length > 0) {
-                const tempTeamMemberList: ITeamMemberList = {members: [], total: 0}
                 r.data.members.map((item: ITeamMember) => {
                     item.key = item.user_id
                 })
                 tempTeamMemberList.members = r.data.members
                 tempTeamMemberList.total = r.data.total
-                setTeamMemberList(tempTeamMemberList)
-
             }
+            setTeamMemberList(tempTeamMemberList)
         })
-    }, [currentTeamId])
+    }
+    // 获取团队成员列表
+    const handleGetTeamMemberList = () => {
+        handleTeamMemberList({team_id: currentTeamId})
+    }
 
     const handleSetUserSetting = async () =>{
         const queryParams = new URLSearchParams(window.location.search);
@@ -76,7 +78,7 @@ export const HeaderComponent: React.FC = () => {
         if (res.em === "success") {
             dispatch(setSettings(res.data))
             handleGetTeamList()
-            handleGetTeamMemberList(currentTeamId)
+            handleGetTeamMemberList()
         }
     }
 
@@ -89,19 +91,8 @@ export const HeaderComponent: React.FC = () => {
         teamMemberModalRef.current?.open(teamId)
     }
 
-    const handleTest:TeamMemberModalProps['onParamsChange']=(data)=>{
-        ServiceTeamMembers({team_id: currentTeamId,...data}).then(r => {
-            if (r.em === "success" && r.data.members.length > 0) {
-                const tempTeamMemberList: ITeamMemberList = {members: [], total: 0}
-                r.data.members.map((item: ITeamMember) => {
-                    item.key = item.user_id
-                })
-                tempTeamMemberList.members = r.data.members
-                tempTeamMemberList.total = r.data.total
-                setTeamMemberList(tempTeamMemberList)
-
-            }
-        })
+    const handleSearchTeamMember:TeamMemberModalProps['onParamsChange']=(data)=>{
+        handleTeamMemberList({team_id: currentTeamId, ...data})
     }
 
     return (
@@ -177,7 +168,7 @@ export const HeaderComponent: React.FC = () => {
                 />
             </div>
 
-            <TeamMemberComponent ref={teamMemberModalRef} data={teamMemberList} onParamsChange={handleTest}/>
+            <TeamMemberComponent ref={teamMemberModalRef} data={teamMemberList} onParamsChange={handleSearchTeamMember}/>
         </div>
     )
 
