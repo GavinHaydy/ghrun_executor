@@ -64,23 +64,25 @@ export const HeaderComponent: React.FC = () => {
         })
     }, [currentTeamId])
 
-    const handleGetUserSetting = useCallback(async () => {
+    const handleSetUserSetting = async () =>{
         const queryParams = new URLSearchParams(window.location.search);
         const teamId = queryParams.get("team_id");
         await setUserSettingService({settings: {current_team_id: teamId}})
+    }
+    const handleGetUserSetting = async () => {
+        await handleSetUserSetting()
 
-        getUserSettingService().then((res) => {
-            if (res.em === "success") {
-                dispatch(setSettings(res.data))
-                handleGetTeamList()
-                handleGetTeamMemberList(res.data.settings.current_team_id)
-            }
-        })
-    }, [dispatch, handleGetTeamList, handleGetTeamMemberList])
+        const res = await getUserSettingService()
+        if (res.em === "success") {
+            dispatch(setSettings(res.data))
+            handleGetTeamList()
+            handleGetTeamMemberList(currentTeamId)
+        }
+    }
 
     useEffect(() => {
         handleGetUserSetting().then()
-    }, [handleGetUserSetting]);
+    }, []);
 
 
     const handleOpenMembersModal = (teamId: string) => {
