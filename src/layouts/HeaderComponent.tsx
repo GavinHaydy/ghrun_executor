@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import {Avatar, Button, Card, Divider, Dropdown, Input, Switch} from "antd";
 import {IconFont} from "@/pages/components/IconFont.ts";
 import "./header.less"
-import {getUserSettingService} from "@/api/setting.ts";
+import {getUserSettingService, setUserSettingService} from "@/api/setting.ts";
 import {useDispatch, useSelector} from "react-redux";
 import type {AppDispatch, RootState} from "@/store";
 import {setSettings} from "@/store/modules/settingSlice.ts";
@@ -24,8 +24,7 @@ export const HeaderComponent: React.FC = () => {
     const mode = useSelector((state: RootState) => state.theme.mode);
     const lang = useSelector((state: RootState) => state.lang.lang);
     const teamMemberModalRef = useRef<TeamMemberModalRef>(null);
-    const queryParams = new URLSearchParams(window.location.search);
-    const teamId = queryParams.get("team_id");
+
 
     const {t} = useTranslation()
 
@@ -65,8 +64,12 @@ export const HeaderComponent: React.FC = () => {
         })
     }, [currentTeamId])
 
-    const handleGetUserSetting = useCallback(() => {
-        getUserSettingService({"team_id": teamId}).then((res) => {
+    const handleGetUserSetting = useCallback(async () => {
+        const queryParams = new URLSearchParams(window.location.search);
+        const teamId = queryParams.get("team_id");
+        await setUserSettingService({settings: {current_team_id: teamId}})
+
+        getUserSettingService().then((res) => {
             if (res.em === "success") {
                 dispatch(setSettings(res.data))
                 handleGetTeamList()
@@ -76,7 +79,7 @@ export const HeaderComponent: React.FC = () => {
     }, [dispatch, handleGetTeamList, handleGetTeamMemberList])
 
     useEffect(() => {
-        handleGetUserSetting()
+        handleGetUserSetting().then()
     }, [handleGetUserSetting]);
 
 
