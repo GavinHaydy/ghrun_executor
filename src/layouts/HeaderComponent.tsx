@@ -14,7 +14,7 @@ import {useCurrentTeamId, useUserInfo} from "@/hooks/useSettings.ts";
 import {setMode} from "@/store/theme/themeSlice.ts";
 import {setLang} from "@/store/lang.ts";
 import i18n from "@/locales/i18n.ts";
-import {TeamMemberComponent, type TeamMemberModalRef} from "@/layouts/UserInfoComponent/TeamMemberComponent.tsx";
+import {TeamMemberComponent, type TeamMemberModalRef,type TeamMemberModalProps} from "@/layouts/UserInfoComponent/TeamMemberComponent.tsx";
 
 
 export const HeaderComponent: React.FC = () => {
@@ -85,6 +85,21 @@ export const HeaderComponent: React.FC = () => {
 
     const handleOpenMembersModal = (teamId: string) => {
         teamMemberModalRef.current?.open(teamId)
+    }
+
+    const handleTest:TeamMemberModalProps['onParamsChange']=(data)=>{
+        ServiceTeamMembers({team_id: currentTeamId,...data}).then(r => {
+            if (r.em === "success" && r.data.members.length > 0) {
+                const tempTeamMemberList: ITeamMemberList = {members: [], total: 0}
+                r.data.members.map((item: ITeamMember) => {
+                    item.key = item.user_id
+                })
+                tempTeamMemberList.members = r.data.members
+                tempTeamMemberList.total = r.data.total
+                setTeamMemberList(tempTeamMemberList)
+
+            }
+        })
     }
 
     return (
@@ -160,7 +175,7 @@ export const HeaderComponent: React.FC = () => {
                 />
             </div>
 
-            <TeamMemberComponent ref={teamMemberModalRef} data={teamMemberList}/>
+            <TeamMemberComponent ref={teamMemberModalRef} data={teamMemberList} onParamsChange={handleTest}/>
         </div>
     )
 

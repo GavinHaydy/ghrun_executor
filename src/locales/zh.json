@@ -7,7 +7,11 @@
     "logout": "退出登录",
     "invite": "邀请",
     "history": "操作日志",
-    "teamMemberList": "团队成员列表"
+    "teamMemberList": "团队成员列表",
+    "total": "总数"
+  },
+  "placeholder": {
+    "searchMember": "搜索昵称/账号"
   },
   "table": {
     "member": "成员",

@@ -7,7 +7,11 @@
     "logout": "Logout",
     "invite": "Invite",
     "history": "History",
-    "teamMemberList": "Team member list"
+    "teamMemberList": "Team member list",
+    "total": "total"
+  },
+  "placeholder": {
+    "searchMember": "Search nickname/account"
   },
   "table": {
     "member": "Member",
