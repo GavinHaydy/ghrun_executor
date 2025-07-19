@@ -93,6 +93,7 @@ export const TeamMemberComponent = forwardRef<TeamMemberModalRef,TeamMemberModal
                                 setSize(size)
                             }
                         }
+                        current={page}
                         showSizeChanger
                         showTotal={(total) => t('label.total', {total})}
                         showQuickJumper />
