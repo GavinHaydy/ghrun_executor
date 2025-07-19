@@ -1,3 +1,5 @@
+@layout-color: var(--custom-layout-color, #2b2d30);
+@body-color: var(--custom-body-color, #1e1f22);
 .header-container {
   //display: flex;
   //justify-content: right; /* 水平居中 */
@@ -78,4 +80,28 @@
   margin-left: 8px;
   display: flex;
   flex-direction: column;
+}
+.header-modal-table{
+  max-height: 60vh;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 10px; /* 滚动条的宽度 */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent; /* 滚动条轨道的背景颜色 */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: @layout-color; /* 滚动条滑块的背景颜色 */
+    border-radius: 5px; /* 滚动条滑块的圆角 */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: @body-color; /* 滚动条滑块悬停时的背景颜色 */
+  }
+
+  &::-webkit-scrollbar-track-piece {
+    background-color: transparent;
+  }
 }

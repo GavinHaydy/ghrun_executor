@@ -78,8 +78,11 @@ export const TeamMemberComponent = forwardRef<TeamMemberModalRef,TeamMemberModal
                     footer={null}
                     onCancel={() => setVisible(false)}>
 
-                    <Input onChange={(e)=>setKeyword(e.target.value)} addonBefore={<SearchOutlined />} className={'header-modal-ipt'} placeholder={t('placeholder.searchMember')}/>
-                    <Table columns={columns} dataSource={data.members} pagination={false}></Table>
+                    <Input onChange={(e)=> {
+                        setKeyword(e.target.value)
+                        setPage(1)
+                    }} addonBefore={<SearchOutlined />} className={'header-modal-ipt'} placeholder={t('placeholder.searchMember')}/>
+                    <Table className={'header-modal-table'} columns={columns} dataSource={data.members} pagination={false}></Table>
                     <Pagination
                         align="center"
                         size="small"
