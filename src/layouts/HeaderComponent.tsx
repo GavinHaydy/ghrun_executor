@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import {Avatar, Button, Card, Divider, Dropdown, Input, Switch} from "antd";
+import {Avatar, Button, Card, Divider, Dropdown, Input, message, Switch} from "antd";
 import {IconFont} from "@/pages/components/IconFont.ts";
 import "./header.less"
 import {getUserSettingService, setUserSettingService} from "@/api/setting.ts";
@@ -15,6 +15,8 @@ import {setMode} from "@/store/theme/themeSlice.ts";
 import {setLang} from "@/store/lang.ts";
 import i18n from "@/locales/i18n.ts";
 import {TeamMemberComponent, type TeamMemberModalRef,type TeamMemberModalProps} from "@/layouts/UserInfoComponent/TeamMemberComponent.tsx";
+import {useAuthInfo} from "@/hooks/useAuthInfo.ts";
+import {logoutService} from "@/api/auth.ts";
 
 
 export const HeaderComponent: React.FC = () => {
@@ -24,10 +26,12 @@ export const HeaderComponent: React.FC = () => {
     const mode = useSelector((state: RootState) => state.theme.mode);
     const lang = useSelector((state: RootState) => state.lang.lang);
     const teamMemberModalRef = useRef<TeamMemberModalRef>(null);
+    const updateToken = useAuthInfo().updateToken
 
 
     const {t} = useTranslation()
 
+    const [messageApi, contextHolder] = message.useMessage();
     const [teamList, setTeamList] = useState<ITeam[]>([]);
     const [teamMemberList, setTeamMemberList] = useState<ITeamMemberList>({members: [], total: 0})
 
@@ -95,8 +99,21 @@ export const HeaderComponent: React.FC = () => {
         handleTeamMemberList({team_id: currentTeamId, ...data})
     }
 
+    const handleLogout = () =>{
+        logoutService().then(r=>{
+            if (r.em === "success"){
+                messageApi.success(r.et).then()
+                updateToken("")
+                window.location.href = "http://localhost:5173/login";
+            }
+            else {
+                messageApi.error(r.et).then()
+            }
+        })
+    }
     return (
         <div className={'header-container'}>
+            {contextHolder}
             <Dropdown className={"header-left"}
                       overlayStyle={{width: '20%'}}
                       popupRender={() => {
@@ -143,7 +160,7 @@ export const HeaderComponent: React.FC = () => {
                                     <div className={lang === 'en' ? 'active' : ''} onClick={() => handleLanguageChange('en')}>English</div>
                                 </div>
                                 <Divider size={"small"}/>
-                                <div>{t('label.logout')}</div>
+                                <div onClick={handleLogout}>{t('label.logout')}</div>
                             </Card>
                         )
                     }}>
