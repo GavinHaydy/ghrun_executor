@@ -1,17 +1,52 @@
 // src/components/ThemeProvider.tsx
 import {ConfigProvider, theme} from "antd";
-import React from "react";
-import {useSelector} from "react-redux";
-import {type RootState} from "@/store"; // 替换为你的实际路径
+import React, {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {type AppDispatch, type RootState} from "@/store";
+import {setMode} from "@/store/theme/themeSlice.ts";
+import Cookies from "js-cookie";
+import {setLang} from "@/store/lang.ts";
+import i18n from "@/locales/i18n.ts"; // 替换为你的实际路径
 
 const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
+    const dispatch = useDispatch<AppDispatch>();
     const mode = useSelector((state: RootState) => state.theme.mode);
     const bgColor = mode === "dark" ? "#2d2b30" : undefined;
     const bodyColor = mode === "dark" ? "#1f1f1f" : undefined;
     const primaryColor = mode === "dark" ? "#9254de" : undefined;
     const siderColor = mode === "dark" ? "#2d2b30" : undefined;
-    const textColor = mode === 'dark' ? '#cda8f0': undefined
+    const textColor = mode === 'dark' ? '#cda8f0' : undefined
 
+    // 主题 & 语言 轮询同步
+    useEffect(() => {
+        let lastTheme = ''
+        let lastLang = ''
+        const syncThemeFromCookie = () => {
+            const theme = Cookies.get('theme')
+            if (theme && theme !== lastTheme) {
+                dispatch(setMode(theme))
+                lastTheme = theme
+            }
+        }
+
+        const syncLangFromCookie = () => {
+            const lang = Cookies.get('lang')
+            if (lang && lang !== lastLang) {
+                dispatch(setLang(lang))
+                i18n.changeLanguage(lang).then(() => {
+                });
+                lastLang = lang
+            }
+        }
+        const timerTheme = setInterval(syncThemeFromCookie, 500); // 每 500ms 轮询
+        const timerLang = setInterval(syncLangFromCookie, 500); // 每 500ms 轮询
+
+        return () => {
+            clearInterval(timerTheme)
+            clearInterval(timerLang)
+        };
+
+    }, []);
     return (
         <ConfigProvider
             theme={{
@@ -34,7 +69,7 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
                         itemBg: siderColor,
                         itemHoverBg: bgColor,
                         itemSelectedBg: bgColor,
-                        itemSelectedColor:  textColor,
+                        itemSelectedColor: textColor,
                         activeBarBorderWidth: '0px',
                         // itemHoverColor: mode === "dark" ? darkColor :
                     }

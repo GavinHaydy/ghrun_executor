@@ -14,7 +14,11 @@ import {useCurrentTeamId, useUserInfo} from "@/hooks/useSettings.ts";
 import {setMode} from "@/store/theme/themeSlice.ts";
 import {setLang} from "@/store/lang.ts";
 import i18n from "@/locales/i18n.ts";
-import {TeamMemberComponent, type TeamMemberModalRef,type TeamMemberModalProps} from "@/layouts/UserInfoComponent/TeamMemberComponent.tsx";
+import {
+    TeamMemberComponent,
+    type TeamMemberModalRef,
+    type TeamMemberModalProps
+} from "@/layouts/UserInfoComponent/TeamMemberComponent.tsx";
 import {useAuthInfo} from "@/hooks/useAuthInfo.ts";
 import {logoutService} from "@/api/auth.ts";
 
@@ -70,7 +74,7 @@ export const HeaderComponent: React.FC = () => {
         handleTeamMemberList({team_id: currentTeamId})
     }
 
-    const handleSetUserSetting = async () =>{
+    const handleSetUserSetting = async () => {
         const queryParams = new URLSearchParams(window.location.search);
         const teamId = queryParams.get("team_id");
         await setUserSettingService({settings: {current_team_id: teamId}})
@@ -95,18 +99,17 @@ export const HeaderComponent: React.FC = () => {
         teamMemberModalRef.current?.open(teamId)
     }
 
-    const handleSearchTeamMember:TeamMemberModalProps['onParamsChange']=(data)=>{
+    const handleSearchTeamMember: TeamMemberModalProps['onParamsChange'] = (data) => {
         handleTeamMemberList({team_id: currentTeamId, ...data})
     }
 
-    const handleLogout = () =>{
-        logoutService().then(r=>{
-            if (r.em === "success"){
+    const handleLogout = () => {
+        logoutService().then(r => {
+            if (r.em === "success") {
                 messageApi.success(r.et).then()
                 updateToken("")
                 window.location.href = "http://localhost:5173/login";
-            }
-            else {
+            } else {
                 messageApi.error(r.et).then()
             }
         })
@@ -156,8 +159,12 @@ export const HeaderComponent: React.FC = () => {
                                 <div>{t('label.userHome')}</div>
                                 <Divider size={"small"}/>
                                 <div className={"lang-switch"}>
-                                    <div className={lang === 'zh' ? 'active' : ''} onClick={() => handleLanguageChange('zh')}>中文</div>
-                                    <div className={lang === 'en' ? 'active' : ''} onClick={() => handleLanguageChange('en')}>English</div>
+                                    <div className={lang === 'zh' ? 'active' : ''}
+                                         onClick={() => handleLanguageChange('zh')}>中文
+                                    </div>
+                                    <div className={lang === 'en' ? 'active' : ''}
+                                         onClick={() => handleLanguageChange('en')}>English
+                                    </div>
                                 </div>
                                 <Divider size={"small"}/>
                                 <div onClick={handleLogout}>{t('label.logout')}</div>
@@ -167,7 +174,7 @@ export const HeaderComponent: React.FC = () => {
                     <Avatar src={userInfo.avatar}/>
                 </Dropdown>
 
-                <div onClick={() =>handleOpenMembersModal(currentTeamId)} className={'header-member-num'}>
+                <div onClick={() => handleOpenMembersModal(currentTeamId)} className={'header-member-num'}>
                     <p>{teamMemberList.total}</p>
                 </div>
                 <Button type={"primary"}>
@@ -176,8 +183,6 @@ export const HeaderComponent: React.FC = () => {
                 </Button>
                 <Button>{t('label.history')}</Button>
                 <Switch
-                    // style={{float: "right"}}
-                    // checked={mode === 'dark'}
                     checked={mode === 'dark'}
                     onChange={(checked) => dispatch(setMode(checked ? 'dark' : "light"))}
                     checkedChildren="🌙"
@@ -185,7 +190,8 @@ export const HeaderComponent: React.FC = () => {
                 />
             </div>
 
-            <TeamMemberComponent ref={teamMemberModalRef} data={teamMemberList} onParamsChange={handleSearchTeamMember}/>
+            <TeamMemberComponent ref={teamMemberModalRef} data={teamMemberList}
+                                 onParamsChange={handleSearchTeamMember}/>
         </div>
     )
 

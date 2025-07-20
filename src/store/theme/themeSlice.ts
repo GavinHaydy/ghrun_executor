@@ -1,22 +1,17 @@
 // src/store/themeSlice.ts
-import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
-export type ThemeMode = "light" | "dark";
 
-interface ThemeState {
-    mode: ThemeMode;
-}
 
-const initialState: ThemeState = {
-    mode: "light",
-};
 
 export const themeSlice = createSlice({
     name: "theme",
-    initialState,
+    initialState: {mode: Cookies.get("theme")},
     reducers: {
-        setMode: (state, action: PayloadAction<ThemeMode>) => {
+        setMode: (state, action) => {
             state.mode = action.payload;
+            Cookies.set("theme", action.payload);
         },
     },
 });
