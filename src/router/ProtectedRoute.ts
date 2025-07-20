@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 
 export const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 
-    const token = Cookies.get("token")
+    const token = Cookies.get("token")||localStorage.getItem("token")
     if (!token) {
         // return <Navigate to="/login" replace />;
         window.location.href = "http://localhost:5173/login";
