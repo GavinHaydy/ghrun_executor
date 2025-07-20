@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import enTranslation from '@/locales/en.json'
 import zhTranslation from '@/locales/zh.json'
-
+import Cookies from "js-cookie";
 
 const getLangFromPersist = (): 'zh' | 'en' => {
     try {
@@ -22,8 +22,8 @@ i18n
             en: {translation: enTranslation},
             zh: {translation: zhTranslation},
         }, // 翻译资源
-        lng: getLangFromPersist(), // 默认语言
-        fallbackLng: "en", // 备用语言
+        lng: getLangFromPersist() || Cookies.get("lang"), // 默认语言
+        fallbackLng: "zh", // 备用语言
         interpolation: {
             escapeValue: false, // 不转义 HTML
         },

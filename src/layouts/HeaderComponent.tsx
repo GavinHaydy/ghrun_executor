@@ -120,7 +120,7 @@ export const HeaderComponent: React.FC = () => {
                           return (
                               <Card>
                                   <div className={"header-team-content"}>
-                                      <div>团队</div>
+                                      <div>{t("label.team")}</div>
                                       <Button>{t("btn.teamManager")}</Button>
                                   </div>
                                   <div>

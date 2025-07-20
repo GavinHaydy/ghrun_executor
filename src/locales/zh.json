@@ -3,6 +3,7 @@
     "teamManager": "团队管理"
   },
   "label": {
+    "team": "团队",
     "userHome": "个人主页",
     "logout": "退出登录",
     "invite": "邀请",

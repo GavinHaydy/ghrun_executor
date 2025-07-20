@@ -3,6 +3,7 @@
     "teamManager": "Team Management"
   },
   "label": {
+    "team": "Team",
     "userHome": "UserHome",
     "logout": "Logout",
     "invite": "Invite",
