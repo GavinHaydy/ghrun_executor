@@ -1,6 +1,6 @@
 import axios, {type AxiosResponse} from "axios";
 import {message} from "antd";
-import {store} from "@/store";
+import Cookies from "js-cookie";
 // import type {IApiResponse} from "@/types/commonType.ts";
 
 const service = axios.create({
@@ -18,8 +18,7 @@ interface ApiResponse<T = never> {
 // request
 service.interceptors.request.use(
     config => {
-        const state = store.getState();
-        const token = state.auth.token;
+        const token = Cookies.get("token");
         if (token) {
             config.headers.Authorization = token;
         }
