@@ -13,7 +13,6 @@ import {useTranslation} from "react-i18next";
 import {useCurrentTeamId, useUserInfo} from "@/hooks/useSettings.ts";
 import {setMode} from "@/store/theme/themeSlice.ts";
 import {setLang} from "@/store/lang.ts";
-import i18n from "@/locales/i18n.ts";
 import {
     TeamMemberComponent,
     type TeamMemberModalRef,
@@ -44,8 +43,8 @@ export const HeaderComponent: React.FC = () => {
         // 处理切换事件
         // 更新 i18next 语言
         dispatch(setLang(language))
-        i18n.changeLanguage(language).then(() => {
-        });
+        // i18n.changeLanguage(language).then(() => {
+        // });
     };
 
     const handleGetTeamList = useCallback(() => {

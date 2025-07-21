@@ -6,7 +6,6 @@ import {type AppDispatch, type RootState} from "@/store";
 import {setMode} from "@/store/theme/themeSlice.ts";
 import Cookies from "js-cookie";
 import {setLang} from "@/store/lang.ts";
-import i18n from "@/locales/i18n.ts"; // 替换为你的实际路径
 
 const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
     const dispatch = useDispatch<AppDispatch>();
@@ -33,8 +32,6 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
             const lang = Cookies.get('lang')
             if (lang && lang !== lastLang) {
                 dispatch(setLang(lang))
-                i18n.changeLanguage(lang).then(() => {
-                });
                 lastLang = lang
             }
         }

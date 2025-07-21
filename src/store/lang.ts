@@ -1,5 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
+import i18n from "@/locales/i18n.ts";
 
 
 
@@ -11,6 +12,8 @@ export const langSlice = createSlice({
     reducers: {
         setLang: (state, action) => {
             state.lang = action.payload
+            Cookies.set("lang", action.payload)
+            i18n.changeLanguage(action.payload).then()
         }
     }
 })
