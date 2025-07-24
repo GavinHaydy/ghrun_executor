@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { GlobalLayout } from "@/layouts/DefaultLayout.tsx";
 import { ErrorPage } from "@/pages/error/errorPage";
 import {ProtectedRoute} from "@/router/ProtectedRoute.ts";
+import {HomePage} from "@/pages/homePages";
 
 export const router = createBrowserRouter([
     {
@@ -16,15 +17,15 @@ export const router = createBrowserRouter([
                 <GlobalLayout />
             </ProtectedRoute>
         ),
-        // children: [
-        //     {
-        //         index: true,
-        //         element: <Navigate to="/work" />,
-        //     },
-        //     {
-        //         path: "work",
-        //         element: <WorkPage />,
-        //     },
+        children: [
+            {
+                index: true,
+                element: <Navigate to="/home" />,
+            },
+            {
+                path: "home",
+                element: <HomePage />,
+            },
         //     {
         //         path: "member",
         //         element: <MemberPage />,
@@ -37,7 +38,7 @@ export const router = createBrowserRouter([
         //         path: "*",
         //         element: <Navigate to="/error" replace />,
         //     },
-        // ],
+        ],
     },
     {
         path: "*",
