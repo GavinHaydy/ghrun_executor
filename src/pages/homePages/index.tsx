@@ -1,43 +1,50 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Col, Layout, Row} from "antd";
 import "@/styles/index.less";
-
+import {useCurrentTeamId} from "@/hooks/useSettings.ts";
+import Cookies from "js-cookie";
+import {ws} from "@/utils/webSocketClientSinglon.ts";
 export const HomePage: React.FC = () => {
+    const token = Cookies.get("token")
+    const currentTeamId = useCurrentTeamId();
     const {Content} = Layout;
-    // return (
-    //     <Layout className="layout">
-    //         <Content style={{ padding: "12px 12px",height: "calc(100vh - 64px)"}}>
-    //             <div style={{ display: "flex", flexDirection: "column",height: "100%"}}>
-    //                 {/* 第一行：3列，每列占8份 */}
-    //                 <div style={{ flex: 1 }}>
-    //                     <Row gutter={16} style={{ height: "100%" }}>
-    //                         <Col span={8}>
-    //                             <div style={{ border: "1px solid #ccc", height: "100%" }}>1</div>
-    //                         </Col>
-    //                         <Col span={8}>
-    //                             <div style={{ border: "1px solid #ccc", height: "100%" }}>2</div>
-    //                         </Col>
-    //                         <Col span={8}>
-    //                             <div style={{ border: "1px solid #ccc", height: "100%" }}>3</div>
-    //                         </Col>
-    //                     </Row>
-    //                 </div>
-    //
-    //                 {/* 第二行：2列，每列占12份 */}
-    //                 <div style={{ flex: 1 ,marginTop: 24}}>
-    //                     <Row gutter={16} style={{ height: "100%" }}>
-    //                         <Col span={12}>
-    //                             <div style={{ border: "1px solid #ccc", height: "100%" }}>A</div>
-    //                         </Col>
-    //                         <Col span={12}>
-    //                             <div style={{ border: "1px solid #ccc", height: "100%" }}>B</div>
-    //                         </Col>
-    //                     </Row>
-    //                 </div>
-    //             </div>
-    //         </Content>
-    //     </Layout>
-    // );
+
+
+    // const wsRef = useRef<WebSocket | null>(null);
+
+    const handleStartHeartbeat = () => {
+        const params = {
+            token: token,
+            team_id: currentTeamId
+        }
+
+        const start_heartbeat = {
+            route_url: "start_heartbeat",
+            param: JSON.stringify(params)
+        }
+        ws.send(start_heartbeat)
+    };
+    const handleSendHomePage = () =>{
+        const params = {
+            token: token,
+            team_id: currentTeamId
+        }
+        const homePage = {
+            route_url: "home_page",
+            param: JSON.stringify(params)
+        }
+        ws.throttledSend("test",homePage,1000)
+    }
+    useEffect(() => {
+        ws.startHeartbeat(handleStartHeartbeat)
+
+        const interval = setInterval(() => {
+            handleSendHomePage();
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <Layout className="layout">
             <Content className="layout-content">
