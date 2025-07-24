@@ -17,9 +17,10 @@ import {
     TeamMemberComponent,
     type TeamMemberModalRef,
     type TeamMemberModalProps
-} from "@/layouts/UserInfoComponent/TeamMemberComponent.tsx";
+} from "@/layouts/HeaderFunctionComponent/TeamMemberComponent.tsx";
 import {useAuthInfo} from "@/hooks/useAuthInfo.ts";
 import {logoutService} from "@/api/auth.ts";
+import {InviteMemberModal, type InviteMemberModalRef} from "@/layouts/HeaderFunctionComponent/InviteComponent.tsx";
 
 
 export const HeaderComponent: React.FC = () => {
@@ -29,6 +30,7 @@ export const HeaderComponent: React.FC = () => {
     const mode = useSelector((state: RootState) => state.theme.mode);
     const lang = useSelector((state: RootState) => state.lang.lang);
     const teamMemberModalRef = useRef<TeamMemberModalRef>(null);
+    const inviteMemberModalRef = useRef<InviteMemberModalRef>(null);
     const updateToken = useAuthInfo().updateToken
 
 
@@ -113,6 +115,11 @@ export const HeaderComponent: React.FC = () => {
             }
         })
     }
+
+    const handleChangeInviteModalStage = () => {
+        inviteMemberModalRef.current?.openModal();
+    }
+
     return (
         <div className={'header-container'}>
             {contextHolder}
@@ -123,7 +130,7 @@ export const HeaderComponent: React.FC = () => {
                               <Card>
                                   <div className={"header-team-content"}>
                                       <div>{t("label.team")}</div>
-                                      <Button>{t("btn.teamManager")}</Button>
+                                      <Button type={"primary"}>{t("btn.teamManager")}</Button>
                                   </div>
                                   <div>
                                       <Input addonBefore={<SearchOutlined/>}
@@ -176,7 +183,9 @@ export const HeaderComponent: React.FC = () => {
                 <div onClick={() => handleOpenMembersModal(currentTeamId)} className={'header-member-num'}>
                     <p>{teamMemberList.total}</p>
                 </div>
-                <Button type={"primary"}>
+                <Button type={"primary"} onClick={() => {
+                    handleChangeInviteModalStage()
+                }}>
                     <IconFont type={'icon-invite'}/>
                     {t('label.invite')}
                 </Button>
@@ -191,6 +200,7 @@ export const HeaderComponent: React.FC = () => {
 
             <TeamMemberComponent ref={teamMemberModalRef} data={teamMemberList}
                                  onParamsChange={handleSearchTeamMember}/>
+            <InviteMemberModal ref={inviteMemberModalRef} onAddSuccess={handleGetTeamMemberList}/>
         </div>
     )
 
