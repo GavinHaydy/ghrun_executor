@@ -1,4 +1,11 @@
 {
+  "nickname": "Nickname",
+  "companyRole": "Company role",
+  "teamRole": "Team role",
+  "close": "Close",
+  "cancel": "Cancel",
+  "save": "Save",
+  "add": "Add",
   "btn": {
     "teamManager": "Team Management"
   },
@@ -9,7 +16,8 @@
     "invite": "Invite",
     "history": "History",
     "teamMemberList": "Team member list",
-    "total": "total"
+    "total": "Total:{{total}}",
+    "addMemberWithinTheEnterprise": "Add members within the enterprise"
   },
   "placeholder": {
     "searchMember": "Search nickname/account"

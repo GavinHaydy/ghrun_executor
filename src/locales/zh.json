@@ -1,4 +1,11 @@
 {
+  "nickname": "昵称",
+  "companyRole": "企业角色",
+  "teamRole": "团队角色",
+  "close": "关闭",
+  "cancel": "取消",
+  "save": "保存",
+  "add": "添加",
   "btn": {
     "teamManager": "团队管理"
   },
@@ -9,7 +16,8 @@
     "invite": "邀请",
     "history": "操作日志",
     "teamMemberList": "团队成员列表",
-    "total": "总数"
+    "total": "共{{total}}条",
+    "addMemberWithinTheEnterprise": "添加企业内成员"
   },
   "placeholder": {
     "searchMember": "搜索昵称/账号"

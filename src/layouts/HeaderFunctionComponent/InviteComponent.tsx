@@ -8,7 +8,7 @@ import {
     Modal,
     Input,
     Table,
-    message, type TableProps, Select,
+    message, type TableProps, Select, Pagination,
 } from 'antd';
 
 
@@ -121,15 +121,17 @@ export const InviteMemberModal = forwardRef<InviteMemberModalRef, InviteMemberMo
     }, [roleList]);
 
 
-    const handleRoleChange = (user_id: string, role_id: string)=>{
+    useEffect(() => {
+        handleGetTeamCompanyMember()
+    }, [searchMemberPayload]);
+    const handleRoleChange = (user_id: string, role_id: string) => {
         const exists = inviteMemberPayload.members.find(item => item.user_id === user_id)
         if (exists) {
-            const update = inviteMemberPayload.members.map((item:IInviteMember) => {
+            const update = inviteMemberPayload.members.map((item: IInviteMember) => {
                 return item.user_id === user_id ? {...item, team_role_id: role_id} : item
             })
             setInviteMemberPayload({...inviteMemberPayload, members: update})
-        }
-        else {
+        } else {
             const member = memberData.members.find(item => item.user_id === user_id)
             if (member) {
                 member.team_role_id = role_id
@@ -139,15 +141,15 @@ export const InviteMemberModal = forwardRef<InviteMemberModalRef, InviteMemberMo
     }
     const columns = [
         {
-            title: t('table.nickname'),
+            title: t('nickname'),
             dataIndex: 'nickname',
         },
         {
-            title: t('table.companyRole'),
+            title: t('companyRole'),
             dataIndex: 'company_role_name',
         },
         {
-            title: t('table.teamRole'),
+            title: t('teamRole'),
             dataIndex: 'team_role_id',
             render: (text: string, record: ITeamCompanyUserInfo) => (
                 <>
@@ -178,11 +180,11 @@ export const InviteMemberModal = forwardRef<InviteMemberModalRef, InviteMemberMo
             setSelectedRowKeys(selectedRowKeys)
             const temp: IInviteMember[] = selectedRows.map(item => ({
                 user_id: item.user_id,
-                team_role_id: item.team_role_id||options?.[0].value || ''
+                team_role_id: item.team_role_id || options?.[0].value || ''
             }))
             setInviteMemberPayload({...inviteMemberPayload, members: temp})
-            console.log(temp,'-----2')
-            console.log(memberData.members,'-----2')
+            console.log(temp, '-----2')
+            console.log(memberData.members, '-----2')
 
         },
         getCheckboxProps: (record: ITeamCompanyUserInfo) => ({
@@ -207,24 +209,42 @@ export const InviteMemberModal = forwardRef<InviteMemberModalRef, InviteMemberMo
             {contextHolder}
             <Modal
                 width="50%"
-                title={t('label.addCompanyMember')}
+                title={t('label.addMemberWithinTheEnterprise')}
                 open={visible}
                 onCancel={() => setVisible(false)}
                 onOk={handleAdd}
+                okText={t('add')}
+                cancelText={t('close')}
             >
                 <Input
-                    placeholder={t('placeholder.roleMemberSearch')}
+                    placeholder={t('placeholder.searchMember')}
                     value={searchMemberPayload.keyword}
                     onChange={(e) => {
                         setMemberPayload({...searchMemberPayload, keyword: e.target.value});
                         // loadTeamRoleAndMembers(teamId, e.target.value).then(r => r);
                     }}
                 />
+                {options.length > 0 &&
                 <Table
                     rowSelection={rowSelection}
                     columns={columns}
                     dataSource={memberData?.members}
-                    className={"teamTailTable"}
+                    className={"table-scrollbar"}
+                    scroll={{y: '50vh'}}
+                    pagination={false}
+                />}
+                <Pagination
+                    total={memberData.total}
+                    showSizeChanger
+                    showQuickJumper={true}
+                    showTotal={(total) => {
+                        console.log("------",total)
+                        return t('label.total', {total})}
+                    }
+                    onChange={(page, pageSize) => {
+                        setMemberPayload({...searchMemberPayload, page: page, size: pageSize});
+                        // loadTeamRoleAndMembers(teamId, searchMemberPayload.keyword, page).then(r => r);
+                    }}
                 />
             </Modal>
         </>

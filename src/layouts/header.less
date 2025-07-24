@@ -105,3 +105,21 @@
     background-color: transparent;
   }
 }
+.table-scrollbar {
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: @layout-color;
+    border-radius: 5px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: @body-color;
+  }
+  &::-webkit-scrollbar-track-piece {
+    background-color: transparent;
+  }
+}
