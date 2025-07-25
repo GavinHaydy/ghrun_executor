@@ -147,16 +147,20 @@ export const ApiCountComponent: React.FC<ApiCountComponentProps> = ({data}) => {
             },
             series: [
                 {
+                    name: '新增数',
+                    stack: 'Total',
                     data: Object.values(data?.api_manage_data?.api_add_count??{}),
                     type: 'line',
                 },
                 {
+                    name: '调试数',
+                    stack: 'Total',
                     data: Object.values(data?.api_manage_data?.api_debug??{}),
                     type: 'line',
                 }
             ]
         }
-        const lineSecneOption = {
+        const lineSceneOption = {
             title: {
                 text: '近7日',
             },
@@ -178,10 +182,14 @@ export const ApiCountComponent: React.FC<ApiCountComponentProps> = ({data}) => {
             },
             series: [
                 {
+                    name: '新增数',
+                    stack: 'Total',
                     data: Object.values(data?.scene_manage_data?.scene_debug_count??{}),
                     type: 'line',
                 },
                 {
+                    name: '调试数',
+                    stack: 'Total',
                     data: Object.values(data?.api_manage_data?.api_debug??{}),
                     type: 'line',
                 }
@@ -209,7 +217,7 @@ export const ApiCountComponent: React.FC<ApiCountComponentProps> = ({data}) => {
         })
         const lineSceneObserver = new ResizeObserver(()=>{
             const lineScene = echarts.init(lineRefScene.current)
-            lineScene.setOption(lineSecneOption)
+            lineScene.setOption(lineSceneOption)
             lineScene.resize()
             lineSceneObserver.disconnect()
         })
