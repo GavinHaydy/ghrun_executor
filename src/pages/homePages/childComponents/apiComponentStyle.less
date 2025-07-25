@@ -1,0 +1,39 @@
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%; // 占满整个视口高度
+  gap: 10px;
+
+  .dashboard-title {
+    height: 8%;
+    line-height: 60px;
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 16px;
+    border-radius: 8px;
+  }
+
+  .dashboard-row {
+    flex: 1; // 平分剩余高度
+    display: grid;
+    grid-template-columns: 30% 70%;
+    gap: 16px;
+
+    .dashboard-col {
+      background-color: #ffffff;
+      height: 100%;
+      width: 100%;
+      border-radius: 8px;
+      //padding: 16px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+      &.left {
+        // 左列样式（如需要）
+      }
+
+      &.right {
+        // 右列样式（如需要）
+      }
+    }
+  }
+}
