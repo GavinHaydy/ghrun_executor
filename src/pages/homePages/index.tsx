@@ -1,16 +1,15 @@
-import React, {useEffect} from "react";
-import {Col, Layout, Row} from "antd";
+import React, {useEffect, useState} from "react";
 import "@/styles/index.less";
 import {useCurrentTeamId} from "@/hooks/useSettings.ts";
 import Cookies from "js-cookie";
 import {ws} from "@/utils/webSocketClientSinglon.ts";
+import {ApiCountComponent} from "@/pages/homePages/childComponents/ApiCountComponent.tsx";
+import type {IWSHomeData} from "@/types/ws/homeType.ts";
 export const HomePage: React.FC = () => {
     const token = Cookies.get("token")
     const currentTeamId = useCurrentTeamId();
-    const {Content} = Layout;
 
-
-    // const wsRef = useRef<WebSocket | null>(null);
+    const [wsData, setWsData] = useState<IWSHomeData>();
 
     const handleStartHeartbeat = () => {
         const params = {
@@ -34,6 +33,12 @@ export const HomePage: React.FC = () => {
             param: JSON.stringify(params)
         }
         ws.throttledSend("test",homePage,1000)
+        ws.onMessage((data) => {
+            if (data.code === 0 && data.route_url === 'home_page'){
+                setWsData(data.data)
+                // console.log(data.data.api_manage_data)
+            }
+        })
     }
     useEffect(() => {
         ws.startHeartbeat(handleStartHeartbeat)
@@ -46,38 +51,21 @@ export const HomePage: React.FC = () => {
     }, []);
 
     return (
-        <Layout className="layout">
-            <Content className="layout-content">
-                <div className="content-wrapper">
-                    {/* 第一行 */}
-                    <div className="row1">
-                        <Row gutter={16}>
-                            <Col span={8}>
-                                <div>1</div>
-                            </Col>
-                            <Col span={8}>
-                                <div>2</div>
-                            </Col>
-                            <Col span={8}>
-                                <div>3</div>
-                            </Col>
-                        </Row>
-                    </div>
-
-                    {/* 第二行 */}
-                    <div className="row2">
-                        <Row gutter={16}>
-                            <Col span={12}>
-                                <div>A</div>
-                            </Col>
-                            <Col span={12}>
-                                <div>B</div>
-                            </Col>
-                        </Row>
-                    </div>
-                </div>
-            </Content>
-        </Layout>
+        <div className="dashboard-container">
+            <div className="top-section">
+                {wsData && <ApiCountComponent data={wsData}/>}
+                <div>test2</div>
+                <div>test3</div>
+                {/*<SceneCountComponent/>*/}
+                {/*<CaseChartComponent/>*/}
+                {/*<TeamOverviewComponent/>*/}
+            </div>
+            <div className="bottom-section">
+                {/*<PerfTestComponent/>*/}
+                <div>6666666</div>
+                <div>6666666</div>
+            </div>
+        </div>
     );
 
 }

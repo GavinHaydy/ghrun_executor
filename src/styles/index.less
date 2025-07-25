@@ -3,44 +3,26 @@
   overflow-y: hidden;
 }
 
-.layout-content {
-  padding: 12px 12px;
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 12px;
   height: calc(100vh - 64px);
 
-  .content-wrapper {
-    display: flex;
-    flex-direction: column;
+  .top-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
     height: 100%;
-
-    .row1 {
-      flex: 1;
-
-      .ant-row {
-        height: 100%;
-
-        .ant-col {
-          div {
-            border: 1px solid #ccc;
-            height: 100%;
-          }
-        }
-      }
-    }
-
-    .row2 {
-      flex: 1;
-      margin-top: 24px;
-
-      .ant-row {
-        height: 100%;
-
-        .ant-col {
-          div {
-            border: 1px solid #ccc;
-            height: 100%;
-          }
-        }
-      }
-    }
+    background-color: purple;
+  }
+  //
+  .bottom-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    height: 100%;
+    background-color: green;
   }
 }
