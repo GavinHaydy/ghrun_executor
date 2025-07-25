@@ -1,6 +1,13 @@
 // src/utils/WebSocketClient.ts
 
-type MessageHandler = (data: unknown) => void;
+interface IWSResponse<T = never> {
+    code: number;
+    data: T;
+    em: string;
+    et: string;
+    route_url: string;
+}
+type MessageHandler = (data: IWSResponse) => void;
 
 interface WebSocketOptions {
     url: string;
