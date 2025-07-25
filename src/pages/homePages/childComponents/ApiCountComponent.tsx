@@ -4,7 +4,7 @@ import './apiComponentStyle.less'
 import type {IWSHomeData} from "@/types/ws/homeType.ts";
 
 export interface ApiCountComponentProps{
-    data: IWSHomeData | undefined
+    data: IWSHomeData
 }
 
 export const ApiCountComponent: React.FC<ApiCountComponentProps> = ({data}) => {

@@ -37,7 +37,7 @@ export const CaseComponent: React.FC<ApiCountComponentProps> = ({data}) => {
                     name: 'case',
                     stack: 'total',
                     data: Object.values(data?.case_add_seven_data??{}),
-                    type: 'line',
+                    type: 'bar',
                 }
             ]
         }

@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import {ws} from "@/utils/webSocketClientSinglon.ts";
 import {ApiCountComponent} from "@/pages/homePages/childComponents/ApiCountComponent.tsx";
 import type {IWSHomeData} from "@/types/ws/homeType.ts";
+import { CaseComponent } from "./childComponents/CaseComponent";
+import {TeamOverviewComponent} from "@/pages/homePages/childComponents/TeamOverviewComponent.tsx";
 export const HomePage: React.FC = () => {
     const token = Cookies.get("token")
     const currentTeamId = useCurrentTeamId();
@@ -54,7 +56,9 @@ export const HomePage: React.FC = () => {
         <div className="dashboard-container">
             <div className="top-section">
                 {wsData && <ApiCountComponent data={wsData}/>}
-                <div>test2</div>
+                {wsData && <CaseComponent data={wsData}/>}
+                {wsData && <TeamOverviewComponent data={wsData}/>}
+                {/*<div>test2</div>*/}
                 <div>test3</div>
                 {/*<SceneCountComponent/>*/}
                 {/*<CaseChartComponent/>*/}
