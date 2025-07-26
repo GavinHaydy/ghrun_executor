@@ -29,11 +29,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: path => path.replace('', '')
       },
-      '/ws': {
-        target: 'ws://localhost:30000',
+      '/websocket': {
+        target: 'ws://localhost:58887',
         ws: true,       // 关键：启用 WebSocket 代理
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/ws/, '/ws'),
+        rewrite: path => path.replace('', ''),
       },
     }
   },

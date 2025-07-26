@@ -7,6 +7,7 @@ import {ApiCountComponent} from "@/pages/homePages/childComponents/ApiCountCompo
 import type {IWSHomeData} from "@/types/ws/homeType.ts";
 import { CaseComponent } from "./childComponents/CaseComponent";
 import {TeamOverviewComponent} from "@/pages/homePages/childComponents/TeamOverviewComponent.tsx";
+import {AutoComponent} from "@/pages/homePages/childComponents/AutoComponent.tsx";
 export const HomePage: React.FC = () => {
     const token = Cookies.get("token")
     const currentTeamId = useCurrentTeamId();
@@ -58,15 +59,9 @@ export const HomePage: React.FC = () => {
                 {wsData && <ApiCountComponent data={wsData}/>}
                 {wsData && <CaseComponent data={wsData}/>}
                 {wsData && <TeamOverviewComponent data={wsData}/>}
-                {/*<div>test2</div>*/}
-                <div>test3</div>
-                {/*<SceneCountComponent/>*/}
-                {/*<CaseChartComponent/>*/}
-                {/*<TeamOverviewComponent/>*/}
             </div>
             <div className="bottom-section">
-                {/*<PerfTestComponent/>*/}
-                <div>6666666</div>
+                {wsData && <AutoComponent data={wsData}/>}
                 <div>6666666</div>
             </div>
         </div>

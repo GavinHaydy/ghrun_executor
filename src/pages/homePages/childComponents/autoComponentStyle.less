@@ -1,0 +1,69 @@
+.home-auto-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* 第一行 10% 高度 */
+.home-auto-header {
+  height: 10%;
+  background-color: #e3f2fd;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+/* 第二行 60% 高度 */
+.home-auto-middle {
+  height: 60%;
+  display: flex;
+}
+
+/* 左列 70% 宽 */
+.home-auto-left {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-auto-left-top {
+  height: 50%;
+  background-color: #bbdefb;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  //display: flex;
+  align-items: center;
+  //justify-content: center;
+}
+
+.home-auto-left-bottom {
+  height: 50%;
+  display: flex;
+}
+
+.home-auto-bottom-left,
+.home-auto-bottom-right {
+  width: 50%;
+  background-color: #90caf9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 右列 30% 宽 */
+.home-auto-right {
+  width: 30%;
+  background-color: #64b5f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 第三行 剩余空间 30% */
+.home-auto-footer {
+  flex: 1;
+  background-color: #42a5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

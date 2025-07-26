@@ -5,38 +5,38 @@ import * as echarts from 'echarts'
 export const TeamOverviewComponent: React.FC<ApiCountComponentProps> = ({data}) => {
     const barRef = useRef<HTMLDivElement>(null);
 
-    const {
-        auto_plan_exec_num,
-        auto_plan_total_num,
-        stress_plan_exec_num,
-        stress_plan_total_num,
-        team_name
-    } = data?.team_overview[0] ?? {};
-
-    const rawData = [
-        auto_plan_exec_num,
-        auto_plan_total_num - auto_plan_exec_num,
-        stress_plan_exec_num,
-        stress_plan_total_num - stress_plan_exec_num
-    ];
     const names = ['自动化-已执行', '自动化-未执行', '性能-已执行', '性能-未执行']
 
     useEffect(() => {
+        const teams:string[] = data?.team_overview.map(item => item.team_name)
+        const r: number[][] = data?.team_overview.map(item => ([
+            item.auto_plan_exec_num,
+            item.auto_plan_total_num - item.auto_plan_exec_num,
+            item.stress_plan_exec_num,
+            item.stress_plan_total_num - item.stress_plan_exec_num
+        ]))
+
+        const totalData: number[] = r.map(item => item.reduce((a, b) => a + b, 0));
+
+        const series = names.map((name, sid) => {
+            return {
+                name,
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true,
+                    // formatter: totalData
+                    formatter: (params: any) => {
+                        const val = params.value;
+                        return val > 1 ? val : '';
+                    }
+                },
+                data: r.map(item => item[sid])
+            };
+        });
         if (!barRef.current) return
 
         const barEl = barRef.current
-
-        const series = rawData.map((val, i) => ({
-            name: names[i],
-            type: 'bar',
-            stack: 'total', // 堆叠
-            label: {
-                show: true,
-                position: 'inside',
-                formatter: () => val.toString()
-            },
-            data: [val]
-        }));
 
         const option = {
             title: {
@@ -52,14 +52,14 @@ export const TeamOverviewComponent: React.FC<ApiCountComponentProps> = ({data}) 
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '1%',
+                bottom: '6%',
                 top: '15%',
                 containLabel: true
             },
             xAxis: [
                 {
                     type: 'category',
-                    data: [team_name],
+                    data: teams,
                 }
             ],
             yAxis: [
