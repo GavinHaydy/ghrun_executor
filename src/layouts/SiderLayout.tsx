@@ -36,7 +36,7 @@ export const MenuLayout: React.FC = () => {
     }
 
     const items: ItemType[] = [
-        getItem('menu.home', '/index', <HomeOutlined />),
+        getItem('menu.home', '/home', <HomeOutlined />),
         getItem('menu.testObj', '/apis', <IconFont  type={"icon-connect"} />),
         getItem('menu.scene', '/scene', <IconFont type={"icon-scene"} />),
         getItem('menu.performance', '/performance', <IconFont type={"icon-performance"} />),
