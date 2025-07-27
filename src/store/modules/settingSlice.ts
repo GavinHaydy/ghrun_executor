@@ -1,10 +1,11 @@
 import type {ISettings} from "@/types/settingType.ts";
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 
 const initialState: ISettings = {
   settings: {
-    current_team_id: ''
+    current_team_id: Cookies.get("team_id")??''
   },
   user_info: {
     id: 0,

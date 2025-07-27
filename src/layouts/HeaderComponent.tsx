@@ -10,7 +10,7 @@ import {ServiceTeamList, ServiceTeamMembers} from "@/api/team.ts";
 import type {ITeam, ITeamMember, ITeamMemberList} from "@/types/teamType.ts";
 import {SearchOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
-import {useCurrentTeamId, useUserInfo} from "@/hooks/useSettings.ts";
+import {useUserInfo} from "@/hooks/useSettings.ts";
 import {setMode} from "@/store/theme/themeSlice.ts";
 import {setLang} from "@/store/lang.ts";
 import {
@@ -27,7 +27,7 @@ import Cookies from "js-cookie";
 
 export const HeaderComponent: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const currentTeamId = useCurrentTeamId();
+    const currentTeamId = Cookies.get('team_id')??'';
     const userInfo = useUserInfo();
     const mode = useSelector((state: RootState) => state.theme.mode);
     const lang = useSelector((state: RootState) => state.lang.lang);
@@ -78,8 +78,9 @@ export const HeaderComponent: React.FC = () => {
 
     const handleSetUserSetting = async () => {
         // const queryParams = new URLSearchParams(window.location.search);
-        const teamId = Cookies.get("team_id");
-        await setUserSettingService({settings: {current_team_id: teamId}})
+        // const teamId = Cookies.get("team_id");
+        // console.log(currentTeamId)
+        await setUserSettingService({settings: {current_team_id: currentTeamId}})
     }
     const handleGetUserSetting = async () => {
         await handleSetUserSetting()
