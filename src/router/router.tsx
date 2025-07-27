@@ -4,6 +4,7 @@ import { GlobalLayout } from "@/layouts/DefaultLayout.tsx";
 import { ErrorPage } from "@/pages/error/errorPage";
 import {ProtectedRoute} from "@/router/ProtectedRoute.ts";
 import {HomePage} from "@/pages/homePages";
+import {MachinePage} from "@/pages/machine";
 
 export const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
             {
                 path: "home",
                 element: <HomePage />,
+            },
+            {
+              path: "machine",
+              element: <MachinePage />,
             },
         //     {
         //         path: "member",
