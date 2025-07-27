@@ -77,8 +77,8 @@ export const HeaderComponent: React.FC = () => {
     }
 
     const handleSetUserSetting = async () => {
-        const queryParams = new URLSearchParams(window.location.search);
-        const teamId = queryParams.get("team_id");
+        // const queryParams = new URLSearchParams(window.location.search);
+        const teamId = Cookies.get("team_id");
         await setUserSettingService({settings: {current_team_id: teamId}})
     }
     const handleGetUserSetting = async () => {
