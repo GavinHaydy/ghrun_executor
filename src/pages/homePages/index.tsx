@@ -8,24 +8,14 @@ import type {IWSHomeData} from "@/types/ws/homeType.ts";
 import { CaseComponent } from "./childComponents/CaseComponent";
 import {TeamOverviewComponent} from "@/pages/homePages/childComponents/TeamOverviewComponent.tsx";
 import {AutoComponent} from "@/pages/homePages/childComponents/AutoComponent.tsx";
+import type {IWSResponse} from "@/utils/wsClient.ts";
 export const HomePage: React.FC = () => {
     const token = Cookies.get("token")
     const currentTeamId = useCurrentTeamId();
 
     const [wsData, setWsData] = useState<IWSHomeData>();
 
-    const handleStartHeartbeat = () => {
-        const params = {
-            token: token,
-            team_id: currentTeamId
-        }
 
-        const start_heartbeat = {
-            route_url: "start_heartbeat",
-            param: JSON.stringify(params)
-        }
-        ws.send(start_heartbeat)
-    };
     const handleSendHomePage = () =>{
         const params = {
             token: token,
@@ -36,21 +26,24 @@ export const HomePage: React.FC = () => {
             param: JSON.stringify(params)
         }
         ws.throttledSend("test",homePage,1000)
-        ws.onMessage((data) => {
-            if (data.code === 0 && data.route_url === 'home_page'){
-                setWsData(data.data)
-                // console.log(data.data.api_manage_data)
-            }
-        })
     }
+
     useEffect(() => {
-        ws.startHeartbeat(handleStartHeartbeat)
+        const handleData = (res: IWSResponse<IWSHomeData>) =>{
+            if (res.route_url === 'home_page'){
+                setWsData(res.data)
+            }
+        }
+        ws.subscribe("home_page", handleData)
 
         const interval = setInterval(() => {
             handleSendHomePage();
         }, 1000);
 
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+            ws.unsubscribe("home_page", handleData)
+        }
     }, []);
 
     return (

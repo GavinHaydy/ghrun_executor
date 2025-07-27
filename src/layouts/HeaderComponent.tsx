@@ -21,6 +21,8 @@ import {
 import {useAuthInfo} from "@/hooks/useAuthInfo.ts";
 import {logoutService} from "@/api/auth.ts";
 import {InviteMemberModal, type InviteMemberModalRef} from "@/layouts/HeaderFunctionComponent/InviteComponent.tsx";
+import {ws} from "@/utils/webSocketClientSinglon.ts";
+import Cookies from "js-cookie";
 
 
 export const HeaderComponent: React.FC = () => {
@@ -32,6 +34,7 @@ export const HeaderComponent: React.FC = () => {
     const teamMemberModalRef = useRef<TeamMemberModalRef>(null);
     const inviteMemberModalRef = useRef<InviteMemberModalRef>(null);
     const updateToken = useAuthInfo().updateToken
+    const token = Cookies.get("token")
 
 
     const {t} = useTranslation()
@@ -45,8 +48,6 @@ export const HeaderComponent: React.FC = () => {
         // 处理切换事件
         // 更新 i18next 语言
         dispatch(setLang(language))
-        // i18n.changeLanguage(language).then(() => {
-        // });
     };
 
     const handleGetTeamList = useCallback(() => {
@@ -91,7 +92,22 @@ export const HeaderComponent: React.FC = () => {
         }
     }
 
+    const handleStartHeartbeat = () => {
+        const params = {
+            token: token,
+            team_id: currentTeamId
+        }
+
+        const start_heartbeat = {
+            route_url: "start_heartbeat",
+            param: JSON.stringify(params)
+        }
+        ws.send(start_heartbeat)
+    };
+
+
     useEffect(() => {
+        ws.startHeartbeat(handleStartHeartbeat)
         handleGetUserSetting().then()
     }, []);
 

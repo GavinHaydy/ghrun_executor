@@ -1,19 +1,20 @@
 // src/utils/WebSocketClient.ts
 
-interface IWSResponse<T = never> {
+export interface IWSResponse<T = unknown> {
     code: number;
     data: T;
     em: string;
     et: string;
     route_url: string;
 }
-type MessageHandler = (data: IWSResponse) => void;
+
+type MessageHandler<T = unknown> = (data: IWSResponse<T>) => void;
 
 interface WebSocketOptions {
     url: string;
     reconnectInterval?: number;
     heartbeatInterval?: number;
-    heartbeatData?: () => unknown; // 默认心跳内容（可选）
+    heartbeatData?: () => unknown;
 }
 
 export class WebSocketClient {
@@ -28,10 +29,11 @@ export class WebSocketClient {
     private sendTimestamps: Record<string, number> = {};
     private isManuallyClosed = false;
 
-    private messageListeners: MessageHandler[] = [];
-    private openListeners: (() => void)[] = [];
-    private closeListeners: (() => void)[] = [];
-    private errorListeners: ((e: Event) => void)[] = [];
+    // 全局监听器（可选）
+    private globalListeners: MessageHandler[] = [];
+
+    // 路由分发监听器
+    private routeListeners: Map<string, Set<MessageHandler>> = new Map();
 
     constructor(options: WebSocketOptions) {
         this.url = options.url;
@@ -45,31 +47,35 @@ export class WebSocketClient {
         this.ws = new WebSocket(this.url);
 
         this.ws.onopen = () => {
-            this.openListeners.forEach(cb => cb());
-            if (this.heartbeatData) {
-                this.startHeartbeat(this.heartbeatData);
-            }
+            if (this.heartbeatData) this.startHeartbeat(this.heartbeatData);
         };
 
         this.ws.onmessage = (event) => {
+            let parsed: IWSResponse;
+
             try {
-                const parsed = JSON.parse(event.data);
-                this.messageListeners.forEach(cb => cb(parsed));
+                parsed = JSON.parse(event.data);
             } catch {
-                this.messageListeners.forEach(cb => cb(event.data));
+                console.warn('Invalid WS message:', event.data);
+                return;
             }
+
+            // 按 route_url 分发
+            const route = parsed.route_url;
+            if (route && this.routeListeners.has(route)) {
+                this.routeListeners.get(route)!.forEach(cb => cb(parsed));
+            }
+
+            // 全局监听器也执行
+            this.globalListeners.forEach(cb => cb(parsed));
         };
 
         this.ws.onclose = () => {
-            this.closeListeners.forEach(cb => cb());
             this.stopHeartbeat();
-            if (!this.isManuallyClosed) {
-                this.reconnect();
-            }
+            if (!this.isManuallyClosed) this.reconnect();
         };
 
-        this.ws.onerror = (e) => {
-            this.errorListeners.forEach(cb => cb(e));
+        this.ws.onerror = () => {
             this.ws?.close(); // 触发重连
         };
     }
@@ -82,7 +88,6 @@ export class WebSocketClient {
         }, this.reconnectInterval);
     }
 
-    // ✅ 显式心跳控制
     public startHeartbeat(fn: () => unknown) {
         this.stopHeartbeat();
         this.heartbeatTimer = setInterval(() => {
@@ -128,37 +133,29 @@ export class WebSocketClient {
         return this.ws?.readyState === WebSocket.OPEN;
     }
 
-    // ✅ 事件注册器
+    // ✅ 按 route_url 注册订阅
+    public subscribe<T=unknown>(route: string, handler: MessageHandler<T>) {
+        if (!this.routeListeners.has(route)) {
+            this.routeListeners.set(route, new Set());
+        }
+        this.routeListeners.get(route)!.add(handler as MessageHandler);
+    }
+
+    public unsubscribe<T=unknown>(route: string, handler: MessageHandler<T>) {
+        if (this.routeListeners.has(route)) {
+            this.routeListeners.get(route)!.delete(handler as MessageHandler);
+            if (this.routeListeners.get(route)!.size === 0) {
+                this.routeListeners.delete(route);
+            }
+        }
+    }
+
+    // ✅ 可选的全局订阅
     public onMessage(cb: MessageHandler) {
-        this.messageListeners.push(cb);
+        this.globalListeners.push(cb);
     }
 
-    public onOpen(cb: () => void) {
-        this.openListeners.push(cb);
-    }
-
-    public onClose(cb: () => void) {
-        this.closeListeners.push(cb);
-    }
-
-    public onError(cb: (e: Event) => void) {
-        this.errorListeners.push(cb);
-    }
-
-    // ✅ 事件注销器（可选）
     public offMessage(cb: MessageHandler) {
-        this.messageListeners = this.messageListeners.filter(fn => fn !== cb);
-    }
-
-    public offOpen(cb: () => void) {
-        this.openListeners = this.openListeners.filter(fn => fn !== cb);
-    }
-
-    public offClose(cb: () => void) {
-        this.closeListeners = this.closeListeners.filter(fn => fn !== cb);
-    }
-
-    public offError(cb: (e: Event) => void) {
-        this.errorListeners = this.errorListeners.filter(fn => fn !== cb);
+        this.globalListeners = this.globalListeners.filter(fn => fn !== cb);
     }
 }
