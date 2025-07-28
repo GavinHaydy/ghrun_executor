@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {ws} from "@/utils/webSocketClientSinglon.ts";
-import type {IMachineList, IMachineParams} from "@/types/machineType.ts";
+import type {IMachine, IMachineList, IMachineParams} from "@/types/machineType.ts";
 import {useTranslation} from "react-i18next";
-import {Input, Pagination, Table} from "antd";
+import {Input, Pagination, Table, Tag} from "antd";
 import {SearchOutlined} from "@ant-design/icons";
 import type {IWSResponse} from "@/utils/wsClient.ts";
+import {changeMachineStatusService} from "@/api/machine.ts";
 
 export const MachinePage: React.FC = () => {
     const {t} = useTranslation()
@@ -24,13 +25,13 @@ export const MachinePage: React.FC = () => {
         // ws.onMessage((data) => {
         //     setMachineList(data.data)
         // })
-        const handleData = (res: IWSResponse<IMachineList>) =>{
-            if (res.route_url === 'stress_machine_list'){
+        const handleData = (res: IWSResponse<IMachineList>) => {
+            if (res.route_url === 'stress_machine_list') {
                 setMachineList(res.data)
             }
         }
         ws.subscribe('stress_machine_list', handleData)
-        return () =>{
+        return () => {
             ws.unsubscribe('stress_machine_list', handleData)
         }
     }, []);
@@ -41,6 +42,15 @@ export const MachinePage: React.FC = () => {
         }, 1000);
         return () => clearInterval(interval);
     }, [searchParams]);
+
+    const handleChangeMachineStatus = (id: number, status: number) => {
+        const payload = {
+            id: id,
+            status: status === 1 ? 2 : 1
+        }
+        changeMachineStatusService(payload).then(res => res)
+
+    }
 
     const columns = [
         {
@@ -75,16 +85,31 @@ export const MachinePage: React.FC = () => {
             sorter: true
         },
         {
-            title: t('machine.status'),
+            title: t('machine.type'),
+            dataIndex: 'server_type',
+            render: (type: number) => type === 1 ? t("machine.primary") : t("machine.backup")
+        },
+        {
+            title: t('machine.operation'),
             dataIndex: 'status',
-        }
+            // render: (status: number) =>status === 1 ? t("machine.disable") : t("machine.enable")
+            render: (status: number, record: IMachine) => {
+                return (
+                    <Tag color={status === 1 ? 'blue' : 'green'} onClick={() => {
+                        handleChangeMachineStatus(record.id, status)
+                    }}>
+                        {status === 1 ? t("machine.disable") : t("machine.enable")}
+                    </Tag>
+                )
+            }
+        },
     ]
     return (
         // <>
         <div className={'dashboard-container'}>
             <Input style={{width: '12%'}}
                    addonBefore={<SearchOutlined/>}
-                   placeholder={t('placeholder.searchMachine')}
+                   placeholder={t('machine.searchPlaceholder')}
                    onChange={(e) => {
                        setSearchParams({...searchParams, name: e.target.value})
                    }}></Input>
@@ -96,23 +121,23 @@ export const MachinePage: React.FC = () => {
                    }}
                    pagination={false}
                    onChange={(_pagination, _filters, sorter) => {
-                       if (!Array.isArray(sorter)){
+                       if (!Array.isArray(sorter)) {
                            const order = sorter.order
                            let sort_tag = 0
-                           switch (sorter.field){
+                           switch (sorter.field) {
                                case 'cpu_usage':
-                                       sort_tag = order === 'descend' ? 1 : order === 'ascend' ? 2 : 0
+                                   sort_tag = order === 'descend' ? 1 : order === 'ascend' ? 2 : 0
                                    break
                                case 'mem_usage':
-                                       sort_tag = order === 'descend' ? 3 : order === 'ascend' ? 4 : 0
+                                   sort_tag = order === 'descend' ? 3 : order === 'ascend' ? 4 : 0
                                    break
                                case 'disk_usage':
-                                       sort_tag = order === 'descend' ? 5 : order === 'ascend' ? 6 : 0
+                                   sort_tag = order === 'descend' ? 5 : order === 'ascend' ? 6 : 0
                                    break
                                default:
-                                       sort_tag = 0
+                                   sort_tag = 0
                            }
-                           setSearchParams(prev =>({
+                           setSearchParams(prev => ({
                                ...prev,
                                sort_tag: sort_tag
                            }))
@@ -124,7 +149,7 @@ export const MachinePage: React.FC = () => {
                 align={'center'}
                 showSizeChanger={true}
                 onChange={(page, pageSize) => {
-                    setSearchParams({...searchParams, page: page,size: pageSize});
+                    setSearchParams({...searchParams, page: page, size: pageSize});
                 }}
             ></Pagination>
         </div>

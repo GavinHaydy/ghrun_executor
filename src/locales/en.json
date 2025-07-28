@@ -38,5 +38,21 @@
     "env": "Environment Management",
     "machine": "Machine Management",
     "mock": "Mock Service"
+  },
+  "machine": {
+    "name": "Machine Name",
+    "cpuUsage": "CPU Usage",
+    "cpuLoadOne": "1-Min CPU Load",
+    "cpuLoadFive": "5-Min CPU Load",
+    "cpuLoadFifteen": "15-Min CPU Load",
+    "memUsage": "Memory Usage",
+    "diskUsage": "Disk Usage",
+    "type": "Machine Type",
+    "searchPlaceholder": "Enter machine name",
+    "operation": "Operation",
+    "primary": "Primary Machine",
+    "backup": "Backup Machine",
+    "enable": "Enable",
+    "disable": "Disable"
   }
 }

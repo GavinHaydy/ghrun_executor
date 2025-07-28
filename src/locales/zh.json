@@ -38,5 +38,21 @@
     "env": "环境管理",
     "machine": "机器管理",
     "mock": "Mock服务"
+  },
+  "machine": {
+    "name": "机器名称",
+    "cpuUsage": "CPU 使用率",
+    "cpuLoadOne": "CPU 1 分钟负载",
+    "cpuLoadFive": "CPU 5 分钟负载",
+    "cpuLoadFifteen": "CPU 15 分钟负载",
+    "memUsage": "内存使用率",
+    "diskUsage": "磁盘使用率",
+    "type": "机器类型",
+    "searchPlaceholder": "请输入机器名称",
+    "operation": "操作",
+    "primary": "主力机器",
+    "backup": "备用机器",
+    "enable": "启用",
+    "disable": "停用"
   }
 }
