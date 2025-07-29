@@ -2,14 +2,15 @@ import React, {useEffect, useState} from "react";
 import "@/styles/index.less";
 import {useCurrentTeamId} from "@/hooks/useSettings.ts";
 import Cookies from "js-cookie";
-import {ws} from "@/utils/webSocketClientSinglon.ts";
 import {ApiCountComponent} from "@/pages/homePages/childComponents/ApiCountComponent.tsx";
 import type {IWSHomeData} from "@/types/ws/homeType.ts";
 import { CaseComponent } from "./childComponents/CaseComponent";
 import {TeamOverviewComponent} from "@/pages/homePages/childComponents/TeamOverviewComponent.tsx";
 import {AutoComponent} from "@/pages/homePages/childComponents/AutoComponent.tsx";
 import type {IWSResponse} from "@/utils/wsClient.ts";
+import {getWebSocket} from "@/utils/webSocketClientSinglon.ts";
 export const HomePage: React.FC = () => {
+    const ws = getWebSocket()
     const token = Cookies.get("token")
     const currentTeamId = useCurrentTeamId();
 

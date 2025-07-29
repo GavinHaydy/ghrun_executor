@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {ws} from "@/utils/webSocketClientSinglon.ts";
+import {getWebSocket} from "@/utils/webSocketClientSinglon.ts";
 import type {IMachine, IMachineList, IMachineParams} from "@/types/machineType.ts";
 import {useTranslation} from "react-i18next";
 import {Input, Pagination, Table, Tag} from "antd";
@@ -8,6 +8,7 @@ import type {IWSResponse} from "@/utils/wsClient.ts";
 import {changeMachineStatusService} from "@/api/machine.ts";
 
 export const MachinePage: React.FC = () => {
+    const ws = getWebSocket()
     const {t} = useTranslation()
     const [machineList, setMachineList] = useState<IMachineList>({machine_list: [], total: 0})
     const [searchParams, setSearchParams] = useState<IMachineParams>({page: 1, size: 10, sort_tag: 0, name: ''})
@@ -60,7 +61,14 @@ export const MachinePage: React.FC = () => {
         {
             title: t('machine.cpuUsage'),
             dataIndex: 'cpu_usage',
-            sorter: true
+            sorter: true,
+            render: (usage: number) => {
+                return (
+                    <Tag color={usage > 80 ? 'red' : 'green'}>
+                        {usage.toFixed(2)}%
+                    </Tag>
+                )
+            }
         },
         {
             title: t('machine.cpuLoadOne'),
@@ -77,12 +85,26 @@ export const MachinePage: React.FC = () => {
         {
             title: t('machine.memUsage'),
             dataIndex: 'mem_usage',
-            sorter: true
+            sorter: true,
+            render: (usage: number) => {
+                return (
+                    <Tag color={usage > 80 ? 'red' : 'green'}>
+                        {usage.toFixed(2)}%
+                    </Tag>
+                )
+            }
         },
         {
             title: t('machine.diskUsage'),
             dataIndex: 'disk_usage',
-            sorter: true
+            sorter: true,
+            render: (usage: number) => {
+                return (
+                    <Tag color={usage > 80 ? 'red' : 'green'}>
+                        {usage.toFixed(2)}%
+                    </Tag>
+                )
+            }
         },
         {
             title: t('machine.type'),

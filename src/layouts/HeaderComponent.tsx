@@ -21,11 +21,12 @@ import {
 import {useAuthInfo} from "@/hooks/useAuthInfo.ts";
 import {logoutService} from "@/api/auth.ts";
 import {InviteMemberModal, type InviteMemberModalRef} from "@/layouts/HeaderFunctionComponent/InviteComponent.tsx";
-import {ws} from "@/utils/webSocketClientSinglon.ts";
 import Cookies from "js-cookie";
+import {getWebSocket} from "@/utils/webSocketClientSinglon.ts";
 
 
 export const HeaderComponent: React.FC = () => {
+    const ws = getWebSocket()
     const dispatch = useDispatch<AppDispatch>();
     const currentTeamId = Cookies.get('team_id')??'';
     const userInfo = useUserInfo();
