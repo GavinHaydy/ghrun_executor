@@ -16,22 +16,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Prepare pnpm
-        run: corepack prepare pnpm@latest --activate
-
-      - name: Check pnpm version
-        run: pnpm --version
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
 
       - name: Build project
-        run: pnpm run build
+        run: npm run build
 
       # 工作步骤：上传构建后的文件到服务器并触发热更新
       - name: Upload build to server (hot update)  # 步骤名称：热更新上传到服务器
