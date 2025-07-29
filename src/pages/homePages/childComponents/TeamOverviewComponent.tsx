@@ -16,8 +16,6 @@ export const TeamOverviewComponent: React.FC<ApiCountComponentProps> = ({data}) 
             item.stress_plan_total_num - item.stress_plan_exec_num
         ]))
 
-        const totalData: number[] = r.map(item => item.reduce((a, b) => a + b, 0));
-
         const series = names.map((name, sid) => {
             return {
                 name,

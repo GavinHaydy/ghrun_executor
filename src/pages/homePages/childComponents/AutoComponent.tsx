@@ -4,7 +4,7 @@ import './autoComponentStyle.less'
 import type {ApiCountComponentProps} from "@/pages/homePages/childComponents/ApiCountComponent.tsx";
 // import type {IWSAutoPlanData} from "@/types/ws/homeType.ts";
 
-export const AutoComponent: React.FC<ApiCountComponentProps> = ({data}) => {
+export const AutoComponent: React.FC<ApiCountComponentProps> = () => {
 
     useEffect(() => {
         // const autoData:IWSAutoPlanData = data?.auto_plan_data
