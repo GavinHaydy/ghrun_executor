@@ -32,7 +32,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}      # SSH 私钥内容（用于免密登录）
           source: "webExecutor/*"                        # 要上传的文件，dist 是构建后的输出目录
           target: "/data/gavin/webExecutor/"              # 上传到服务器的目标路径
-#          strip_components: 1                     # 上传时去除 dist/ 目录，只上传其内容
+          strip_components: 1                     # 上传时去除 dist/ 目录，只上传其内容
 
       # （可选）触发前端 reload 的方法：在服务器上写一个 version.txt 文件
       - name: Touch file to trigger reload (optional)  # 步骤名称：写入 version 文件作为部署标记
