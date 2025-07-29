@@ -1,0 +1,49 @@
+name: Frontend Deploy (Hot Update)
+
+on:
+  push:
+    branches: [main]  # 或你用的分支
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build project
+        run: pnpm build
+
+      # 工作步骤：上传构建后的文件到服务器并触发热更新
+      - name: Upload build to server (hot update)  # 步骤名称：热更新上传到服务器
+        uses: appleboy/scp-action@v0.1.7          # 使用 GitHub Action 的 scp 插件上传文件
+        with:
+          host: ${{ secrets.SERVER_HOST }}        # 服务器 IP 地址（从 GitHub Secrets 中读取）
+          username: ${{ secrets.SERVER_USER }}    # SSH 登录用户名
+          key: ${{ secrets.SERVER_SSH_KEY }}      # SSH 私钥内容（用于免密登录）
+          source: "webExecutor/*"                        # 要上传的文件，dist 是构建后的输出目录
+          target: "/data/gavin/webExecutor/"              # 上传到服务器的目标路径
+#          strip_components: 1                     # 上传时去除 dist/ 目录，只上传其内容
+
+      # （可选）触发前端 reload 的方法：在服务器上写一个 version.txt 文件
+      - name: Touch file to trigger reload (optional)  # 步骤名称：写入 version 文件作为部署标记
+        uses: appleboy/ssh-action@v1.0.0               # 使用 GitHub Action 的 ssh 插件执行远程命令
+        with:
+          host: ${{ secrets.SERVER_HOST }}             # 服务器 IP 地址
+          username: ${{ secrets.SERVER_USER }}         # SSH 登录用户名
+          key: ${{ secrets.SERVER_SSH_KEY }}           # SSH 私钥
+          script: |
+            echo "Deployed at $(date)" > /home/ubuntu/web/version.txt  # 写入部署时间到 version.txt 文件中
