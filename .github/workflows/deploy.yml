@@ -33,13 +33,3 @@ jobs:
           source: "webExecutor/*"                        # 要上传的文件，dist 是构建后的输出目录
           target: "/data/gavin/webExecutor/"              # 上传到服务器的目标路径
           strip_components: 1                     # 上传时去除 dist/ 目录，只上传其内容
-
-      # （可选）触发前端 reload 的方法：在服务器上写一个 version.txt 文件
-      - name: Touch file to trigger reload (optional)  # 步骤名称：写入 version 文件作为部署标记
-        uses: appleboy/ssh-action@v1.0.0               # 使用 GitHub Action 的 ssh 插件执行远程命令
-        with:
-          host: ${{ secrets.SERVER_HOST }}             # 服务器 IP 地址
-          username: ${{ secrets.SERVER_USER }}         # SSH 登录用户名
-          key: ${{ secrets.SERVER_SSH_KEY }}           # SSH 私钥
-          script: |
-            echo "Deployed at $(date)" > /home/ubuntu/web/version.txt  # 写入部署时间到 version.txt 文件中

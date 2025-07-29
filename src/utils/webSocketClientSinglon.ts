@@ -13,7 +13,9 @@ let ws: WebSocketClient | null = null;
 
 export function getWebSocket() {
     if (!ws) {
-        const url = `${window.RUNTIME_ENV?.GR_WS_URL}/websocket/index`;
+        const wsUrl = window.RUNTIME_ENV?.GR_WS_URL;
+        console.log('wsUrl', wsUrl)
+        const url = `${wsUrl}/websocket/index`;
         ws = new WebSocketClient({
             url,
             heartbeatInterval: 5000,
