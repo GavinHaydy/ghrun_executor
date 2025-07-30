@@ -12,8 +12,9 @@ export const EnvLeftComponent:React.FC<EnvLeftComponentProps> = ({data,onParamsC
     const [keyword, setKeyword] = useState<string>('')
 
     useEffect(() => {
-        onParamsChange?.({name:keyword});
-        console.log(1)
+        if (keyword !== ''){
+            onParamsChange?.({name:keyword});
+        }
     }, [keyword]);
     return (
         <Space direction="vertical" style={{width: '80%',margin:'10px'}}>
