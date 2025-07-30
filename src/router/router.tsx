@@ -5,6 +5,7 @@ import { ErrorPage } from "@/pages/error/errorPage";
 import {ProtectedRoute} from "@/router/ProtectedRoute.ts";
 import {HomePage} from "@/pages/homePages";
 import {MachinePage} from "@/pages/machine";
+import {EnvManagementPage} from "@/pages/env";
 
 export const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
             {
                 path: "home",
                 element: <HomePage />,
+            },
+            {
+                path: "env",
+                element: <EnvManagementPage/>
             },
             {
               path: "machine",
