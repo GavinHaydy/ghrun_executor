@@ -3,7 +3,7 @@ import request, {Method} from "@/utils/request.ts";
 
 const API_ENV_LIST = `${PREFIX}env/get_env_list`;
 const API_ENV_CREATE = `${PREFIX}env/create_env`;
-const API_ENV_SERVER_LIST = `${PREFIX}env/get_server_list`;
+const API_ENV_SERVER_LIST = `${PREFIX}env/get_service_list`;
 const API_ENV_UPDATE = `${PREFIX}env/update_env`;
 
 // 环境列表
