@@ -26,3 +26,23 @@ export interface IEnvServiceSearch {
     page: number;
     size: number;
 }
+
+// db 列表
+export interface IEnvDB {
+    key: number;
+    charset: string;
+    database_id: number;
+    db_name: string;
+    env_id: number;
+    host: string;
+    password: string;
+    port: number;
+    server_name: string;
+    team_id: string;
+    type: string;
+    user: string;
+}
+export interface IEnvDBList {
+    database_list: IEnvDB[];
+    total: number;
+}
