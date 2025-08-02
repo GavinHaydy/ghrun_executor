@@ -46,3 +46,12 @@ export interface IEnvDBList {
     database_list: IEnvDB[];
     total: number;
 }
+
+// create server
+export interface IEnvSaveServer {
+    service_id?: number;
+    team_id: string;
+    env_id: number;
+    server_name: string;
+    content: string;
+}

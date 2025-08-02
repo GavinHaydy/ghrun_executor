@@ -48,7 +48,7 @@ export const EnvLeftComponent:React.FC<EnvLeftComponentProps> = ({data,onParamsC
                 onClick={() => {handleCreateEnv()}}
             >新建环境</Button>
             {data && data.map((item:IEnv) => (
-                <div onClick={() => {setCurrentEnv(item)}}>{item.env_name}</div>
+                <div key={item.env_id} onClick={() => {setCurrentEnv(item)}}>{item.env_name}</div>
             ))}
         </Space>
     )

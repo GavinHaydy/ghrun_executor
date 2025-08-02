@@ -11,7 +11,7 @@ export const EnvManagementPage = () =>{
     const currentTeamId = useAuthInfo().teamId as string
     const [searchPayload, setSearchPayload] = useState<IEnvSearchByName>({team_id: currentTeamId, name: ''});
     const [data, setData] = useState<IEnv[]>([])
-    const [currentEnv, setCurrentEnv] = useState<IEnv>({team_id: '', env_id: 0, env_name: ''})
+    const [currentEnv, setCurrentEnv] = useState<IEnv>({team_id: currentTeamId, env_id: 0, env_name: ''})
 
 
 
@@ -20,6 +20,7 @@ export const EnvManagementPage = () =>{
             const temp: IEnv[] = []
             if (res.em === "success" && res.data.length > 0){
                 temp.push(...res.data)
+                setCurrentEnv(res.data[0])
             }
             setData(temp)
         })

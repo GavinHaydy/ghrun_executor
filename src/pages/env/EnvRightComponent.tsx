@@ -1,17 +1,28 @@
-import type {IEnv, IEnvDB, IEnvDBList, IEnvService, IEnvServiceSearch, IEvnServiceList} from "@/types/envType.ts";
-import React, {useEffect, useState} from "react";
-import {Table, Tabs, type TabsProps} from "antd";
+import type {
+    IEnv,
+    IEnvDB,
+    IEnvDBList,
+    IEnvService,
+    IEnvServiceSearch,
+    IEvnServiceList
+} from "@/types/envType.ts";
+import React, {useEffect, useRef, useState} from "react";
+import {Button, Table, Tabs, type TabsProps} from "antd";
 import {ServiceEnvDBList, ServiceEnvServerList} from "@/api/env.ts";
+import {ServerModalComponent, type ServerModalComponentRef} from "@/pages/env/ServerModalComponent.tsx";
+import {EyeOutlined} from "@ant-design/icons";
 
 interface EnvRightComponentProps {
     env_tail: IEnv
 }
 
 export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =>{
-    const [serverSearchPayload, setServerSearchPayload] = useState<IEnvServiceSearch>({team_id: env_tail.team_id, env_id: 0, page: 1, size: 10})
+    const [serverSearchPayload, setServerSearchPayload] = useState<IEnvServiceSearch>({team_id: env_tail.team_id, env_id: env_tail.env_id, page: 1, size: 10})
     const [serverData, setServerData] = useState<IEvnServiceList>({service_list: [], total: 0})
     const [dbData, setDbData] = useState<IEnvDBList>({database_list: [], total: 0})
     const [currentTab, setCurrentTab] = useState<string>('1')
+    const [serverType, setServerType] = useState<string>('add')
+    const modalServerRef = useRef<ServerModalComponentRef>(null)
 
     const columns = [
         {
@@ -21,6 +32,17 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
         {
             title: '服务地址',
             dataIndex: 'content',
+        },
+        {
+            title: '操作',
+            dataIndex: 'operation',
+            render: (_: number,record: IEnvService) => (
+                <EyeOutlined onClick={() => {
+                    // setCurrentServer(record)
+                    setServerType('update')
+                    modalServerRef.current?.open(record)
+                }} />
+            )
         }
     ]
     const db_columns = [
@@ -46,20 +68,29 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
         },
         {
             title: '操作',
-            dataIndex: 'operation',
+            dataIndex: 'operation'
         }
     ]
+
 
     const items:TabsProps['items'] = [
         {
             key:'1',
             label: '服务',
-            children:<Table columns={ columns} dataSource={serverData.service_list}></Table>
+            children: (<div>
+                <Button style={{float: "left"}} onClick={() => modalServerRef.current?.open()}>添加服务</Button>
+                <Table columns={ columns} dataSource={serverData.service_list}></Table>
+            </div>)
         },
         {
             key:'2',
             label: '数据库',
-            children:<Table columns={ db_columns} dataSource={dbData.database_list}></Table>
+            children:(
+                <div>
+                    <Button style={{float: "left"}}>添加数据库</Button>
+                    <Table columns={ db_columns} dataSource={dbData.database_list}></Table>
+                </div>
+            )
         }
     ]
 
@@ -67,10 +98,11 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
         const tempList: IEvnServiceList = {service_list: [], total: 0}
         ServiceEnvServerList(serverSearchPayload).then(res => {
             if (res.em === "success"){
-                res.data.service_list.map((item: IEnvService) => ({
+                tempList.service_list =res.data.service_list.map((item: IEnvService) => ({
                     ...item,
                     key: item.service_id
                 }))
+                tempList.total = res.data.total
             }
             setServerData(tempList)
         })
@@ -81,7 +113,7 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
         const tempList: IEnvDBList = {database_list: [], total: 0}
         ServiceEnvDBList(serverSearchPayload).then(res => {
             if (res.em === "success"){
-                res.data.service_list.map((item: IEnvDB) => ({
+                res.data.database_list.map((item: IEnvDB) => ({
                     ...item,
                     key: item.database_id
                 }))
@@ -117,6 +149,11 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
             <div>环境名称{env_tail.env_name}</div>
             <Tabs items={ items} onChange={handleSwitchTab}></Tabs>
 
+            <ServerModalComponent  ref={modalServerRef}
+                                   ent_tail={env_tail}
+                                   modal_type={serverType}
+                                   // serverTail={currentServer}
+                                   onGetServer={handleGetServerList}/>
         </div>
     )
 }
