@@ -69,6 +69,9 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
                         itemSelectedColor: textColor,
                         activeBarBorderWidth: '0px',
                         // itemHoverColor: mode === "dark" ? darkColor :
+                    },
+                    Tabs: {
+                        horizontalMargin: '0 0 10px 0',
                     }
                 }
             }}
