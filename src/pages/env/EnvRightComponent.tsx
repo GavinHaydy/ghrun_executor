@@ -8,9 +8,9 @@ import type {
 } from "@/types/envType.ts";
 import React, {useEffect, useRef, useState} from "react";
 import {Button, Table, Tabs, type TabsProps} from "antd";
-import {ServiceEnvDBList, ServiceEnvServerList} from "@/api/env.ts";
+import {ServiceDeleteEnvServer, ServiceEnvDBList, ServiceEnvServerList} from "@/api/env.ts";
 import {ServerModalComponent, type ServerModalComponentRef} from "@/pages/env/ServerModalComponent.tsx";
-import {EyeOutlined} from "@ant-design/icons";
+import {DeleteOutlined, EyeOutlined} from "@ant-design/icons";
 
 interface EnvRightComponentProps {
     env_tail: IEnv
@@ -23,6 +23,15 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
     const [currentTab, setCurrentTab] = useState<string>('1')
     const [serverType, setServerType] = useState<string>('add')
     const modalServerRef = useRef<ServerModalComponentRef>(null)
+
+    const handleDelServer = (record: IEnvService) =>{
+        const payload = {env_id:record.env_id, service_id: record.service_id, team_id:record.team_id}
+        ServiceDeleteEnvServer(payload).then(res => {
+            if (res.em === "success"){
+                handleGetServerList()
+            }
+        })
+    }
 
     const columns = [
         {
@@ -37,11 +46,15 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
             title: '操作',
             dataIndex: 'operation',
             render: (_: number,record: IEnvService) => (
-                <EyeOutlined onClick={() => {
-                    // setCurrentServer(record)
-                    setServerType('update')
-                    modalServerRef.current?.open(record)
-                }} />
+                <>
+                    <EyeOutlined onClick={() => {
+                        // setCurrentServer(record)
+                        setServerType('update')
+                        modalServerRef.current?.openForUpdate(record)
+                    }} />
+                    <DeleteOutlined style={{marginLeft: '10px'}} onClick={()=>handleDelServer(record)}/>
+                </>
+
             )
         }
     ]
@@ -78,7 +91,10 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
             key:'1',
             label: '服务',
             children: (<div>
-                <Button style={{float: "left"}} onClick={() => modalServerRef.current?.open()}>添加服务</Button>
+                <Button style={{float: "left"}} onClick={() => {
+                    setServerType('add')
+                    modalServerRef.current?.openForAdd(env_tail)
+                }}>添加服务</Button>
                 <Table columns={ columns} dataSource={serverData.service_list}></Table>
             </div>)
         },
@@ -150,7 +166,7 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
             <Tabs items={ items} onChange={handleSwitchTab}></Tabs>
 
             <ServerModalComponent  ref={modalServerRef}
-                                   ent_tail={env_tail}
+                                   // ent_tail={env_tail}
                                    modal_type={serverType}
                                    // serverTail={currentServer}
                                    onGetServer={handleGetServerList}/>

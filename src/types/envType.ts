@@ -52,6 +52,6 @@ export interface IEnvSaveServer {
     service_id?: number;
     team_id: string;
     env_id: number;
-    server_name: string;
+    service_name: string;
     content: string;
 }

@@ -9,7 +9,7 @@ const API_ENV_UPDATE = `${PREFIX}env/update_env`;
 
 const API_ENV_SERVER_LIST = `${PREFIX}env/get_service_list`;
 const API_ENV_SERVER_CREATE = `${PREFIX}env/save_env_service`;
-// const API_ENV_SERVER_DELETE = `${PREFIX}env/del_env_service`;
+const API_ENV_SERVER_DELETE = `${PREFIX}env/del_env_service`;
 
 const API_ENV_DB_LIST = `${PREFIX}env/get_database_list`;
 // const API_ENV_DB_CREATE = `${PREFIX}env/save_env_database`;
@@ -64,6 +64,15 @@ export const ServiceEnvDBList = (data = {}) => {
 export const ServiceCreateEnvServer = (data = {}) => {
   return request(
       API_ENV_SERVER_CREATE,
+      Method.POST,
+      data
+  )
+}
+
+// 删除环境服务
+export const ServiceDeleteEnvServer = (data = {}) => {
+  return request(
+      API_ENV_SERVER_DELETE,
       Method.POST,
       data
   )

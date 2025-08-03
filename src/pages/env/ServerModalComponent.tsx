@@ -1,44 +1,60 @@
 import {forwardRef, useImperativeHandle, useState} from "react";
 import {Form, Input, message, Modal} from "antd";
-import type {IEnv, IEnvService} from "@/types/envType.ts";
+import type {IEnv, IEnvSaveServer, IEnvService} from "@/types/envType.ts";
 import {ServiceCreateEnvServer} from "@/api/env.ts";
 
 export interface ServerModalComponentRef {
-    open: (serverTail?: IEnvService) => void;
+    openForUpdate: (serverTail: IEnvService) => void;
+    openForAdd: (env: IEnv) => void
     close: () => void;
 }
 
 interface ServerModalComponentProps {
-    ent_tail: IEnv;
     modal_type: string;
     onGetServer: () => void
 }
 
 export const ServerModalComponent = forwardRef<
     ServerModalComponentRef, ServerModalComponentProps>(
-    ({ent_tail, modal_type,onGetServer}, ref) => {
+    ({modal_type, onGetServer}, ref) => {
         const [messageApi, contextHolder] = message.useMessage();
         const [serverVisible, setServerVisible] = useState<boolean>(false)
-        const serverPayload= {
+        const [serverPayload, setServerPayload] = useState<IEnvSaveServer>({
             service_id: modal_type === 'update' ? 0 : undefined,
-            team_id: ent_tail.team_id,
-            env_id: ent_tail.env_id,
-            server_name: '',
+            team_id: '',
+            env_id: 0,
+            service_name: '',
             content: ''
-        }
+        })
         const [form] = Form.useForm()
 
         useImperativeHandle(ref, () => ({
-            open: (serverTail?: IEnvService) => {
-                if (modal_type === 'update' && serverTail){
+            openForUpdate: (serverTail: IEnvService) => {
+                if (modal_type === 'update' && serverTail) {
+                    setServerPayload({
+                        ...serverPayload,
+                        service_id: serverTail.service_id,
+                        team_id: serverTail.team_id,
+                        env_id: serverTail.env_id
+                    })
                     form.setFieldsValue({
-                        server_name: serverTail.service_name,
+                        service_name: serverTail.service_name,
                         content: serverTail.content
                     })
-                }else {
-                    form.resetFields()
                 }
                 setServerVisible(true)
+            },
+            openForAdd: (env: IEnv) => {
+                if (modal_type === 'add' && env) {
+                    setServerPayload({
+                        ...serverPayload,
+                        service_id: undefined,
+                        team_id: env.team_id,
+                        env_id: env.env_id
+                    })
+                }
+                setServerVisible(true)
+
             },
             close: () => {
                 form.resetFields()
@@ -56,16 +72,16 @@ export const ServerModalComponent = forwardRef<
                 const values = await form.validateFields();
                 const payload = {
                     ...serverPayload,
-                    server_name: values.server_name,
+                    service_name: values.service_name,
                     content: values.content
                 }
                 ServiceCreateEnvServer(payload).then(res => {
-                    if (res.em === "success"){
+                    if (res.em === "success") {
                         setServerVisible(false)
                     }
                     onGetServer()
                 })
-            } catch (e){
+            } catch (e) {
                 messageApi.error(`表单验证失败: ${e}`);
             }
         }
@@ -81,7 +97,7 @@ export const ServerModalComponent = forwardRef<
             >
                 {contextHolder}
                 <Form form={form}>
-                    <Form.Item name={"server_name"} label={"服务名称"}>
+                    <Form.Item name={"service_name"} label={"服务名称"}>
                         <Input/>
                     </Form.Item>
                     <Form.Item name={"content"} label={"服务地址"}>
