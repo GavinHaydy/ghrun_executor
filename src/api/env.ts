@@ -4,8 +4,8 @@ import request, {Method} from "@/utils/request.ts";
 const API_ENV_LIST = `${PREFIX}env/get_env_list`;
 const API_ENV_CREATE = `${PREFIX}env/create_env`;
 const API_ENV_UPDATE = `${PREFIX}env/update_env`;
-// const API_ENV_DELETE = `${PREFIX}env/del_env`;
-// const API_ENV_COPY = `${PREFIX}env/copy_env`;
+const API_ENV_DELETE = `${PREFIX}env/del_env`;
+const API_ENV_COPY = `${PREFIX}env/copy_env`;
 
 const API_ENV_SERVER_LIST = `${PREFIX}env/get_service_list`;
 const API_ENV_SERVER_CREATE = `${PREFIX}env/save_env_service`;
@@ -73,6 +73,24 @@ export const ServiceCreateEnvServer = (data = {}) => {
 export const ServiceDeleteEnvServer = (data = {}) => {
   return request(
       API_ENV_SERVER_DELETE,
+      Method.POST,
+      data
+  )
+}
+
+// 删除环境
+export const ServiceDeleteEnv = (data = {}) => {
+  return request(
+      API_ENV_DELETE,
+      Method.POST,
+      data
+  )
+}
+
+// 克隆环境
+export const ServiceCopyEnv = (data = {}) => {
+  return request(
+      API_ENV_COPY,
       Method.POST,
       data
   )
