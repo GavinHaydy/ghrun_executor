@@ -8,10 +8,11 @@ import type {
 } from "@/types/envType.ts";
 import React, {useEffect, useRef, useState} from "react";
 import {Button, Table, Tabs, type TabsProps} from "antd";
-import {ServiceDeleteEnvServer, ServiceEnvDBList, ServiceEnvServerList} from "@/api/env.ts";
+import {ServiceDeleteDB, ServiceDeleteEnvServer, ServiceEnvDBList, ServiceEnvServerList} from "@/api/env.ts";
 import {ServerModalComponent, type ServerModalComponentRef} from "@/pages/env/ServerModalComponent.tsx";
 import {DeleteOutlined, EyeOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
+import {DBModalComponent, type DBModalComponentRef} from "@/pages/env/DBModalComponent.tsx";
 
 interface EnvRightComponentProps {
     env_tail: IEnv
@@ -25,12 +26,22 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
     const [currentTab, setCurrentTab] = useState<string>('1')
     const [serverType, setServerType] = useState<string>('add')
     const modalServerRef = useRef<ServerModalComponentRef>(null)
+    const modalDBRef = useRef<DBModalComponentRef>(null)
 
     const handleDelServer = (record: IEnvService) =>{
         const payload = {env_id:record.env_id, service_id: record.service_id, team_id:record.team_id}
         ServiceDeleteEnvServer(payload).then(res => {
             if (res.em === "success"){
                 handleGetServerList()
+            }
+        })
+    }
+
+    const handleDelDB = (record: IEnvDB) =>{
+        const payload = {env_id:record.env_id, database_id: record.database_id, team_id:record.team_id}
+        ServiceDeleteDB(payload).then(res => {
+            if (res.em === "success"){
+                handleGetDBList()
             }
         })
     }
@@ -83,7 +94,15 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
         },
         {
             title: t('operation'),
-            dataIndex: 'operation'
+            dataIndex: 'operation',
+            render: (_:number,record:IEnvDB) =>(
+                <>
+                    <EyeOutlined onClick={()=>{
+                        modalDBRef.current?.openForUpdate(record)
+                    }}/>
+                    <DeleteOutlined style={{marginLeft:10}} onClick={()=>{handleDelDB(record)}}/>
+                </>
+            )
         }
     ]
 
@@ -105,8 +124,10 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
             label: t('env.db'),
             children:(
                 <div>
-                    <Button style={{float: "left"}}>{t('env.createDb')}</Button>
-                    <Table columns={ db_columns} dataSource={dbData.database_list}></Table>
+                    <Button style={{float: "left"}} onClick={() => {
+                        modalDBRef.current?.openForAdd(env_tail)
+                    }}>{t('env.createDb')}</Button>
+                    <Table columns={db_columns} dataSource={dbData.database_list}></Table>
                 </div>
             )
         }
@@ -131,10 +152,11 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
         const tempList: IEnvDBList = {database_list: [], total: 0}
         ServiceEnvDBList(serverSearchPayload).then(res => {
             if (res.em === "success"){
-                res.data.database_list.map((item: IEnvDB) => ({
+                tempList.database_list = res.data.database_list.map((item: IEnvDB) => ({
                     ...item,
                     key: item.database_id
                 }))
+                tempList.total = res.data.total
             }
             setDbData(tempList)
         })
@@ -170,6 +192,7 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
             <ServerModalComponent  ref={modalServerRef}
                                    modal_type={serverType}
                                    onGetServer={handleGetServerList}/>
+            <DBModalComponent  ref={modalDBRef} onGetDB={handleGetDBList}/>
         </div>
     )
 }

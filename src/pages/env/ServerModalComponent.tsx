@@ -98,7 +98,8 @@ export const ServerModalComponent = forwardRef<
                    }}
             >
                 {contextHolder}
-                <Form form={form}>
+                <Form form={form} labelCol={{ span: 4 }}
+                      wrapperCol={{ span: 16 }}>
                     <Form.Item name={"service_name"} label={t('env.serviceName')}>
                         <Input/>
                     </Form.Item>

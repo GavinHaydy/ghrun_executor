@@ -55,3 +55,18 @@ export interface IEnvSaveServer {
     service_name: string;
     content: string;
 }
+
+// create db
+export interface IEnvSaveDB {
+    charset: string;
+    database_id?: number;
+    db_name: string;
+    env_id: number;
+    host: string;
+    password: string;
+    port: number;
+    server_name: string;
+    team_id: string;
+    type: string;
+    user: string;
+}

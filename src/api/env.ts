@@ -12,8 +12,8 @@ const API_ENV_SERVER_CREATE = `${PREFIX}env/save_env_service`;
 const API_ENV_SERVER_DELETE = `${PREFIX}env/del_env_service`;
 
 const API_ENV_DB_LIST = `${PREFIX}env/get_database_list`;
-// const API_ENV_DB_CREATE = `${PREFIX}env/save_env_database`;
-// const API_ENV_DB_DELETE = `${PREFIX}env/del_env_database`;
+const API_ENV_DB_CREATE = `${PREFIX}env/save_env_database`;
+const API_ENV_DB_DELETE = `${PREFIX}env/del_env_database`;
 
 // 环境列表
 export const ServiceEnvList = (data = {}) => {
@@ -91,6 +91,24 @@ export const ServiceDeleteEnv = (data = {}) => {
 export const ServiceCopyEnv = (data = {}) => {
   return request(
       API_ENV_COPY,
+      Method.POST,
+      data
+  )
+}
+
+// 创建数据库
+export const ServiceCreateDB = (data = {}) => {
+  return request(
+      API_ENV_DB_CREATE,
+      Method.POST,
+      data
+  )
+}
+
+// 删除数据库
+export const ServiceDeleteDB = (data = {}) => {
+  return request(
+      API_ENV_DB_DELETE,
       Method.POST,
       data
   )
