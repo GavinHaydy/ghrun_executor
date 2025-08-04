@@ -8,6 +8,8 @@
   "add": "添加",
   "name": "名称",
   "operation": "操作",
+  "username": "用户名",
+  "password": "密码",
   "btn": {
     "teamManager": "团队管理"
   },
@@ -62,7 +64,7 @@
     "delEnv": "删除环境",
     "cloneEnv": "克隆环境",
     "createEnv": "新建环境",
-    "envName": "环境名称: \"{{name}}\"",
+    "envName": "环境名称: {{name}}",
     "server": "服务",
     "db": "数据库",
     "createServer": "添加服务",
@@ -72,6 +74,7 @@
     "dbType": "数据库类型",
     "dbName": "库名",
     "host": "IP地址",
-    "port": "端口号"
+    "port": "端口号",
+    "charset": "编码集"
   }
 }

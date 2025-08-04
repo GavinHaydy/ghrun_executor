@@ -8,6 +8,8 @@
   "add": "Add",
   "name": "Name",
   "operation": "Action",
+  "username": "Username",
+  "password": "Password",
   "btn": {
     "teamManager": "Team Management"
   },
@@ -62,7 +64,7 @@
     "delEnv": "Delete env",
     "cloneEnv": "Clone env",
     "createEnv": "Create env",
-    "envName": "Env Name: \"{{name}}\"",
+    "envName": "Env Name: {{name}}",
     "server": "Service",
     "db": "Database",
     "createServer": "Create service",
@@ -72,6 +74,7 @@
     "dbType": "DB type",
     "dbName": "DB name",
     "host": "IP",
-    "port": "Port"
+    "port": "Port",
+    "charset": "Charset"
   }
 }
