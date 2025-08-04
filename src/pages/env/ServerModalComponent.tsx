@@ -2,6 +2,7 @@ import {forwardRef, useImperativeHandle, useState} from "react";
 import {Form, Input, message, Modal} from "antd";
 import type {IEnv, IEnvSaveServer, IEnvService} from "@/types/envType.ts";
 import {ServiceCreateEnvServer} from "@/api/env.ts";
+import {useTranslation} from "react-i18next";
 
 export interface ServerModalComponentRef {
     openForUpdate: (serverTail: IEnvService) => void;
@@ -17,6 +18,7 @@ interface ServerModalComponentProps {
 export const ServerModalComponent = forwardRef<
     ServerModalComponentRef, ServerModalComponentProps>(
     ({modal_type, onGetServer}, ref) => {
+        const {t} = useTranslation();
         const [messageApi, contextHolder] = message.useMessage();
         const [serverVisible, setServerVisible] = useState<boolean>(false)
         const [serverPayload, setServerPayload] = useState<IEnvSaveServer>({
@@ -97,10 +99,10 @@ export const ServerModalComponent = forwardRef<
             >
                 {contextHolder}
                 <Form form={form}>
-                    <Form.Item name={"service_name"} label={"服务名称"}>
+                    <Form.Item name={"service_name"} label={t('env.serviceName')}>
                         <Input/>
                     </Form.Item>
-                    <Form.Item name={"content"} label={"服务地址"}>
+                    <Form.Item name={"content"} label={t('env.serviceAdder')}>
                         <Input/>
                     </Form.Item>
                 </Form>

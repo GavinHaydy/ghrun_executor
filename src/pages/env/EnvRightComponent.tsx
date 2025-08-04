@@ -11,12 +11,14 @@ import {Button, Table, Tabs, type TabsProps} from "antd";
 import {ServiceDeleteEnvServer, ServiceEnvDBList, ServiceEnvServerList} from "@/api/env.ts";
 import {ServerModalComponent, type ServerModalComponentRef} from "@/pages/env/ServerModalComponent.tsx";
 import {DeleteOutlined, EyeOutlined} from "@ant-design/icons";
+import {useTranslation} from "react-i18next";
 
 interface EnvRightComponentProps {
     env_tail: IEnv
 }
 
 export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =>{
+    const {t} = useTranslation()
     const [serverSearchPayload, setServerSearchPayload] = useState<IEnvServiceSearch>({team_id: env_tail.team_id, env_id: env_tail.env_id, page: 1, size: 10})
     const [serverData, setServerData] = useState<IEvnServiceList>({service_list: [], total: 0})
     const [dbData, setDbData] = useState<IEnvDBList>({database_list: [], total: 0})
@@ -35,15 +37,15 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
 
     const columns = [
         {
-            title: '服务名称',
+            title: t('env.serviceName'),
             dataIndex: 'service_name',
         },
         {
-            title: '服务地址',
+            title: t('env.serviceAdder'),
             dataIndex: 'content',
         },
         {
-            title: '操作',
+            title: t('operation'),
             dataIndex: 'operation',
             render: (_: number,record: IEnvService) => (
                 <>
@@ -60,27 +62,27 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
     ]
     const db_columns = [
         {
-            title: '数据库类型',
+            title: t('env.dbType'),
             dataIndex: 'type',
         },
         {
-            title: '名称',
+            title: t('name'),
             dataIndex: 'server_name',
         },
         {
-            title: '库名',
+            title: t('env.dbName'),
             dataIndex: 'db_name',
         },
         {
-            title: 'IP地址',
+            title: t('env.host'),
             dataIndex: 'host',
         },
         {
-            title: '端口',
+            title: t('env.port'),
             dataIndex: 'port',
         },
         {
-            title: '操作',
+            title: t('operation'),
             dataIndex: 'operation'
         }
     ]
@@ -89,21 +91,21 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
     const items:TabsProps['items'] = [
         {
             key:'1',
-            label: '服务',
+            label: t('env.server'),
             children: (<div>
                 <Button style={{float: "left"}} onClick={() => {
                     setServerType('add')
                     modalServerRef.current?.openForAdd(env_tail)
-                }}>添加服务</Button>
+                }}>{t('env.createServer')}</Button>
                 <Table columns={ columns} dataSource={serverData.service_list}></Table>
             </div>)
         },
         {
             key:'2',
-            label: '数据库',
+            label: t('env.db'),
             children:(
                 <div>
-                    <Button style={{float: "left"}}>添加数据库</Button>
+                    <Button style={{float: "left"}}>{t('env.createDb')}</Button>
                     <Table columns={ db_columns} dataSource={dbData.database_list}></Table>
                 </div>
             )
@@ -162,13 +164,11 @@ export const EnvRightComponent:React.FC<EnvRightComponentProps> = ({env_tail}) =
 
     return (
         <div>
-            <div>环境名称{env_tail.env_name}</div>
+            <div>{t('env.envName', {name: env_tail.env_name})}</div>
             <Tabs items={ items} onChange={handleSwitchTab}></Tabs>
 
             <ServerModalComponent  ref={modalServerRef}
-                                   // ent_tail={env_tail}
                                    modal_type={serverType}
-                                   // serverTail={currentServer}
                                    onGetServer={handleGetServerList}/>
         </div>
     )

@@ -6,6 +6,8 @@
   "cancel": "Cancel",
   "save": "Save",
   "add": "Add",
+  "name": "Name",
+  "operation": "Action",
   "btn": {
     "teamManager": "Team Management"
   },
@@ -54,5 +56,22 @@
     "backup": "Backup Machine",
     "enable": "Enable",
     "disable": "Disable"
+  },
+  "env": {
+    "editEnv": "Edit env",
+    "delEnv": "Delete env",
+    "cloneEnv": "Clone env",
+    "createEnv": "Create env",
+    "envName": "Env Name: \"{{name}}\"",
+    "server": "Service",
+    "db": "Database",
+    "createServer": "Create service",
+    "serviceName": "Service name",
+    "serviceAdder": "Service content",
+    "createDb": "Create DB",
+    "dbType": "DB type",
+    "dbName": "DB name",
+    "host": "IP",
+    "port": "Port"
   }
 }

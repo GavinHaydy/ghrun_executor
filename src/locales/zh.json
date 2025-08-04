@@ -6,6 +6,8 @@
   "cancel": "取消",
   "save": "保存",
   "add": "添加",
+  "name": "名称",
+  "operation": "操作",
   "btn": {
     "teamManager": "团队管理"
   },
@@ -54,5 +56,22 @@
     "backup": "备用机器",
     "enable": "启用",
     "disable": "停用"
+  },
+  "env": {
+    "editEnv": "编辑环境",
+    "delEnv": "删除环境",
+    "cloneEnv": "克隆环境",
+    "createEnv": "新建环境",
+    "envName": "环境名称: \"{{name}}\"",
+    "server": "服务",
+    "db": "数据库",
+    "createServer": "添加服务",
+    "serviceName": "服务名",
+    "serviceAdder": "服务地址",
+    "createDb": "添加数据库",
+    "dbType": "数据库类型",
+    "dbName": "库名",
+    "host": "IP地址",
+    "port": "端口号"
   }
 }

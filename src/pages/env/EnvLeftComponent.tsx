@@ -5,6 +5,7 @@ import React, {useEffect, useState} from "react";
 import {ServiceCopyEnv, ServiceCreateEnv, ServiceDeleteEnv} from "@/api/env.ts";
 import {useAuthInfo} from "@/hooks/useAuthInfo.ts";
 import {IconFont} from "@/pages/components/IconFont.ts";
+import {useTranslation} from "react-i18next";
 
 export interface EnvLeftComponentProps {
     data: IEnv[]
@@ -13,6 +14,7 @@ export interface EnvLeftComponentProps {
 }
 
 export const EnvLeftComponent:React.FC<EnvLeftComponentProps> = ({data,onParamsChange,envTail}) => {
+    const {t} = useTranslation()
     const [keyword, setKeyword] = useState<string>('')
     const teamId = useAuthInfo().teamId
     const [messageApi, contextHolder] = message.useMessage();
@@ -69,18 +71,18 @@ export const EnvLeftComponent:React.FC<EnvLeftComponentProps> = ({data,onParamsC
 
     const items: MenuProps['items'] = [
         {
-            label: '编辑环境',
+            label: t('env.editEnv'),
             key: '1',
         },
         {
-            label: '删除环境',
+            label: t('env.delEnv'),
             key: '2',
             onClick: () => {
                 handleDelEnv()
             },
         },
         {
-            label: '克隆环境',
+            label: t('env.cloneEnv'),
             key: '3',
             onClick: () => {
                 handleCloneEnv()
@@ -95,7 +97,7 @@ export const EnvLeftComponent:React.FC<EnvLeftComponentProps> = ({data,onParamsC
             <Button
                 style={{width: '100%',backgroundColor:'transparent'}}
                 onClick={() => {handleCreateEnv()}}
-            >新建环境</Button>
+            >{t('env.createEnv')}</Button>
             {data && data.map((item:IEnv) => (
                 <div key={item.env_id} onClick={() => {setCurrentEnv(item)}}>
                     {item.env_name}
