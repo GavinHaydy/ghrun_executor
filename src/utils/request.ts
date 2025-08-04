@@ -63,7 +63,7 @@ service.interceptors.response.use(
             localStorage.clear()
             message.error(response.data["et"]).then(() => {
                 setTimeout(() => {
-                    location.replace('/')
+                    location.replace(`${window.RUNTIME_ENV?.GR_ADMIN_URL}/login`)
                 }, 1000)
             })
         }
