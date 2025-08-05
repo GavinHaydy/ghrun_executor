@@ -6,6 +6,7 @@ import {ProtectedRoute} from "@/router/ProtectedRoute.ts";
 import {HomePage} from "@/pages/homePages";
 import {MachinePage} from "@/pages/machine";
 import {EnvManagementPage} from "@/pages/env";
+import {TestSubjectPage} from "@/pages/testSubject";
 
 export const router = createBrowserRouter([
     {
@@ -36,10 +37,10 @@ export const router = createBrowserRouter([
               path: "machine",
               element: <MachinePage />,
             },
-        //     {
-        //         path: "member",
-        //         element: <MemberPage />,
-        //     },
+            {
+                path: "apis",
+                element: <TestSubjectPage />,
+            },
         //     {
         //         path: "role",
         //         element: <RolePage />,
