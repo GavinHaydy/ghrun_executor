@@ -1,4 +1,4 @@
-import {Dropdown, Input, Space} from "antd";
+import {Dropdown, Input, Space, Splitter} from "antd";
 import {SearchOutlined} from "@ant-design/icons";
 import React, {useState} from "react";
 import type {ITargetList} from "@/types/targetType.ts";
@@ -26,25 +26,22 @@ export const SubjectLeftComponent: React.FC<SubjectLeftComponentProps> = ({data}
             <Input addonBefore={<SearchOutlined/>} onChange={(e) => {
                 setListSearch(e.target.value)
             }}/>
-            <div className={'subject-icon'}>
-                <span className={'subject-icon-item'}>
+            <Splitter>
+                <Splitter.Panel defaultSize={'25%'} resizable={false}>
                     <Dropdown menu={{items: createItems}}>
                         <IconFont type={'icon-connect'}/>
                     </Dropdown>
-                    <span className={'subject-icon-line'}>|</span>
-                </span>
-                <span className={'subject-icon-item'}>
+                </Splitter.Panel>
+                <Splitter.Panel defaultSize={'25%'} resizable={false}>
                     <IconFont type={'icon-add-folder'}/>
-                    <span className={'subject-icon-line'}>|</span>
-                </span>
-                <span className={'subject-icon-item'}>
+                </Splitter.Panel>
+                <Splitter.Panel defaultSize={'25%'} resizable={false}>
                     <IconFont type={'icon-download'}/>
-                    <span className={'subject-icon-line'}>|</span>
-                </span>
-                <span className={'subject-icon-item'}>
+                </Splitter.Panel>
+                <Splitter.Panel defaultSize={'25%'} resizable={false}>
                     <IconFont type={'icon-Expand'}/>
-                </span>
-            </div>
+                </Splitter.Panel>
+            </Splitter>
 
             {data && data.targets.map((item) => (
                 <div>
