@@ -127,7 +127,7 @@ export const HeaderComponent: React.FC = () => {
             if (r.em === "success") {
                 messageApi.success(r.et).then()
                 updateToken("")
-                window.location.href = "http://localhost:5173/login";
+                window.location.href = "/exe/login";
             } else {
                 messageApi.error(r.et).then()
             }
