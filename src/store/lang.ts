@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import Cookies from "js-cookie";
+import Cookies from "@/utils/cookie.ts";
 import i18n from "@/locales/i18n.ts";
 
 

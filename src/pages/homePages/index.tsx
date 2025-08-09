@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "@/styles/index.less";
 import {useCurrentTeamId} from "@/hooks/useSettings.ts";
-import Cookies from "js-cookie";
+import Cookies from "@/utils/cookie.ts";
 import {ApiCountComponent} from "@/pages/homePages/childComponents/ApiCountComponent.tsx";
 import type {IWSHomeData} from "@/types/ws/homeType.ts";
 import { CaseComponent } from "./childComponents/CaseComponent";

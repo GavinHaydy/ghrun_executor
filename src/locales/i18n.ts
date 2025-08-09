@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import enTranslation from '@/locales/en.json'
 import zhTranslation from '@/locales/zh.json'
-import Cookies from "js-cookie";
+import Cookies from "@/utils/cookie.ts";
 
 const getLangFromPersist = (): 'zh' | 'en' => {
     try {

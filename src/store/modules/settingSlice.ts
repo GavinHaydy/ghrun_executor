@@ -1,6 +1,6 @@
 import type {ISettings} from "@/types/settingType.ts";
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import Cookies from "js-cookie";
+import Cookies from "@/utils/cookie.ts";
 
 
 const initialState: ISettings = {

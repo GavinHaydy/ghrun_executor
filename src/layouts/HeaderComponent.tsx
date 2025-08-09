@@ -21,7 +21,7 @@ import {
 import {useAuthInfo} from "@/hooks/useAuthInfo.ts";
 import {logoutService} from "@/api/auth.ts";
 import {InviteMemberModal, type InviteMemberModalRef} from "@/layouts/HeaderFunctionComponent/InviteComponent.tsx";
-import Cookies from "js-cookie";
+import Cookies from "@/utils/cookie.ts";
 import {getWebSocket} from "@/utils/webSocketClientSinglon.ts";
 
 

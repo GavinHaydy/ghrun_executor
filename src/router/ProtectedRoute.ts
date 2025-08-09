@@ -1,6 +1,6 @@
 // 路由守卫组件
 import type {ReactNode} from "react";
-import Cookies from "js-cookie";
+import Cookies from "@/utils/cookie.ts";
 
 export const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 

@@ -1,6 +1,6 @@
 import axios, {type AxiosResponse} from "axios";
 import {message} from "antd";
-import Cookies from "js-cookie";
+import Cookies from "@/utils/cookie.ts";
 // import type {IApiResponse} from "@/types/commonType.ts";
 
 const service = axios.create({

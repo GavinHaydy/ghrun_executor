@@ -4,7 +4,7 @@ import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {type AppDispatch, type RootState} from "@/store";
 import {setMode} from "@/store/theme/themeSlice.ts";
-import Cookies from "js-cookie";
+import Cookies from "@/utils/cookie.ts";
 import {setLang} from "@/store/lang.ts";
 
 const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
