@@ -31,5 +31,5 @@ jobs:
           username: ${{ secrets.SERVER_USER }}    # SSH 登录用户名
           key: ${{ secrets.SERVER_SSH_KEY }}      # SSH 私钥内容（用于免密登录）
           source: "webExecutor/*"                        # 要上传的文件，dist 是构建后的输出目录
-          target: "/data/gavin/webExecutor/"              # 上传到服务器的目标路径
+          target: "/data/gavin/site2/"              # 上传到服务器的目标路径
           strip_components: 1                     # 上传时去除 dist/ 目录，只上传其内容
