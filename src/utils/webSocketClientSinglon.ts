@@ -13,7 +13,7 @@ let ws: WebSocketClient | null = null;
 
 export function getWebSocket() {
     if (!ws) {
-        const url = `/exe/websocket/index`;
+        const url = `/ws/websocket/index`;
         ws = new WebSocketClient({
             url,
             heartbeatInterval: 5000,
