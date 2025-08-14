@@ -21,7 +21,7 @@ import {
 import {useAuthInfo} from "@/hooks/useAuthInfo.ts";
 import {logoutService} from "@/api/auth.ts";
 import {InviteMemberModal, type InviteMemberModalRef} from "@/layouts/HeaderFunctionComponent/InviteComponent.tsx";
-import Cookies from "@/utils/cookie.ts";
+import Cookies, {clearAllCookies} from "@/utils/cookie.ts";
 import {getWebSocket} from "@/utils/webSocketClientSinglon.ts";
 
 
@@ -127,6 +127,7 @@ export const HeaderComponent: React.FC = () => {
             if (r.em === "success") {
                 messageApi.success(r.et).then()
                 updateToken("")
+                clearAllCookies()
                 window.location.href = "/exe/login";
             } else {
                 messageApi.error(r.et).then()

@@ -4,7 +4,25 @@ import {fileURLToPath, URL} from "node:url";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(),
+    //   dev 跳转处理
+    {
+      name: 'redirect-exe',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          if (req.url?.startsWith('/exe/')) {
+            const newPath = req.url.replace(/^\/exe/, '')
+            res.writeHead(301, {
+              Location: `http://localhost:5173${newPath}`
+            })
+            res.end()
+          } else {
+            next()
+          }
+        })
+      },
+    }
+  ],
   css: {
     preprocessorOptions: {
       less: {
@@ -29,11 +47,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: path => path.replace('', '')
       },
-      '/websocket': {
+      '/ws': {
         target: 'ws://localhost:58887',
         ws: true,       // 关键：启用 WebSocket 代理
         changeOrigin: true,
-        rewrite: path => path.replace('', ''),
+        rewrite: path => path.replace('ws', ''),
       },
     }
   },
