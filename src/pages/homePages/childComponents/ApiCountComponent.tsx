@@ -23,7 +23,7 @@ export const ApiCountComponent: React.FC<ApiCountComponentProps> = ({data}) => {
         const chartEl = chartRef.current
         const chartElScene = chartRefScene.current
         const lineEl = lineRef.current
-        const lineElScene = lineRef.current
+        const lineElScene = lineRefScene.current
 
         const referenced = data?.api_manage_data.api_cite_count??0; // 被引用接口数量
         const total = data?.api_manage_data.api_total_count??0;
@@ -206,7 +206,7 @@ export const ApiCountComponent: React.FC<ApiCountComponentProps> = ({data}) => {
             const chart = echarts.init(chartRefScene.current);
             chart.setOption(optionApiScene)
             chart.resize()
-            observer.disconnect()
+            observerScene.disconnect()
         })
 
         const lineObserver = new ResizeObserver(()=>{
