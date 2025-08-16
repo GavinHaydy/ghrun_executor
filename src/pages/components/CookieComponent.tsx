@@ -1,269 +1,244 @@
-// import React, { useState, useEffect } from 'react';
-// import { Table, Input, Checkbox, Button } from 'antd';
-// import { DeleteOutlined } from '@ant-design/icons';
-// import type { ColumnsType } from 'antd/es/table';
-// import type {ICookie} from "@/types/targets/cookieType.ts";
-//
-// interface EditableCellProps {
-//     value: string | boolean;
-//     onChange: (value: string | boolean) => void;
-//     type: 'key' | 'value' | 'is_check';
-// }
-//
-// const EditableCell: React.FC<EditableCellProps> = ({ value, onChange, type }) => {
-//     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> |
-//         React.MouseEvent<HTMLInputElement> |
-//         { target: { checked: boolean } }) => {
-//         if (type === 'is_check') {
-//             onChange((e as { target: { checked: boolean } }).target.checked);
-//         } else {
-//             onChange((e as React.ChangeEvent<HTMLInputElement>).target.value);
-//         }
-//     };
-//
-//     if (type === 'is_check') {
-//         return <Checkbox checked={value as boolean} onChange={handleChange} />;
-//     }
-//
-//     return <Input value={value as string} onChange={handleChange} />;
-// };
-//
-// export const CookieComponent: React.FC = () => {
-//     const [dataSource, setDataSource] = useState<ICookie[]>([
-//         {
-//             description: '',
-//             field_type: '',
-//             is_checked: 0,
-//             key: '',
-//             not_null: 0,
-//             type: '',
-//             value: '',
-//         }
-//     ]);
-//
-//     useEffect(() => {
-//         // 检查是否需要添加新行
-//         const shouldAddRow = dataSource.some(
-//             (item, index) =>
-//                 (item.key !== '' || item.value !== '') &&
-//                 (index === dataSource.length - 1) &&
-//                 (dataSource[dataSource.length - 1].key !== '' || dataSource[dataSource.length - 1].value !== '')
-//         );
-//
-//         if (shouldAddRow) {
-//             setDataSource(prev => [
-//                 ...prev,
-//                 {
-//                     description: '',
-//                     field_type: '',
-//                     is_checked: 0,
-//                     key: '',
-//                     not_null: 0,
-//                     type: '',
-//                     value: '',
-//                 }
-//             ]);
-//         }
-//     }, [dataSource]);
-//
-//     const handleFieldChange = (index: number, field: keyof ICookie, value: string | number) => {
-//         const newData = [...dataSource];
-//         if (field === 'is_checked'){
-//             newData[index][field] = value as number;
-//         }else if (field === 'key' || field === 'value'){
-//             newData[index][field] = value as  string;
-//         }else {
-//             console.log('field:', field)
-//         }
-//         setDataSource(newData);
-//     };
-//
-//     const handleDelete = (index: number) => {
-//         // 只有当 key 或 value 不为空时才能删除
-//         if (dataSource[index].key !== '' || dataSource[index].value !== '') {
-//             const newData = dataSource.filter((_, i) => i !== index);
-//             setDataSource(newData);
-//         }
-//     };
-//
-//     const columns: ColumnsType<ICookie> = [
-//         {
-//             title: 'Is Check',
-//             dataIndex: 'is_checked',
-//             width: '20%',
-//             render: (_: unknown, __: ICookie, index: number) => (
-//                 <EditableCell
-//                     value={dataSource[index].is_checked === 1}
-//                     onChange={(value) => handleFieldChange(index, 'is_checked', value ? 1 : 0)}
-//                     type="is_check"
-//                 />
-//             ),
-//         },
-//         {
-//             title: 'Key',
-//             dataIndex: 'key',
-//             width: '30%',
-//             render: (_: unknown, __: ICookie, index: number) => (
-//                 <EditableCell
-//                     value={dataSource[index].key}
-//                     onChange={(value) => handleFieldChange(index, 'key', value as string)}
-//                     type="key"
-//                 />
-//             ),
-//         },
-//         {
-//             title: 'Value',
-//             dataIndex: 'value',
-//             width: '30%',
-//             render: (_: unknown, __: ICookie, index: number) => (
-//                 <EditableCell
-//                     value={dataSource[index].value}
-//                     onChange={(value) => handleFieldChange(index, 'value', value as string)}
-//                     type="value"
-//                 />
-//             ),
-//         },
-//         {
-//             title: 'Action',
-//             dataIndex: 'action',
-//             width: '20%',
-//             render: (_: unknown, record: ICookie, index: number) => (
-//                 <Button
-//                     type="link"
-//                     icon={<DeleteOutlined />}
-//                     onClick={() => handleDelete(index)}
-//                     disabled={record.key === '' && record.value === ''}
-//                 />
-//             ),
-//         },
-//     ];
-//
-//     return (
-//         <Table
-//             dataSource={dataSource}
-//             columns={columns}
-//             pagination={false}
-//             rowKey={(_, index) => index?.toString() || '0'}
-//         />
-//     );
-// };
-//
-import React, {useState } from 'react';
-import { Table, Input, Switch, Button } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import {Table, Input, Form, Switch, type FormInstance} from 'antd';
+import type { InputRef } from 'antd';
+import type { ICookie } from '@/types/targets/cookieType.ts';
+import {DeleteOutlined} from "@ant-design/icons";
 
-interface RowData {
-    key: string;
-    enabled: boolean;
-    name: string;
-    value: string;
+const EditableContext = React.createContext<FormInstance<ICookie>| null>(null);
+
+interface EditableRowProps {
+    index: number;
 }
 
+const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
+    const [form] = Form.useForm();
+    return (
+        <Form form={form} component={false}>
+            <EditableContext.Provider value={form}>
+                <tr {...props} className={index % 2 === 0 ? 'even-row' : 'odd-row'} />
+            </EditableContext.Provider>
+        </Form>
+    );
+};
+
+interface EditableCellProps {
+    // title: React.ReactNode;
+    editable: boolean;
+    dataIndex: keyof ICookie;
+    record: ICookie;
+    handleSave: (record: ICookie) => void;
+    placeholder?: string;
+}
+
+const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
+                                                                                // title,
+                                                                                editable,
+                                                                                children,
+                                                                                dataIndex,
+                                                                                record,
+                                                                                handleSave,
+                                                                                placeholder,
+                                                                                ...restProps
+                                                                            }) => {
+    const [editing, setEditing] = useState(false);
+    const inputRef = useRef<InputRef>(null);
+    const form = useContext(EditableContext)!;
+
+    useEffect(() => {
+        if (editing) {
+            inputRef.current?.focus();
+        }
+    }, [editing]);
+
+    const toggleEdit = () => {
+        setEditing(!editing);
+        form.setFieldsValue({ [dataIndex]: record[dataIndex] });
+    };
+
+    const save = async () => {
+        try {
+            const values = await form.validateFields();
+            setEditing(false);
+            handleSave({ ...record, ...values });
+
+        } catch (errInfo) {
+            console.log('Save failed:', errInfo);
+        }
+    };
+
+    let childNode = children;
+
+    if (editable) {
+        childNode = editing ? (
+            <Form.Item
+                style={{ margin: 0 }}
+                name={dataIndex}
+                // rules={[{ required: true, message: `${title} is required.` }]}
+            >
+                <Input ref={inputRef} placeholder={placeholder} onPressEnter={save} onBlur={save} />
+            </Form.Item>
+        ) : (
+            <div
+                className="editable-cell-value-wrap"
+                style={{ paddingInlineEnd: 24, minHeight: 24 }}
+                onClick={toggleEdit}
+            >
+                {record[dataIndex]}
+            </div>
+        );
+    }
+
+    return <td {...restProps}>{childNode}</td>;
+};
+
 export const CookieComponent: React.FC = () => {
-    const [data, setData] = useState<RowData[]>([
-        { key: '1', enabled: true, name: '', value: '' },
+    const [dataSource, setDataSource] = useState<ICookie[]>([
+        {
+            id: '1',
+            key: '',
+            value: '',
+            description: '',
+            field_type: 'String',
+            fileBase64: null,
+            is_checked: 1,
+            not_null: 1,
+            type: 'Text',
+        },
     ]);
 
-    // 判断是否最后一行为空，如果不是就加一行
-    const checkAndAddEmptyRow = (rows: RowData[]) => {
-        const last = rows[rows.length - 1];
-        if (last.name || last.value) {
-            const newRow: RowData = {
-                key: Date.now().toString(),
-                enabled: true,
-                name: '',
-                value: '',
-            };
-            return [...rows, newRow];
-        }
-        return rows;
+    const handleDelete = (id: string) => {
+        setDataSource(prev => prev.filter(item => item.id !== id));
     };
 
-    const handleChange = (
-        key: string,
-        field: keyof Omit<RowData, 'key'>,
-        value: string | boolean
-    ) => {
-        const newData = data.map(row =>
-            row.key === key ? { ...row, [field]: value } : row
-        );
-        setData(checkAndAddEmptyRow(newData));
-        console.log('data:', data);
-    };
+    // const handleAdd = () => {
+    //     const maxId = Math.max(...dataSource.map(item => Number(item.id)), 0);
+    //     setDataSource(prev => [
+    //         ...prev,
+    //         {
+    //             id: String(maxId + 1),
+    //             key: '',
+    //             value: '',
+    //             description: '',
+    //             field_type: 'String',
+    //             fileBase64: null,
+    //             is_checked: 1,
+    //             not_null: 1,
+    //             type: 'Text',
+    //         },
+    //     ]);
+    // };
 
-    const handleDelete = (key: string) => {
-        const row = data.find(d => d.key === key);
-        // 如果是空行，不允许删除
-        if (!row?.name && !row?.value) return;
+    const handleSave = (row: ICookie) => {
+        setDataSource((prev) => {
+            const newData = [...prev];
+            const index = newData.findIndex((item) => item.id === row.id);
 
-        const newData = data.filter(d => d.key !== key);
-        setData(newData);
+            if (index === -1) return newData;
+
+            const updatedRow = { ...newData[index], ...row };
+            newData[index] = updatedRow;
+
+            const isLastRow = index === newData.length - 1;
+            const isEmpty = (!updatedRow.key || updatedRow.key.trim() === '') &&
+                (!updatedRow.value || updatedRow.value.trim() === '');
+
+            // 逻辑 1：最后一行不为空 → 新增行
+            if (isLastRow && !isEmpty) {
+                const maxId = Math.max(...newData.map(item => Number(item.id)), 0);
+                newData.push({
+                    description: '',
+                    field_type: 'String',
+                    fileBase64: null,
+                    id: String(maxId + 1),
+                    is_checked: 1,
+                    key: '',
+                    not_null: 1,
+                    type: 'Text',
+                    value: ''
+                });
+            }
+
+            // 逻辑 2：非最后一行为空 → 删除行
+            if (!isLastRow && isEmpty) {
+                newData.splice(index, 1);
+            }
+            console.log(newData)
+            return newData;
+        });
     };
 
     const columns = [
         {
-            title: '',
-            dataIndex: 'enabled',
-            width: 50,
-            render: (_: unknown, record: RowData) => (
+            title: 'Enable',
+            dataIndex: 'is_checked',
+            width: '10%',
+            render: (_: unknown, record: ICookie) => (
                 <Switch
-                    checked={record.enabled}
-                    onChange={value => handleChange(record.key, 'enabled', value)}
+                    checked={record.is_checked === 1}
+                    onChange={checked => handleSave({ ...record, is_checked: checked ? 1 : 2 })}
                 />
             ),
         },
         {
-            title: 'cookie名',
-            dataIndex: 'name',
-            render: (_: unknown, record: RowData) => (
-                <Input
-                    value={record.name}
-                    placeholder="参数名"
-                    onChange={e => handleChange(record.key, 'name', e.target.value)}
-                />
-            ),
+            title: 'Cookie Key',
+            dataIndex: 'key',
+            editable: true,
         },
         {
-            title: 'cookie值',
+            title: 'Cookie Value',
             dataIndex: 'value',
-            render: (_: unknown, record: RowData) => (
-                <Input
-                    style={{border: 'none'}}
-                    value={record.value}
-                    placeholder="参数值"
-                    onChange={e => handleChange(record.key, 'value', e.target.value)}
-                />
-            ),
+            editable: true,
         },
         {
-            title: '',
-            dataIndex: 'actions',
-            width: 50,
-            render: (_: unknown, record: RowData) => {
-                const isEmpty = !record.name && !record.value;
-                return (
-                    <Button
-                        type="text"
-                        icon={<DeleteOutlined />}
-                        disabled={isEmpty}
-                        onClick={() => handleDelete(record.key)}
-                    />
-                );
+            title: 'Operation',
+            dataIndex: 'operation',
+            render: (_: unknown, record: ICookie, index: number) => {
+                const isLastRow = index === dataSource.length - 1; // 判断是否最后一行
+
+                return(
+                    <DeleteOutlined onClick={() => {
+                        if (!isLastRow){
+                            handleDelete(record.id)
+                        }
+                    }}>
+                    </DeleteOutlined>
+                    )
             },
         },
     ];
 
+
+    const mergedColumns = columns.map(col => {
+        if (!col.editable) return col;
+        return {
+            ...col,
+            onCell: (record: ICookie) => ({
+                record,
+                editable: col.editable,
+                dataIndex: col.dataIndex as keyof ICookie,
+                title: col.title,
+                handleSave,
+                placeholder: col.dataIndex === 'key' ? '请输入 cookieKey' : '请输入 cookieVal',
+            }),
+        };
+    });
+
+    const components = {
+        body: {
+            row: EditableRow,
+            cell: EditableCell,
+        },
+    };
+
     return (
-        <Table<RowData>
-            rowKey="key"
-            columns={columns}
-            dataSource={data}
-            pagination={false}
-            bordered
+        <Table
             size="small"
-            style={{ background: '#0e0e25', color: '#fff' }}
+            components={components}
+            bordered
+            dataSource={dataSource}
+            columns={mergedColumns}
+            rowKey="id"
+            pagination={false}
         />
     );
 };
-
-// export default EditableRowTable;
