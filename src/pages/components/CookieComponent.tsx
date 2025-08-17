@@ -1,13 +1,18 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Table, Input, Form, Switch, type FormInstance} from 'antd';
 import type { InputRef } from 'antd';
 import type { ICookie } from '@/types/targets/cookieType.ts';
 import {DeleteOutlined} from "@ant-design/icons";
+import {useTranslation} from "react-i18next";
 
 const EditableContext = React.createContext<FormInstance<ICookie>| null>(null);
 
 interface EditableRowProps {
     index: number;
+}
+
+interface CookieComponentProps{
+    onChange:(data: ICookie[]) => void
 }
 
 const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
@@ -91,7 +96,8 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
     return <td {...restProps}>{childNode}</td>;
 };
 
-export const CookieComponent: React.FC = () => {
+export const CookieComponent: React.FC<CookieComponentProps> = ({onChange}) => {
+    const {t} = useTranslation()
     const [dataSource, setDataSource] = useState<ICookie[]>([
         {
             id: '1',
@@ -106,6 +112,9 @@ export const CookieComponent: React.FC = () => {
         },
     ]);
 
+    useEffect(() => {
+        onChange(dataSource.slice(0,-1))
+    }, [dataSource]);
     const handleDelete = (id: string) => {
         setDataSource(prev => prev.filter(item => item.id !== id));
     };
@@ -162,16 +171,16 @@ export const CookieComponent: React.FC = () => {
             if (!isLastRow && isEmpty) {
                 newData.splice(index, 1);
             }
-            console.log(newData)
+            console.log(newData.slice(0,-1))
             return newData;
         });
     };
 
     const columns = [
         {
-            title: 'Enable',
+            title: t('subject.cookieEnable'),
             dataIndex: 'is_checked',
-            width: '10%',
+            width: '1%',
             render: (_: unknown, record: ICookie) => (
                 <Switch
                     checked={record.is_checked === 1}
@@ -180,18 +189,19 @@ export const CookieComponent: React.FC = () => {
             ),
         },
         {
-            title: 'Cookie Key',
+            title: t('subject.cookieKey'),
             dataIndex: 'key',
             editable: true,
         },
         {
-            title: 'Cookie Value',
+            title: t('subject.cookieValue'),
             dataIndex: 'value',
             editable: true,
         },
         {
-            title: 'Operation',
+            // title: t('operation'),
             dataIndex: 'operation',
+            width: '1%',
             render: (_: unknown, record: ICookie, index: number) => {
                 const isLastRow = index === dataSource.length - 1; // 判断是否最后一行
 

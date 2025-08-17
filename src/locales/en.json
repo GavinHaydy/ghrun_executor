@@ -76,5 +76,10 @@
     "host": "IP",
     "port": "Port",
     "charset": "Charset"
+  },
+  "subject": {
+    "cookieEnable": "Enable",
+    "cookieKey": "cookieName",
+    "cookieValue": "cookieValue"
   }
 }

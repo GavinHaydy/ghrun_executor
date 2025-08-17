@@ -76,5 +76,10 @@
     "host": "IP地址",
     "port": "端口号",
     "charset": "编码集"
+  },
+  "subject": {
+    "cookieEnable": "启用",
+    "cookieKey": "cookie名",
+    "cookieValue": "cookie值"
   }
 }
