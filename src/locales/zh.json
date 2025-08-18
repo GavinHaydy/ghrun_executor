@@ -10,6 +10,9 @@
   "operation": "操作",
   "username": "用户名",
   "password": "密码",
+  "enable": "启用",
+  "key": "参数名",
+  "value": "参数值",
   "btn": {
     "teamManager": "团队管理"
   },
@@ -78,8 +81,8 @@
     "charset": "编码集"
   },
   "subject": {
-    "cookieEnable": "启用",
     "cookieKey": "cookie名",
-    "cookieValue": "cookie值"
+    "cookieValue": "cookie值",
+    "description": "描述"
   }
 }

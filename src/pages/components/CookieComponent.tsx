@@ -178,7 +178,7 @@ export const CookieComponent: React.FC<CookieComponentProps> = ({onChange}) => {
 
     const columns = [
         {
-            title: t('subject.cookieEnable'),
+            title: t('enable'),
             dataIndex: 'is_checked',
             width: '1%',
             render: (_: unknown, record: ICookie) => (

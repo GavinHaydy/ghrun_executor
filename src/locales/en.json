@@ -10,6 +10,9 @@
   "operation": "Action",
   "username": "Username",
   "password": "Password",
+  "enable": "Enable",
+  "key": "Key",
+  "value": "Value",
   "btn": {
     "teamManager": "Team Management"
   },
@@ -78,8 +81,8 @@
     "charset": "Charset"
   },
   "subject": {
-    "cookieEnable": "Enable",
-    "cookieKey": "cookieName",
-    "cookieValue": "cookieValue"
+    "cookieKey": "Cookie Name",
+    "cookieValue": "Cookie Value",
+    "description": "Description"
   }
 }
