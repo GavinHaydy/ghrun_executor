@@ -1,11 +1,12 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {Table, Input, Form, Switch, type FormInstance} from 'antd';
-import type {InputRef} from 'antd';
+import React, { useEffect, useState} from 'react';
+import {Table, Form, Switch, type FormInstance} from 'antd';
 import {DeleteOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import type {IHeader} from "@/types/targets/headersType.ts";
+import {withEditableCell} from "@/pages/components/WithEditableCell.tsx";
+import {createHandleSave} from "@/pages/components/SaveComponent.ts";
 
-const EditableContext = React.createContext<FormInstance<IHeader> | null>(null);
+const EditableContext = React.createContext<FormInstance<IHeader>>({} as FormInstance);
 
 interface EditableRowProps {
     index: number;
@@ -26,75 +27,76 @@ const EditableRow: React.FC<EditableRowProps> = ({index, ...props}) => {
     );
 };
 
-interface EditableCellProps {
-    // title: React.ReactNode;
-    editable: boolean;
-    dataIndex: keyof IHeader;
-    record: IHeader;
-    handleSave: (record: IHeader) => void;
-    placeholder?: string;
-}
-
-const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
-                                                                                // title,
-                                                                                editable,
-                                                                                children,
-                                                                                dataIndex,
-                                                                                record,
-                                                                                handleSave,
-                                                                                placeholder,
-                                                                                ...restProps
-                                                                            }) => {
-    const [editing, setEditing] = useState(false);
-    const inputRef = useRef<InputRef>(null);
-    const form = useContext(EditableContext)!;
-
-    useEffect(() => {
-        if (editing) {
-            inputRef.current?.focus();
-        }
-    }, [editing]);
-
-    const toggleEdit = () => {
-        setEditing(!editing);
-        form.setFieldsValue({[dataIndex]: record[dataIndex]});
-    };
-
-    const save = async () => {
-        try {
-            const values = await form.validateFields();
-            setEditing(false);
-            handleSave({...record, ...values});
-
-        } catch (errInfo) {
-            console.log('Save failed:', errInfo);
-        }
-    };
-
-    let childNode = children;
-
-    if (editable) {
-        childNode = editing ? (
-            <Form.Item
-                style={{margin: 0}}
-                name={dataIndex}
-                // rules={[{ required: true, message: `${title} is required.` }]}
-            >
-                <Input ref={inputRef} placeholder={placeholder} onPressEnter={save} onBlur={save}/>
-            </Form.Item>
-        ) : (
-            <div
-                className="editable-cell-value-wrap"
-                style={{paddingInlineEnd: 24, minHeight: 24}}
-                onClick={toggleEdit}
-            >
-                {record[dataIndex]}
-            </div>
-        );
-    }
-
-    return <td {...restProps}>{childNode}</td>;
-};
+// interface EditableCellProps {
+//     // title: React.ReactNode;
+//     editable: boolean;
+//     dataIndex: keyof IHeader;
+//     record: IHeader;
+//     handleSave: (record: IHeader) => void;
+//     placeholder?: string;
+// }
+//
+// const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
+//                                                                                 // title,
+//                                                                                 editable,
+//                                                                                 children,
+//                                                                                 dataIndex,
+//                                                                                 record,
+//                                                                                 handleSave,
+//                                                                                 placeholder,
+//                                                                                 ...restProps
+//                                                                             }) => {
+//     const [editing, setEditing] = useState(false);
+//     const inputRef = useRef<InputRef>(null);
+//     const form = useContext(EditableContext)!;
+//
+//     useEffect(() => {
+//         if (editing) {
+//             inputRef.current?.focus();
+//         }
+//     }, [editing]);
+//
+//     const toggleEdit = () => {
+//         setEditing(!editing);
+//         form.setFieldsValue({[dataIndex]: record[dataIndex]});
+//     };
+//
+//     const save = async () => {
+//         try {
+//             const values = await form.validateFields();
+//             setEditing(false);
+//             handleSave({...record, ...values});
+//
+//         } catch (errInfo) {
+//             console.log('Save failed:', errInfo);
+//         }
+//     };
+//
+//     let childNode = children;
+//
+//     if (editable) {
+//         childNode = editing ? (
+//             <Form.Item
+//                 style={{margin: 0}}
+//                 name={dataIndex}
+//                 // rules={[{ required: true, message: `${title} is required.` }]}
+//             >
+//                 <Input ref={inputRef} placeholder={placeholder} onPressEnter={save} onBlur={save}/>
+//             </Form.Item>
+//         ) : (
+//             <div
+//                 className="editable-cell-value-wrap"
+//                 style={{paddingInlineEnd: 24, minHeight: 24}}
+//                 onClick={toggleEdit}
+//             >
+//                 {record[dataIndex]}
+//             </div>
+//         );
+//     }
+//
+//     return <td {...restProps}>{childNode}</td>;
+// };
+const EditableCell = withEditableCell<IHeader>(EditableContext)
 
 export const ReqHeaderComponent: React.FC<CookieComponentProps> = ({onChange}) => {
     const {t} = useTranslation()
@@ -136,43 +138,56 @@ export const ReqHeaderComponent: React.FC<CookieComponentProps> = ({onChange}) =
     //     ]);
     // };
 
-    const handleSave = (row: IHeader) => {
-        setDataSource((prev) => {
-            const newData = [...prev];
-            const index = newData.findIndex((item) => item.id === row.id);
-
-            if (index === -1) return newData;
-
-            const updatedRow = {...newData[index], ...row};
-            newData[index] = updatedRow;
-
-            const isLastRow = index === newData.length - 1;
-            const isEmpty = (!updatedRow.key || updatedRow.key.trim() === '') &&
-                (!updatedRow.value || updatedRow.value.trim() === '');
-
-            // 逻辑 1：最后一行不为空 → 新增行
-            if (isLastRow && !isEmpty) {
-                const maxId = Math.max(...newData.map(item => Number(item.id)), 0);
-                newData.push({
-                    description: '',
-                    field_type: 'String',
-                    id: String(maxId + 1),
-                    is_checked: 1,
-                    key: '',
-                    not_null: 1,
-                    type: 'Text',
-                    value: ''
-                });
-            }
-
-            // 逻辑 2：非最后一行为空 → 删除行
-            if (!isLastRow && isEmpty) {
-                newData.splice(index, 1);
-            }
-            console.log(newData.slice(0, -1))
-            return newData;
-        });
-    };
+    // const handleSave = (row: IHeader) => {
+    //     setDataSource((prev) => {
+    //         const newData = [...prev];
+    //         const index = newData.findIndex((item) => item.id === row.id);
+    //
+    //         if (index === -1) return newData;
+    //
+    //         const updatedRow = {...newData[index], ...row};
+    //         newData[index] = updatedRow;
+    //
+    //         const isLastRow = index === newData.length - 1;
+    //         const isEmpty = (!updatedRow.key || updatedRow.key.trim() === '') &&
+    //             (!updatedRow.value || updatedRow.value.trim() === '');
+    //
+    //         // 逻辑 1：最后一行不为空 → 新增行
+    //         if (isLastRow && !isEmpty) {
+    //             const maxId = Math.max(...newData.map(item => Number(item.id)), 0);
+    //             newData.push({
+    //                 description: '',
+    //                 field_type: 'String',
+    //                 id: String(maxId + 1),
+    //                 is_checked: 1,
+    //                 key: '',
+    //                 not_null: 1,
+    //                 type: 'Text',
+    //                 value: ''
+    //             });
+    //         }
+    //
+    //         // 逻辑 2：非最后一行为空 → 删除行
+    //         if (!isLastRow && isEmpty) {
+    //             newData.splice(index, 1);
+    //         }
+    //         console.log(newData.slice(0, -1))
+    //         return newData;
+    //     });
+    // };
+    const handleSave = createHandleSave<IHeader>(
+        setDataSource,
+        (id) => ({
+            id,
+            key: '',
+            value: '',
+            description: '',
+            field_type: 'String',
+            is_checked: 1,
+            not_null: 1,
+            type: 'Text',
+        })
+    )
 
     const columns = [
         {
