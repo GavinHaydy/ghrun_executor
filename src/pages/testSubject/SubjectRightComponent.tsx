@@ -4,16 +4,22 @@ import type {ICookie} from "@/types/targets/cookieType.ts";
 import {Tabs, type TabsProps} from "antd";
 import type {IHeader} from "@/types/targets/headersType.ts";
 import {ReqHeaderComponent} from "@/pages/components/ReqHeaderComponent.tsx";
+import {QueryComponent} from "@/pages/components/QueryComponent.tsx";
+import type {IQuery} from "@/types/targets/queryType.ts";
 
 export const SubjectRightComponent:React.FC = () =>{
     const [cookies, setCookies] = useState<ICookie[]>()
     const [headers, setHeaders] = useState<IHeader[]>()
+    const [query,setQuery] = useState<IQuery[]>()
     useEffect(() => {
         console.log(cookies)
     }, [cookies]);
     useEffect(() => {
         console.log(headers)
     }, [headers]);
+    useEffect(() => {
+        console.log(query)
+    }, [query]);
 
     const items: TabsProps['items'] = [
         {
@@ -29,7 +35,7 @@ export const SubjectRightComponent:React.FC = () =>{
         {
             label: 'Query',
             key: '3',
-            children: 'Content of Tab Pane 3',
+            children: <QueryComponent onChange={setQuery}/>,
         },
         {
             label: 'Body',
