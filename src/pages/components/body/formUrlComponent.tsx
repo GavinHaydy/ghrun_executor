@@ -4,16 +4,16 @@ import {DeleteOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import {withEditableCell} from "@/pages/components/WithEditableCell.tsx";
 import {createHandleSave} from "@/pages/components/SaveComponent.ts";
-import type {IQuery} from "@/types/targets/queryType.ts";
+import type {IBodyParameter} from "@/types/targets/bodyType.ts";
 
-const EditableContext = React.createContext<FormInstance<IQuery>>({} as FormInstance);
+const EditableContext = React.createContext<FormInstance<IBodyParameter>>({} as FormInstance);
 
 interface EditableRowProps {
     index: number;
 }
 
 interface CookieComponentProps {
-    onChange: (data: IQuery[]) => void
+    onChange: (data: IBodyParameter[]) => void
 }
 
 const EditableRow: React.FC<EditableRowProps> = ({index, ...props}) => {
@@ -27,11 +27,11 @@ const EditableRow: React.FC<EditableRowProps> = ({index, ...props}) => {
     );
 };
 
-const EditableCell = withEditableCell<IQuery>(EditableContext)
+const EditableCell = withEditableCell<IBodyParameter>(EditableContext)
 
-export const QueryComponent: React.FC<CookieComponentProps> = ({onChange}) => {
+export const BodyFormUrlComponent: React.FC<CookieComponentProps> = ({onChange}) => {
     const {t} = useTranslation()
-    const [dataSource, setDataSource] = useState<IQuery[]>([
+    const [dataSource, setDataSource] = useState<IBodyParameter[]>([
         {
             id: '1',
             key: '',
@@ -51,7 +51,7 @@ export const QueryComponent: React.FC<CookieComponentProps> = ({onChange}) => {
         setDataSource(prev => prev.filter(item => item.id !== id));
     };
 
-    const handleSave = createHandleSave<IQuery>(
+    const handleSave = createHandleSave<IBodyParameter>(
         setDataSource,
         (id) => ({
             id,
@@ -70,7 +70,7 @@ export const QueryComponent: React.FC<CookieComponentProps> = ({onChange}) => {
             title: t('enable'),
             dataIndex: 'is_checked',
             width: '1%',
-            render: (_: unknown, record: IQuery) => (
+            render: (_: unknown, record: IBodyParameter) => (
                 <Switch
                     checked={record.is_checked === 1}
                     onChange={checked => handleSave({...record, is_checked: checked ? 1 : 2})}
@@ -96,7 +96,7 @@ export const QueryComponent: React.FC<CookieComponentProps> = ({onChange}) => {
             // title: t('operation'),
             dataIndex: 'operation',
             width: '1%',
-            render: (_: unknown, record: IQuery, index: number) => {
+            render: (_: unknown, record: IBodyParameter, index: number) => {
                 const isLastRow = index === dataSource.length - 1; // 判断是否最后一行
 
                 return (
@@ -116,10 +116,10 @@ export const QueryComponent: React.FC<CookieComponentProps> = ({onChange}) => {
         if (!col.editable) return col;
         return {
             ...col,
-            onCell: (record: IQuery) => ({
+            onCell: (record: IBodyParameter) => ({
                 record,
                 editable: col.editable,
-                dataIndex: col.dataIndex as keyof IQuery,
+                dataIndex: col.dataIndex as keyof IBodyParameter,
                 title: col.title,
                 handleSave,
                 placeholder: col.dataIndex === 'key' ? '请输入 cookieKey' : '请输入 cookieVal',

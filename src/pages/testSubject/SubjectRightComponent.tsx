@@ -6,11 +6,14 @@ import type {IHeader} from "@/types/targets/headersType.ts";
 import {ReqHeaderComponent} from "@/pages/components/ReqHeaderComponent.tsx";
 import {QueryComponent} from "@/pages/components/QueryComponent.tsx";
 import type {IQuery} from "@/types/targets/queryType.ts";
+import {BodyComponent} from "@/pages/components/BodyComponent.tsx";
+import type {IBodyParameter} from "@/types/targets/bodyType.ts";
 
 export const SubjectRightComponent:React.FC = () =>{
     const [cookies, setCookies] = useState<ICookie[]>()
     const [headers, setHeaders] = useState<IHeader[]>()
     const [query,setQuery] = useState<IQuery[]>()
+    const [body,setBody] = useState<IBodyParameter[]>()
     useEffect(() => {
         console.log(cookies)
     }, [cookies]);
@@ -20,6 +23,9 @@ export const SubjectRightComponent:React.FC = () =>{
     useEffect(() => {
         console.log(query)
     }, [query]);
+    useEffect(() => {
+        console.log(body)
+    }, [body])
 
     const items: TabsProps['items'] = [
         {
@@ -40,7 +46,7 @@ export const SubjectRightComponent:React.FC = () =>{
         {
             label: 'Body',
             key: '4',
-            children: 'Content of Tab Pane 4',
+            children: <BodyComponent onChange={setBody}/>,
         },
         {
             label: 'Auth',

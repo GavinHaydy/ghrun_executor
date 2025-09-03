@@ -1,6 +1,7 @@
-export interface IQuery {
+export interface IBodyParameter{
     description: string
     field_type: string
+    fileBase64?: string
     id: string
     is_checked: number
     key: string
@@ -8,7 +9,8 @@ export interface IQuery {
     type: string
     value: string
 }
-
-export interface IQueryS {
-    parameter: IQuery;
+export interface IBodyType{
+    mode: string
+    parameter: IBodyParameter
+    raw: string
 }
