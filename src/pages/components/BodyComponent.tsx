@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import {Radio} from "antd";
 import type {IBodyParameter} from "@/types/targets/bodyType.ts";
 import {BodyFormUrlComponent} from "@/pages/components/body/formUrlComponent.tsx";
+import {BodyDataComponent} from "@/pages/components/body/formDataComponent.tsx";
+import {RawComponent} from "@/pages/components/body/rawComponent.tsx";
 
 interface CookieComponentProps {
     onChange: (data: IBodyParameter[]) => void
@@ -9,9 +11,17 @@ interface CookieComponentProps {
 
 export const BodyComponent: React.FC<CookieComponentProps> = ({onChange}) => {
     // const {t} = useTranslation()
-    const [bodyType,setType] = useState<string>('none')
+    const [bodyType, setType] = useState<string>('none')
+    const mapType =
+        {
+            "none": <div>none</div>,
+            "data": <BodyDataComponent onChange={onChange}/>,
+            "url": <BodyFormUrlComponent onChange={onChange}/>,
+            "raw": <RawComponent/>
+        }
 
-    return(
+
+    return (
         <>
             <Radio.Group
                 value={bodyType}
@@ -21,13 +31,19 @@ export const BodyComponent: React.FC<CookieComponentProps> = ({onChange}) => {
                     {value: 'url', label: 'x-www-form-urlencoded'},
                     {value: 'raw', label: 'raw'},
                 ]}
-                onChange={(e) => {setType(e.target.value)}}
+                onChange={(e) => {
+                    setType(e.target.value)
+                }}
             />
-            {bodyType === 'url'
-                ? <BodyFormUrlComponent onChange={onChange}/>
-                : bodyType === 'none'
-                ? <div>该请求暂时没有正文</div>
-                : <div>none</div>}
+            {Object.entries(mapType).map(([key,val]) => {
+                if (key === bodyType){
+                    return (
+                        <div key={key}>
+                            {val}
+                        </div>
+                    )
+                }
+            })}
         </>
     )
 
