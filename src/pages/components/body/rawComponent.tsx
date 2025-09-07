@@ -5,7 +5,7 @@ import format from 'xml-formatter';
 
 export const RawComponent:React.FC = () =>{
     const [value, setValue] = useState<string>('');
-    const [type, setType] = useState<string>('');
+    const [type, setType] = useState<string>('json');
     const handleMH = () => {
         // 使用 try-catch 来处理非法的 JSON，防止应用崩溃
         if (type === "json"){
