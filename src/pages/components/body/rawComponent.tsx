@@ -1,6 +1,7 @@
 import {Input, Select} from "antd";
 import React, {useState} from "react";
 import format from 'xml-formatter';
+import beautify from 'js-beautify';
 
 
 export const RawComponent:React.FC = () =>{
@@ -31,6 +32,20 @@ export const RawComponent:React.FC = () =>{
                 // setXmlOutput('错误: ' + (e as Error).message);
             }
         }
+        if (type === "js"){
+            try {
+                const formatted = beautify.js(value,{
+                    indent_size: 4,
+                    space_in_empty_paren: true,
+                    jslint_happy: true,
+                    break_chained_methods: true
+                })
+                setValue(formatted)
+            }
+            catch (e) {
+                console.log(`输入的 JavaScript 格式不正确.${e}`)
+            }
+        }
 
     };
 
@@ -38,7 +53,8 @@ export const RawComponent:React.FC = () =>{
     const options = [
         {value: "json", label: "JSON"},
         {value: "xml", label: "XML"},
-        {value: "html", label: "HTML"}
+        {value: "html", label: "HTML"},
+        {value: "js", label: "JS"},
     ]
     return (
         <>
