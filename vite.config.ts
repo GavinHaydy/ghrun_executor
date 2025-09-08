@@ -64,8 +64,8 @@ export default defineConfig({
             return id.toString().split('node_modules/')[1].split('/')[0].toString()
           }
         },
-        entryFileNames: 'assets/js[name].[hash].js',
-        chunkFileNames: 'assets/js[name].[hash].js',
+        entryFileNames: 'assets/js/[name].[hash].js',
+        chunkFileNames: 'assets/js/[name].[hash].js',
         assetFileNames: 'assets/[ext]/[name].[hash].[ext]'
       }
     },
