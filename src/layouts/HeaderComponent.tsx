@@ -113,6 +113,14 @@ export const HeaderComponent: React.FC = () => {
         handleGetUserSetting().then()
     }, []);
 
+    // 更新 Title
+    useEffect(() => {
+        teamList.map((item:ITeam) =>{
+            if (item.team_id === currentTeamId){
+                document.title = item.name
+            }
+        })
+    }, [teamList]);
 
     const handleOpenMembersModal = (teamId: string) => {
         teamMemberModalRef.current?.open(teamId)
