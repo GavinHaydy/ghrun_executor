@@ -2,8 +2,8 @@ import React from "react";
 
 type BaseRow = {
     id: string;
-    key: string;
-    value: string;
+    key?: string;
+    value?: string;
 };
 
 interface NewRowFactory<T extends BaseRow> {
@@ -12,7 +12,8 @@ interface NewRowFactory<T extends BaseRow> {
 
 export function createHandleSave<T extends BaseRow>(
     setDataSource: React.Dispatch<React.SetStateAction<T[]>>,
-    newRowFactory: NewRowFactory<T>
+    newRowFactory: NewRowFactory<T>,
+    isEmptyRow?: (row: T) => boolean // 可选判空函数
 ) {
     return (row: T) => {
         setDataSource((prev) => {
@@ -25,9 +26,17 @@ export function createHandleSave<T extends BaseRow>(
             newData[index] = updatedRow;
 
             const isLastRow = index === newData.length - 1;
+            // const isEmpty =
+            //     (!updatedRow.key || updatedRow.key.trim() === "") &&
+            //     (!updatedRow.value || updatedRow.value.trim() === "");
+
+            // 🔑 判空逻辑：优先用外部传的 isEmptyRow，否则就用默认的 key/value
             const isEmpty =
-                (!updatedRow.key || updatedRow.key.trim() === "") &&
-                (!updatedRow.value || updatedRow.value.trim() === "");
+                isEmptyRow?.(updatedRow) ??
+                (
+                    ("key" in updatedRow && (!updatedRow.key || updatedRow.key.trim() === "")) &&
+                    ("value" in updatedRow && (!updatedRow.value || updatedRow.value.trim() === ""))
+                );
 
             // 逻辑 1：最后一行不为空 → 新增行
             if (isLastRow && !isEmpty) {
