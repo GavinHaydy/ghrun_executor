@@ -69,6 +69,7 @@ export default defineConfig({
         assetFileNames: 'assets/[ext]/[name].[hash].[ext]'
       }
     },
-    outDir: 'webExecutor'
+    outDir: 'webExecutor',
+    sourcemap: true
   }
 })
