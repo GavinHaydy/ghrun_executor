@@ -13,6 +13,9 @@
   "enable": "Enable",
   "key": "Key",
   "value": "Value",
+  "assertBody": "Assertion body",
+  "field": "field",
+  "condition": "condition",
   "btn": {
     "teamManager": "Team Management"
   },
@@ -27,7 +30,8 @@
     "addMemberWithinTheEnterprise": "Add members within the enterprise"
   },
   "placeholder": {
-    "searchMember": "Search nickname/account"
+    "searchMember": "Search nickname/account",
+    "select": "Please select"
   },
   "table": {
     "member": "Member",
@@ -83,6 +87,9 @@
   "subject": {
     "cookieKey": "Cookie Name",
     "cookieValue": "Cookie Value",
-    "description": "Description"
+    "description": "Description",
+    "resHeader": "Response Header",
+    "resBody": "Response Body",
+    "resCode": "Response Code"
   }
 }

@@ -13,6 +13,9 @@
   "enable": "启用",
   "key": "参数名",
   "value": "参数值",
+  "assertBody": "断言体",
+  "field": "字段",
+  "condition": "条件",
   "btn": {
     "teamManager": "团队管理"
   },
@@ -27,7 +30,8 @@
     "addMemberWithinTheEnterprise": "添加企业内成员"
   },
   "placeholder": {
-    "searchMember": "搜索昵称/账号"
+    "searchMember": "搜索昵称/账号",
+    "select": "请选择"
   },
   "table": {
     "member": "成员",
@@ -83,6 +87,9 @@
   "subject": {
     "cookieKey": "cookie名",
     "cookieValue": "cookie值",
-    "description": "描述"
+    "description": "描述",
+    "resHeader": "响应头",
+    "resBody": "响应体",
+    "resCode": "响应码"
   }
 }

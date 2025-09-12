@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import {Table, Form, Switch, type FormInstance} from 'antd';
+import {Table, Form, Switch, type FormInstance, Select} from 'antd';
 import {DeleteOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import {withEditableCell} from "@/pages/components/WithEditableCell.tsx";
@@ -49,6 +49,23 @@ export const AssertComponent: React.FC<CookieComponentProps> = ({onChange}) => {
         setDataSource(prev => prev.filter(item => item.id !== id));
     };
 
+    const assertBodyType = [
+        {value: '1', label: t('resHeader')},
+        {value: '2', label: t('resBody')},
+        {value: '3', label: t('resCode')},
+    ]
+    const COMPARE_TYPE = [
+        { value: 'eq', label: '等于' },
+        { value: 'uneq', label: '不等于' },
+        { value: 'gt', label: '大于' },
+        { value: 'gte', label: '大于或等于' },
+        { value: 'lt', label: '小于' },
+        { value: 'lte', label: '小于或等于' },
+        { value: 'includes', label: '包含' },
+        { value: 'unincludes', label: '不包含' },
+        { value: 'null', label: '等于空' },
+        { value: 'notnull', label: '不等于空' },
+    ];
     const handleSave = createHandleSave<IAssert>(
         setDataSource,
         (id) => ({
@@ -58,7 +75,8 @@ export const AssertComponent: React.FC<CookieComponentProps> = ({onChange}) => {
             response_type: 1,
             val: "",
             var: ""
-        })
+        }),
+        (row) => !row.var.trim() && !row.val.trim(),
     )
 
     const columns = [
@@ -74,18 +92,30 @@ export const AssertComponent: React.FC<CookieComponentProps> = ({onChange}) => {
             ),
         },
         {
-            title: t('key'),
-            dataIndex: 'key',
+            title: t('assertBody'),
+            dataIndex: 'response_type',
+            width: '1%',
+            render: () => (
+                <Select options={assertBodyType} placeholder={t('placeholder.select')}></Select>
+            )
+        },
+        {
+            title: t('field'), // 字段
+            dataIndex: 'var',
             editable: true,
+        },
+        {
+            title: t('condition'), // 条件
+            dataIndex: 'compare',
+            // editable: true,
+            width: '1%',
+            render: ()=>  (
+                <Select options={COMPARE_TYPE} placeholder={t('placeholder.select')}></Select>
+            )
         },
         {
             title: t('value'),
-            dataIndex: 'value',
-            editable: true,
-        },
-        {
-            title: t('subject.description'),
-            dataIndex: 'description',
+            dataIndex: 'val',
             editable: true,
         },
         {
