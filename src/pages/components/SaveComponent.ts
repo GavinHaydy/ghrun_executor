@@ -49,7 +49,7 @@ export function createHandleSave<T extends BaseRow>(
                 newData.splice(index, 1);
             }
 
-            console.log(newData.slice(0, -1));
+            // console.log(newData.slice(0, -1));
             return newData;
         });
     };
