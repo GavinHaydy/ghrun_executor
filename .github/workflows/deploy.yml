@@ -17,11 +17,16 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Install dependencies
-        run: npm install
+        run:  pnpm install #npm install
 
       - name: Build project
-        run: npm run build
+        run: pnpm run build #npm run build
 
       # 工作步骤：上传构建后的文件到服务器并触发热更新
       - name: Upload build to server (hot update)  # 步骤名称：热更新上传到服务器
