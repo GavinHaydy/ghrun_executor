@@ -11,10 +11,9 @@ export interface CommonEditableCellProps<T> {
     handleSave: (record: T) => void;
     placeholder?: string;
     context: React.Context<FormInstance>; // Context 作为参数传入
+    disableEdit?: (record: T) => boolean;  // 禁用输入框
 }
 
-type EditableCellProps<T> = CommonEditableCellProps<T> &
-    Omit<React.ComponentPropsWithoutRef<"td">,"children">;
 
 export function EditableCell<T extends object>({
                                                    editable,
@@ -24,8 +23,9 @@ export function EditableCell<T extends object>({
                                                    handleSave,
                                                    placeholder,
                                                    context,
+                                                   disableEdit,
                                                    ...restProps
-                                               }: EditableCellProps<T>) {
+                                               }: React.PropsWithChildren<CommonEditableCellProps<T>>) {
     const [editing, setEditing] = useState(false);
     const inputRef = useRef<InputRef>(null);
     const form = useContext(context)!;
@@ -35,6 +35,7 @@ export function EditableCell<T extends object>({
     }, [editing]);
 
     const toggleEdit = () => {
+        if (disableEdit?.(record)) return;
         setEditing(!editing);
         form.setFieldsValue({ [dataIndex]: record[dataIndex] });
     };
@@ -59,6 +60,7 @@ export function EditableCell<T extends object>({
                     placeholder={placeholder}
                     onPressEnter={save}
                     onBlur={save}
+                    disabled={disableEdit?.(record)}
                 />
             </Form.Item>
         ) : (
