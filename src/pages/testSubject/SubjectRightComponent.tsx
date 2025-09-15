@@ -12,6 +12,7 @@ import {AssertComponent} from "@/pages/components/AssertComponent.tsx";
 import type {IAssert} from "@/types/targets/assertType.ts";
 import {AssociationExtractionComponent} from "@/pages/components/AssociationExtractionComponent.tsx";
 import type {IAssociation} from "@/types/targets/associationType.ts";
+import {ApiSettingComponent} from "@/pages/components/ApiSettingComponent.tsx";
 
 export const SubjectRightComponent:React.FC = () =>{
     const [cookies, setCookies] = useState<ICookie[]>()
@@ -78,7 +79,7 @@ export const SubjectRightComponent:React.FC = () =>{
         {
             label: 'APISettings',
             key: '8',
-            children: 'Content of Tab Pane 8',
+            children: <ApiSettingComponent/>,
         },
     ]
     return (
