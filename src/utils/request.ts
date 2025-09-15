@@ -1,6 +1,6 @@
 import axios, {type AxiosResponse} from "axios";
 import {message} from "antd";
-import Cookies from "@/utils/cookie.ts";
+import Cookies, {clearAllCookies} from "@/utils/cookie.ts";
 // import type {IApiResponse} from "@/types/commonType.ts";
 
 const service = axios.create({
@@ -63,6 +63,7 @@ service.interceptors.response.use(
             localStorage.clear()
             message.error(response.data["et"]).then(() => {
                 setTimeout(() => {
+                    clearAllCookies()
                     location.replace(`/exe/login`)
                 }, 1000)
             })
