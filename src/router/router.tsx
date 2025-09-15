@@ -2,7 +2,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { GlobalLayout } from "@/layouts/DefaultLayout.tsx";
 import { ErrorPage } from "@/pages/error/errorPage";
-import {ProtectedRoute} from "@/router/ProtectedRoute.tsx";
+import {ProtectedRoute} from "@/router/ProtectedRoute.ts";
 import {HomePage} from "@/pages/homePages";
 import {MachinePage} from "@/pages/machine";
 import {EnvManagementPage} from "@/pages/env";
