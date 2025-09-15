@@ -13,6 +13,7 @@ import type {IAssert} from "@/types/targets/assertType.ts";
 import {AssociationExtractionComponent} from "@/pages/components/AssociationExtractionComponent.tsx";
 import type {IAssociation} from "@/types/targets/associationType.ts";
 import {ApiSettingComponent} from "@/pages/components/ApiSettingComponent.tsx";
+import type {IApiSetting} from "@/types/targets/apiSettingType.ts";
 
 export const SubjectRightComponent:React.FC = () =>{
     const [cookies, setCookies] = useState<ICookie[]>()
@@ -21,6 +22,7 @@ export const SubjectRightComponent:React.FC = () =>{
     const [body,setBody] = useState<IBodyParameter[]>()
     const [assert,setAssert] = useState<IAssert[]>()
     const [association,setAssociation] = useState<IAssociation[]>()
+    const [apiSetting,setApiSettings] = useState<IApiSetting>()
     useEffect(() => {
         console.log(cookies)
     }, [cookies]);
@@ -39,6 +41,9 @@ export const SubjectRightComponent:React.FC = () =>{
     useEffect(() => {
         console.log(association)
     }, [association]);
+    useEffect(() => {
+        console.log(apiSetting)
+    }, [apiSetting]);
 
     const items: TabsProps['items'] = [
         {
@@ -79,7 +84,7 @@ export const SubjectRightComponent:React.FC = () =>{
         {
             label: 'APISettings',
             key: '8',
-            children: <ApiSettingComponent/>,
+            children: <ApiSettingComponent onChange={setApiSettings}/>,
         },
     ]
     return (
