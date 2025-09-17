@@ -53,6 +53,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: path => path.replace('ws', ''),
       },
+      '/file':{
+        target: 'http://localhost:58888', // fileServer
+        changeOrigin: true,
+        // rewrite: path => path.replace('', ''),
+      }
     }
   },
   build: {
