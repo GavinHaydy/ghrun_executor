@@ -14,6 +14,7 @@ import {AssociationExtractionComponent} from "@/pages/components/AssociationExtr
 import type {IAssociation} from "@/types/targets/associationType.ts";
 import {ApiSettingComponent} from "@/pages/components/ApiSettingComponent.tsx";
 import type {IApiSetting} from "@/types/targets/apiSettingType.ts";
+import {AuthComponent} from "@/pages/components/AuthComponent.tsx";
 
 export const SubjectRightComponent:React.FC = () =>{
     const [cookies, setCookies] = useState<ICookie[]>()
@@ -69,7 +70,7 @@ export const SubjectRightComponent:React.FC = () =>{
         {
             label: 'Auth',
             key: '5',
-            children: 'Content of Tab Pane 5',
+            children: <AuthComponent/>,
         },
         {
             label: 'Assertion',
