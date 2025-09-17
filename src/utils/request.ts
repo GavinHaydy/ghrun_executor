@@ -78,13 +78,14 @@ service.interceptors.response.use(
 );
 
 
-export const request = async (url: string, method: string, data?: object) => {
+export const request = async (url: string, method: string, data?: object, headers?: Record<string, string>) => {
     const res = await service({
         url,
         method,
-        data
+        data,
+        headers
     });
-    return await res.data;
+    return res.data;
 }
 
 export const Method = {
