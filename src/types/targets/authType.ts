@@ -7,3 +7,7 @@ export interface IPrivateKV{
     key: string,
     value: string
 }
+
+export interface IAuth{
+    kv: IPrivateKV
+}
