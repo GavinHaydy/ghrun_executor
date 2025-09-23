@@ -26,6 +26,7 @@ export const BasicAuthComponent: React.FC<BasicAuthProps> = ({onChange}) => {
 
     return (
         <Form
+            form={form}
             onChange={handleChange}
         >
             <Form.Item label={'username'} name={'username'}>
