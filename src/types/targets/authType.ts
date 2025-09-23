@@ -11,3 +11,7 @@ export interface IPrivateKV{
 export interface IAuth{
     kv: IPrivateKV
 }
+
+export interface IBearer{
+    key: string
+}

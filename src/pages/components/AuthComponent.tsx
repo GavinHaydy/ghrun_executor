@@ -4,25 +4,32 @@ import {useEffect, useState} from "react";
 import {OneWayComponent} from "@/pages/components/auth/oneWay.tsx";
 import {MutualAuthComponent} from "@/pages/components/auth/mutualAuth.tsx";
 import {PrivateKVPComponent} from "@/pages/components/auth/privateKVP.tsx";
-import type {IPrivateKV} from "@/types/targets/authType.ts";
+import type {IBearer, IPrivateKV} from "@/types/targets/authType.ts";
+import {BearerComponent} from "@/pages/components/auth/bearer.tsx";
+import {useTranslation} from "react-i18next";
 
 export const AuthComponent = () => {
+    const {t} = useTranslation();
 
     const [selected, setSelected] = useState<string>("1");
     const [kv, setKv] = useState<IPrivateKV>({
         key: '',
         value: ''
     });
+    const [bearer,setBearer] = useState<IBearer>({key:''})
     useEffect(() => {
         console.log(kv)
     }, [kv]);
+    useEffect(() => {
+        console.log(bearer)
+    }, [bearer]);
 
     const options = [
         {value: "1", label: "a", component: <NoAuthComponent/>},
         {value: "2", label: "b", component: <OneWayComponent/>},
         {value: "3", label: "c", component: <MutualAuthComponent/>},
         {value: "4", label: "d", component: <PrivateKVPComponent onChange={setKv}/>},
-        {value: "5", label: "e"},
+        {value: "5", label: t('bearerAuth'), component: <BearerComponent onChange={setBearer}/>},
         {value: "6", label: "f"}
     ]
 
@@ -40,7 +47,7 @@ export const AuthComponent = () => {
                     onChange={(val) => setSelected(val)}
                 />
             </Col>
-            <Col offset={2}>
+            <Col offset={1}>
                 {current?.component}
             </Col>
         </Row>
