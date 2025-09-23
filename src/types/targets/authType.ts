@@ -15,3 +15,8 @@ export interface IAuth{
 export interface IBearer{
     key: string
 }
+
+export interface IBasic{
+    username: string,
+    password: string
+}

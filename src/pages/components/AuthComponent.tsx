@@ -4,9 +4,10 @@ import {useEffect, useState} from "react";
 import {OneWayComponent} from "@/pages/components/auth/oneWay.tsx";
 import {MutualAuthComponent} from "@/pages/components/auth/mutualAuth.tsx";
 import {PrivateKVPComponent} from "@/pages/components/auth/privateKVP.tsx";
-import type {IBearer, IPrivateKV} from "@/types/targets/authType.ts";
+import type {IBasic, IBearer, IPrivateKV} from "@/types/targets/authType.ts";
 import {BearerComponent} from "@/pages/components/auth/bearer.tsx";
 import {useTranslation} from "react-i18next";
+import {BasicAuthComponent} from "@/pages/components/auth/basicAuth.tsx";
 
 export const AuthComponent = () => {
     const {t} = useTranslation();
@@ -17,12 +18,16 @@ export const AuthComponent = () => {
         value: ''
     });
     const [bearer,setBearer] = useState<IBearer>({key:''})
+    const [basic, setBasic] = useState<IBasic>({username: '',password:''})
     useEffect(() => {
         console.log(kv)
     }, [kv]);
     useEffect(() => {
         console.log(bearer)
     }, [bearer]);
+    useEffect(() =>{
+        console.log(basic)
+    },[basic])
 
     const options = [
         {value: "1", label: "a", component: <NoAuthComponent/>},
@@ -30,7 +35,7 @@ export const AuthComponent = () => {
         {value: "3", label: "c", component: <MutualAuthComponent/>},
         {value: "4", label: "d", component: <PrivateKVPComponent onChange={setKv}/>},
         {value: "5", label: t('bearerAuth'), component: <BearerComponent onChange={setBearer}/>},
-        {value: "6", label: "f"}
+        {value: "6", label: t('basicAuth'),component: <BasicAuthComponent onChange={setBasic}/>}
     ]
 
     // 找到选中的配置
