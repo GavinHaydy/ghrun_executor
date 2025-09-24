@@ -4,6 +4,9 @@ import React, {useState} from "react";
 import type {ITargetList} from "@/types/targetType.ts";
 import {IconFont} from "@/pages/components/IconFont.ts";
 import './index.less'
+// import {useUserInfo} from "@/hooks/useSettings.ts";
+// import {generateUid} from "@/utils/uids.ts";
+// import {useAuthInfo} from "@/hooks/useAuthInfo.ts";
 
 interface SubjectLeftComponentProps {
     data: ITargetList
@@ -11,6 +14,8 @@ interface SubjectLeftComponentProps {
 
 export const SubjectLeftComponent: React.FC<SubjectLeftComponentProps> = ({data}) => {
     const [listSearch, setListSearch] = useState<string>('')
+    // const userInfo = useUserInfo()
+    // const authInfo = useAuthInfo()
 
     const createItems = [
         {key: '1', label: '新建Http接口'},
@@ -19,6 +24,21 @@ export const SubjectLeftComponent: React.FC<SubjectLeftComponentProps> = ({data}
         {key: '4', label: '新建WebSocket'},
         {key: '5', label: '新建Dubbo'},
     ]
+    // const newApi = {
+    //     created_user_id: userInfo.user_id,
+    //     method: 'POST',
+    //     name: "新建接口",
+    //     parent_id: "0",
+    //     recent_user_id: userInfo.user_id,
+    //     sort: data.total + 1,
+    //     source: 0,
+    //     target_id: generateUid(),
+    //     target_type: 'api',
+    //     team_id: authInfo.teamId,
+    //     type_sort: 0,
+    //     url: "",
+    //     version: 1
+    // }
 
 
     return (

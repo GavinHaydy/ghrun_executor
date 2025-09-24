@@ -3,7 +3,8 @@ import {useEffect, useState} from "react";
 import type {ITargetFolder, ITargetList} from "@/types/targetType.ts";
 import {useAuthInfo} from "@/hooks/useAuthInfo.ts";
 import {ServiceTargetList} from "@/api/target.ts";
-import {SubjectRightComponent} from "@/pages/testSubject/SubjectRightComponent.tsx";
+// import {SubjectRightComponent} from "@/pages/testSubject/SubjectRightComponent.tsx";
+import {RightTagComponent} from "@/pages/testSubject/RightTagComponent.tsx";
 
 export const TestSubjectPage = () =>{
     const currentTeamId = useAuthInfo().teamId as string
@@ -34,7 +35,8 @@ export const TestSubjectPage = () =>{
                 <SubjectLeftComponent data={dataList}/>
             </div>
             <div className={'env-right'}>
-                <SubjectRightComponent/>
+                {/*<SubjectRightComponent/>*/}
+                <RightTagComponent/>
             </div>
         </div>
     )
