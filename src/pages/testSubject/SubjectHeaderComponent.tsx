@@ -3,7 +3,7 @@ import type {ITargetFolder} from "@/types/targetType.ts";
 import React from "react";
 
 interface SubjectHeaderProps {
-    data: (data: ITargetFolder) => void
+    data: ITargetFolder
 }
 
 

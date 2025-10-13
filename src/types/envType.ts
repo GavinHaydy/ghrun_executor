@@ -70,3 +70,14 @@ export interface IEnvSaveDB {
     type: string;
     user: string;
 }
+
+// target env_info
+export interface IEnvInfo {
+    database_id: number,
+    env_id: number,
+    env_name: string,
+    pre_url: string,
+    server_name: string,
+    service_id: number,
+    service_name: string
+}

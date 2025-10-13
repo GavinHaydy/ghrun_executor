@@ -13,4 +13,5 @@ export interface IBodyType{
     mode: string
     parameter: IBodyParameter
     raw: string
+    raw_para: string[]
 }
