@@ -1,15 +1,15 @@
 import {Button, Checkbox, Form, Input, Space} from "antd";
 import {useEffect, useState} from "react";
-import type {IApiSetting} from "@/types/targets/apiSettingType.ts";
+import type {IHttpApiSetup} from "@/types/targets/httpApiSetupType.ts";
 
 
 interface ApiSettingComponentProps {
-    onChange: (data: IApiSetting) => void
+    onChange: (data: IHttpApiSetup) => void
 }
 
 export const ApiSettingComponent: React.FC<ApiSettingComponentProps> = ({onChange}) => {
     const [form] = Form.useForm();
-    const [settingValue, setSettingValue] = useState<IApiSetting>({
+    const [settingValue, setSettingValue] = useState<IHttpApiSetup>({
         client_name: '',
         is_redirects: 0,
         keep_alive: true,
