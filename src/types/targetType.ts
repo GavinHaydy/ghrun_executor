@@ -1,7 +1,19 @@
 // 接口文件夹
 import type {IEnvInfo} from "@/types/envType.ts";
 import type {IBodyType} from "@/types/targets/bodyType.ts";
-import type {ICookies} from "@/types/targets/cookieType.ts";
+import type {IHeaders} from "@/types/targets/headersType.ts";
+import type {IQuery} from "@/types/targets/queryType.ts";
+import type {IRegex} from "@/types/targets/regexType.ts";
+import type {ISqlDetail} from "@/types/targets/sqlType.ts";
+import type {ITcpDetail} from "@/types/targets/tcpType.ts";
+import type {IWebsocketDetail} from "@/types/targets/wsType.ts";
+import type {IMqttDetail} from "@/types/targets/mqttType.ts";
+import type {IDubboDetail} from "@/types/targets/dubboType.ts";
+import type {IEvent} from "@/types/targets/eventType.ts";
+import type {IAssert} from "@/types/targets/assertType.ts";
+import type {ICookie} from "@/types/targets/cookieType.ts";
+import type {IHttpApiSetup} from "@/types/targets/httpApiSetupType.ts";
+import type {IAuth} from "@/types/targets/authType.ts";
 
 export interface ITargetFolder {
     created_user_id: string;
@@ -32,31 +44,56 @@ export interface ITargetSearch {
     team_id: string
 }
 
+
+
+
 // request TODO
 export interface ITargetRequest {
-    assert: string[],
-    auth: ITargetRequest,
-    body: IBodyType,
-    cookie: ICookies,
+    pre_url: string,
+    url: string
+    method: string,
     description: string,
+    auth: IAuth,
+    body: IBodyType,
+    header: IHeaders,
+    query: IQuery,
+    event: IEvent,
+    cookie: ICookie,
+    assert: IAssert[],
+    regex: IRegex[],
+    http_api_setup: IHttpApiSetup
 }
 
-// save
+// IResponse
+export interface IResponseParameter {
+    expect: object,
+    parameter: string[],
+    raw: string
+}
+
+
+// save payload
 export interface ITargetSave {
-    check_result_expectID: string,
-    create_dtime: number,
+    description: string,
+    dubbo_detail: IDubboDetail,
     env_info: IEnvInfo,
-    expects: string[],
-    is_changed: number,
-    id_check_result: number,
-    is_example: number,
-    id_locked: number,
-    is_mock_open: number,
     method: string,
-    mock: string,
-    mock_path: string,
-    mock_url: string,
+    mqtt_detail: IMqttDetail,
     name: string,
+    old_target_id: string,
+    old_parent_id: string,
     parent_id: string,
-    request: ITargetRequest
+    request: ITargetRequest,
+    sort: number,
+    source: number,
+    source_id: string,
+    sql_detail: ISqlDetail,
+    target_id: string,
+    target_type: string,
+    tcp_detail: ITcpDetail,
+    team_id: string,
+    type_sort: number,
+    url: string,
+    version: number
+    websocket_detail: IWebsocketDetail,
 }
