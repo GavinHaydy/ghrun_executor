@@ -7,103 +7,114 @@ export interface IPrivateKV{
     key: string,
     value: string
 }
-
-export interface IAuth{
-    kv: IPrivateKV
+export interface IAuth {
+    type: string;
+    kv: IKV;
+    bearer: IBearer;
+    basic: IBasic;
+    digest: IDigest;
+    hawk: IHawk;
+    awsv4: IAwsV4;
+    ntlm: INtlm;
+    edgegrid: IEdgegrid;
+    oauth1: IOauth1;
+    bidirectional: ITLS;
 }
 
-export interface IBearer{
-    key: string
+/** 双向认证配置 (TLS) */
+export interface ITLS {
+    ca_cert: string;
+    ca_cert_name: string;
 }
 
-export interface IBasic{
-    username: string,
-    password: string
+/** Bearer Token 认证 */
+export interface IBearer {
+    key: string;
 }
 
-export interface IDigest{
-    algorithm: string,
-    cnonce: string,
-    nc: string,
-    nonce: string,
-    opaque: string,
-    password: string,
-    qop: string,
-    realm: string,
-    username: string
+/** 键值对认证 */
+export interface IKV {
+    key: string;
+    value: string;
 }
 
-// aws auth
-interface IAwsv4 {
-    accessKey: string,
-    addAuthDataToQuery: number,
-    region: string,
-    secretKey: string,
-    service: string,
-    sessionToken: string
+/** Basic 认证 */
+export interface IBasic {
+    username: string;
+    password: string;
 }
 
-// edge auth
-interface IEdge{
-    accessToken: string,
-    baseURi: string,
-    clientSecret: string,
-    clientToken: string,
-    nonce: string,
-    timestamp: string
+/** Digest 认证 */
+export interface IDigest {
+    username: string;
+    password: string;
+    realm: string;
+    nonce: string;
+    algorithm: string;
+    qop: string;
+    nc: string;
+    cnonce: string;
+    opaque: string;
 }
 
-// hawk
-interface IHawk{
-    algorithm: string,
-    app: string,
-    authId: string,
-    authKey: string,
-    delegation: string,
-    extraData: string,
-    includePayloadHash: number,
-    nonce: string,
-    timestamp: string
-    user: string
+/** Hawk 认证 */
+export interface IHawk {
+    authId: string;
+    authKey: string;
+    algorithm: string;
+    user: string;
+    nonce: string;
+    extraData: string;
+    app: string;
+    delegation: string;
+    timestamp: string;
+    includePayloadHash: number;
 }
 
-// ntlm
-interface INtlm {
-    disableRetryRequest: number
-    domain: string,
-    password: string,
-    username: string,
-    workstation: string
+/** AWS V4 签名认证 */
+export interface IAwsV4 {
+    accessKey: string;
+    secretKey: string;
+    region: string;
+    service: string;
+    sessionToken: string;
+    addAuthDataToQuery: number;
 }
 
-// oauth1
-interface IOAuth1 {
-    addEmptyParamsToSign: number,
-    addParamsToHeader: number,
-    callback: string,
-    consumerKey: string,
-    consumerSecret: string,
-    includeBodyHash: number,
-    nonce: string,
-    realm: string,
-    signatureMethod: string,
-    timestamp: string,
-    token: string,
-    tokenSecret: string,
-    verifier: string,
-    version: string
+/** NTLM 认证 */
+export interface INtlm {
+    username: string;
+    password: string;
+    domain: string;
+    workstation: string;
+    disableRetryRequest: number;
 }
 
-export interface IRequestAuth {
-    awsv4: IAwsv4,
-    basic: IBasic,
-    bearer: IBearer,
-    bidirectional: IBidirectional,
-    digest: IDigest,
-    edgest: IEdge,
-    hawk: IHawk,
-    kv: IPrivateKV,
-    ntlm: INtlm,
-    oauth1: IOAuth1,
-    type: string
+/** EdgeGrid 认证 (Akamai) */
+export interface IEdgegrid {
+    accessToken: string;
+    clientToken: string;
+    clientSecret: string;
+    nonce: string;
+    timestamp: string;
+    baseURi: string;
+    headersToSign: string;
+}
+
+/** OAuth 1.0 认证 */
+export interface IOauth1 {
+    consumerKey: string;
+    consumerSecret: string;
+    signatureMethod: string;
+    addEmptyParamsToSign: number;
+    includeBodyHash: number;
+    addParamsToHeader: number;
+    realm: string;
+    version: string;
+    nonce: string;
+    timestamp: string;
+    verifier: string;
+    callback: string;
+    tokenSecret: string;
+    token: string;
 }
