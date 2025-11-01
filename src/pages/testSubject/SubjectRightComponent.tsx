@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {CookieComponent} from "@/pages/components/CookieComponent.tsx";
 import type {ICookie} from "@/types/targets/cookieType.ts";
 import {Tabs, type TabsProps} from "antd";
-import type {IHeader} from "@/types/targets/headersType.ts";
+import type {IHeaders} from "@/types/targets/headersType.ts";
 import {ReqHeaderComponent} from "@/pages/components/ReqHeaderComponent.tsx";
 import {QueryComponent} from "@/pages/components/QueryComponent.tsx";
 import type {IQuery} from "@/types/targets/queryType.ts";
@@ -13,17 +13,17 @@ import type {IAssert} from "@/types/targets/assertType.ts";
 import {AssociationExtractionComponent} from "@/pages/components/AssociationExtractionComponent.tsx";
 import type {IAssociation} from "@/types/targets/associationType.ts";
 import {ApiSettingComponent} from "@/pages/components/ApiSettingComponent.tsx";
-import type {IApiSetting} from "@/types/targets/apiSettingType.ts";
+import type {IHttpApiSetup} from "@/types/targets/httpApiSetupType.ts";
 import {AuthComponent} from "@/pages/components/AuthComponent.tsx";
 
 export const SubjectRightComponent:React.FC = () =>{
     const [cookies, setCookies] = useState<ICookie[]>()
-    const [headers, setHeaders] = useState<IHeader[]>()
+    const [headers, setHeaders] = useState<IHeaders[]>()
     const [query,setQuery] = useState<IQuery[]>()
     const [body,setBody] = useState<IBodyParameter[]>()
     const [assert,setAssert] = useState<IAssert[]>()
     const [association,setAssociation] = useState<IAssociation[]>()
-    const [apiSetting,setApiSettings] = useState<IApiSetting>()
+    const [apiSetting,setApiSettings] = useState<IHttpApiSetup>()
     useEffect(() => {
         console.log(cookies)
     }, [cookies]);
