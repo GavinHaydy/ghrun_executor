@@ -1,14 +1,5 @@
-export interface IQuery {
-    description: string
-    field_type: string
-    id: string
-    is_checked: number
-    key: string
-    not_null: number
-    type: string
-    value: string
-}
+import type {IParameter} from "@/types/commonType.ts";
 
-export interface IQueryS {
-    parameter: IQuery;
+export interface IQuery{
+    parameter: IParameter[]
 }
