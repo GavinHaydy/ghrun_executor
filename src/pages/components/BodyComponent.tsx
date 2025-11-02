@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import {Radio} from "antd";
-import type {IBodyParameter} from "@/types/targets/bodyType.ts";
+import type {IBodyType} from "@/types/targets/bodyType.ts";
 import {BodyFormUrlComponent} from "@/pages/components/body/formUrlComponent.tsx";
 import {BodyDataComponent} from "@/pages/components/body/formDataComponent.tsx";
 import {RawComponent} from "@/pages/components/body/rawComponent.tsx";
 
 interface CookieComponentProps {
-    onChange: (data: IBodyParameter[]) => void
+    onChange: (data: IBodyType) => void
 }
 
 export const BodyComponent: React.FC<CookieComponentProps> = ({onChange}) => {
