@@ -4,16 +4,17 @@ import {DeleteOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import {withEditableCell} from "@/pages/components/WithEditableCell.tsx";
 import {createHandleSave} from "@/pages/components/SaveComponent.ts";
-import type {IBodyParameter} from "@/types/targets/bodyType.ts";
+import type {IBodyParameter, IBodyType} from "@/types/targets/bodyType.ts";
+import type {IParameter} from "@/types/commonType.ts";
 
-const EditableContext = React.createContext<FormInstance<IBodyParameter>>({} as FormInstance);
+const EditableContext = React.createContext<FormInstance<IBodyType>>({} as FormInstance);
 
 interface EditableRowProps {
     index: number;
 }
 
 interface CookieComponentProps {
-    onChange: (data: IBodyParameter[]) => void
+    onChange: (data: IBodyType) => void
 }
 
 const EditableRow: React.FC<EditableRowProps> = ({index, ...props}) => {
@@ -27,11 +28,11 @@ const EditableRow: React.FC<EditableRowProps> = ({index, ...props}) => {
     );
 };
 
-const EditableCell = withEditableCell<IBodyParameter>(EditableContext)
+const EditableCell = withEditableCell<IBodyType>(EditableContext)
 
 export const BodyDataComponent: React.FC<CookieComponentProps> = ({onChange}) => {
     const {t} = useTranslation()
-    const [dataSource, setDataSource] = useState<IBodyParameter[]>([
+    const [dataSource, setDataSource] = useState<IParameter[]>([
         {
             id: '1',
             key: '',
@@ -45,15 +46,21 @@ export const BodyDataComponent: React.FC<CookieComponentProps> = ({onChange}) =>
     ]);
 
     useEffect(() => {
-        onChange(dataSource.slice(0, -1))
+        const body:IBodyType = {
+            parameter: dataSource.slice(0, -1),
+            mode: '',
+            raw: ''
+        }
+        // onChange(dataSource.slice(0, -1))
+        onChange(body)
     }, [dataSource]);
     const handleDelete = (id: string) => {
         setDataSource(prev => prev.filter(item => item.id !== id));
     };
 
-    const handleSave = createHandleSave<IBodyParameter>(
+    const handleSave = createHandleSave<IParameter>(
         setDataSource,
-        (id) => ({
+        (id: string) => ({
             id,
             key: '',
             value: '',
@@ -70,7 +77,7 @@ export const BodyDataComponent: React.FC<CookieComponentProps> = ({onChange}) =>
             title: t('enable'),
             dataIndex: 'is_checked',
             width: '1%',
-            render: (_: unknown, record: IBodyParameter) => (
+            render: (_: unknown, record: IParameter) => (
                 <Switch
                     checked={record.is_checked === 1}
                     onChange={checked => handleSave({...record, is_checked: checked ? 1 : 2})}
@@ -81,7 +88,7 @@ export const BodyDataComponent: React.FC<CookieComponentProps> = ({onChange}) =>
             title: '类型',
             dataIndex: 'type',
             width: "1%",
-            render: (_: unknown, record: IBodyParameter) => (
+            render: (_: unknown, record: IParameter) => (
                 <Select
                     value={record.type}
                     style={{width: '100%'}}
@@ -113,7 +120,7 @@ export const BodyDataComponent: React.FC<CookieComponentProps> = ({onChange}) =>
             // title: t('operation'),
             dataIndex: 'operation',
             width: '1%',
-            render: (_: unknown, record: IBodyParameter, index: number) => {
+            render: (_: unknown, record: IParameter, index: number) => {
                 const isLastRow = index === dataSource.length - 1; // 判断是否最后一行
 
                 return (
@@ -133,7 +140,7 @@ export const BodyDataComponent: React.FC<CookieComponentProps> = ({onChange}) =>
         if (!col.editable) return col;
         return {
             ...col,
-            onCell: (record: IBodyParameter) => ({
+            onCell: (record: IParameter) => ({
                 record,
                 editable: col.editable,
                 dataIndex: col.dataIndex as keyof IBodyParameter,
