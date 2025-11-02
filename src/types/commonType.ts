@@ -54,9 +54,10 @@ export interface IInviteMemberList {
 }
 
 export interface IParameter{
+    id: string, // id 为表单操作索引
     description?: string
     field_type?: string
-    fileBase64?: string
+    fileBase64?: string[]
     is_checked?: number
     key?: string
     not_null?: number
