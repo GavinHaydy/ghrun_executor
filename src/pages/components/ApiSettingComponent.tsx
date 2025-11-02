@@ -1,5 +1,5 @@
 import {Button, Checkbox, Form, Input, Space} from "antd";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import type {IHttpApiSetup} from "@/types/targets/httpApiSetupType.ts";
 
 
