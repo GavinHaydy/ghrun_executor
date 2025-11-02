@@ -5,6 +5,7 @@ import {useTranslation} from "react-i18next";
 import {withEditableCell} from "@/pages/components/WithEditableCell.tsx";
 import {createHandleSave} from "@/pages/components/SaveComponent.ts";
 import type {IAssociation} from "@/types/targets/associationType.ts";
+import type {IRegex} from "@/types/targets/regexType.ts";
 
 const EditableContext = React.createContext<FormInstance<IAssociation>>({} as FormInstance);
 
@@ -13,7 +14,7 @@ interface EditableRowProps {
 }
 
 interface CookieComponentProps {
-    onChange: (data: IAssociation[]) => void
+    onChange: (data: IRegex[]) => void
 }
 
 const EditableRow: React.FC<EditableRowProps> = ({index, ...props}) => {
@@ -31,7 +32,7 @@ const EditableCell = withEditableCell<IAssociation>(EditableContext)
 
 export const AssociationExtractionComponent: React.FC<CookieComponentProps> = ({onChange}) => {
     const {t} = useTranslation()
-    const [dataSource, setDataSource] = useState<IAssociation[]>([
+    const [dataSource, setDataSource] = useState<IRegex[]>([
         {
             express: "",
             id:"0",
@@ -57,11 +58,12 @@ export const AssociationExtractionComponent: React.FC<CookieComponentProps> = ({
         {value: 3, label: t('subject.resCode')},
     ]
 
-    const handleSave = createHandleSave<IAssociation>(
+    const handleSave = createHandleSave<IRegex>(
         setDataSource,
         (id) => ({
             express: "",
             id,
+            index: 0,
             is_checked: 1,
             type: 0,
             val: "",
@@ -75,7 +77,7 @@ export const AssociationExtractionComponent: React.FC<CookieComponentProps> = ({
             title: t('enable'),
             dataIndex: 'is_checked',
             width: '1%',
-            render: (_: unknown, record: IAssociation) => (
+            render: (_: unknown, record: IRegex) => (
                 <Switch
                     checked={record.is_checked === 1}
                     onChange={checked => handleSave({...record, is_checked: checked ? 1 : 2})}
@@ -86,7 +88,7 @@ export const AssociationExtractionComponent: React.FC<CookieComponentProps> = ({
             title: t('type'),
             dataIndex: 'type',
             width: '1%',
-            render: (_: unknown,record:IAssociation) => (
+            render: (_: unknown,record:IRegex) => (
                 <Select options={associationType} placeholder={t('placeholder.select')}
                         onChange={(value) => {
                             handleSave({ ...record, type: value }); // 🔑 回填到 dataSource
