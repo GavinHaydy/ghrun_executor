@@ -1,7 +1,7 @@
 import React from "react";
 
 type BaseRow = {
-    id: string;
+    id?: string;
     key?: string;
     value?: string;
 };
