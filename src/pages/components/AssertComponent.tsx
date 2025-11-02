@@ -34,8 +34,8 @@ export const AssertComponent: React.FC<CookieComponentProps> = ({onChange}) => {
     const [dataSource, setDataSource] = useState<IAssert[]>([
         {
             compare: "",
-            id: "0",
             is_checked: 1,
+            id: "0",
             response_type: 1,
             val: "",
             var: ""
@@ -46,7 +46,7 @@ export const AssertComponent: React.FC<CookieComponentProps> = ({onChange}) => {
         onChange(dataSource.slice(0, -1))
     }, [dataSource]);
     const handleDelete = (id: string) => {
-        setDataSource(prev => prev.filter(item => item.id !== id));
+        setDataSource(prev => prev.filter(item => item.var !== id));
     };
 
     const assertBodyType = [
@@ -128,7 +128,7 @@ export const AssertComponent: React.FC<CookieComponentProps> = ({onChange}) => {
                 return (
                     <DeleteOutlined onClick={() => {
                         if (!isLastRow) {
-                            handleDelete(record.id)
+                            handleDelete(record.id || '')
                         }
                     }}>
                     </DeleteOutlined>
