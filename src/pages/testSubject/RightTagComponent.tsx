@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Divider, Dropdown, type MenuProps, Tabs} from 'antd';
 import {IconFont} from "@/pages/components/IconFont.ts";
-import type { ITargetList} from "@/types/targetType.ts";
+import type {ITargetList, ITargetSave} from "@/types/targetType.ts";
 import {SubjectRightComponent} from "@/pages/testSubject/SubjectRightComponent.tsx";
 import {SubjectHeaderComponent} from "@/pages/testSubject/SubjectHeaderComponent.tsx";
 
@@ -40,7 +40,13 @@ interface RightTagProps{
 export const RightTagComponent: React.FC<RightTagProps> = ({data}) => {
 
     // const [items, setItems] = useState<ITargetFolder[]>([]);
-    console.log(data.targets)
+    // console.log(data.targets)
+    const [targetSavePayload, setTargetSavePayload] = useState<ITargetSave>({} as ITargetSave);
+
+    const handlePayloadChange = (data:ITargetSave) => {
+        console.log(data)
+        setTargetSavePayload(data)
+    }
 
     return (
         <>
@@ -52,8 +58,8 @@ export const RightTagComponent: React.FC<RightTagProps> = ({data}) => {
                               label: t.name,
                               children: (
                                   <>
-                                      <SubjectHeaderComponent data={t}/>
-                                      <SubjectRightComponent/>
+                                      <SubjectHeaderComponent data={targetSavePayload} onChange={handlePayloadChange}/>
+                                      <SubjectRightComponent onChange={handlePayloadChange}/>
                                   </>
 
                               )
