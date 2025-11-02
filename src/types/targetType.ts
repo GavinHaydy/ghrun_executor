@@ -86,7 +86,7 @@ export interface ITargetSave {
     request: ITargetRequest,
     sort: number,
     source: number,
-    source_id: string,
+    source_id?: string, //暂时用不上
     sql_detail: ISqlDetail,
     target_id: string,
     target_type: string,
