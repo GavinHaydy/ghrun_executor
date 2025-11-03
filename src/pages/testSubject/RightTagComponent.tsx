@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import {Divider, Dropdown, type MenuProps, Tabs} from 'antd';
 import {IconFont} from "@/pages/components/IconFont.ts";
-import type {ITargetList, ITargetSave} from "@/types/targetType.ts";
+import type { ITargetSave} from "@/types/targetType.ts";
 import {SubjectRightComponent} from "@/pages/testSubject/SubjectRightComponent.tsx";
 import {SubjectHeaderComponent} from "@/pages/testSubject/SubjectHeaderComponent.tsx";
+import type {IRespAPIDetail} from "@/types/resp/targetResp.ts";
 
 
 // const handleCloseAllTags = () => {
@@ -33,12 +34,13 @@ const operations = <Dropdown menu={{items:menus}} trigger={['click']}>
 </Dropdown>
 
 interface RightTagProps{
-    data: ITargetList
+    data: (ITargetSave|IRespAPIDetail)[]
 }
 
 
 export const RightTagComponent: React.FC<RightTagProps> = ({data}) => {
 
+    console.log(data)
     // const [items, setItems] = useState<ITargetFolder[]>([]);
     // console.log(data.targets)
     const [targetSavePayload, setTargetSavePayload] = useState<ITargetSave>({} as ITargetSave);
@@ -50,11 +52,11 @@ export const RightTagComponent: React.FC<RightTagProps> = ({data}) => {
 
     return (
         <>
-            { data.total > 0 && (
+            { data.length > 0 && (
                 <>
                     <Tabs tabBarExtraContent={operations}
-                          items={data.targets.map(t => ({
-                              key: t.key,
+                          items={data.map(t => ({
+                              key: t.target_id,
                               label: t.name,
                               children: (
                                   <>
@@ -68,15 +70,6 @@ export const RightTagComponent: React.FC<RightTagProps> = ({data}) => {
                     <Divider/>
                 </>
             )}
-            {/*{items.length > 0 && (*/}
-            {/*    <>*/}
-            {/*        <Tabs tabBarExtraContent={operations} items={items} onChange={(e) => {*/}
-            {/*            console.log(e)*/}
-            {/*        }}/>*/}
-            {/*        <Divider/>*/}
-            {/*    </>*/}
-
-            {/*)}*/}
 
         </>
     );

@@ -72,7 +72,7 @@ export interface IResponseParameter {
 }
 
 
-// save payload
+// save payload and rsp
 export interface ITargetSave {
     description: string,
     dubbo_detail: IDubboDetail,

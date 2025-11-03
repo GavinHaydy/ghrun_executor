@@ -1,41 +1,55 @@
 import {Dropdown, Input, Space, Splitter} from "antd";
 import {SearchOutlined} from "@ant-design/icons";
 import React, {useState} from "react";
-import type {ITargetFolder, ITargetList} from "@/types/targetType.ts";
+import type { ITargetList, ITargetRequest, ITargetSave} from "@/types/targetType.ts";
 import {IconFont} from "@/pages/components/IconFont.ts";
 import './index.less'
-import {useUserInfo} from "@/hooks/useSettings.ts";
 import {generateUid} from "@/utils/uids.ts";
 import {useAuthInfo} from "@/hooks/useAuthInfo.ts";
+import type {IDubboDetail} from "@/types/targets/dubboType.ts";
+import type {IEnvInfo} from "@/types/envType.ts";
+import type {IMqttDetail} from "@/types/targets/mqttType.ts";
+import type {ISqlDetail} from "@/types/targets/sqlType.ts";
+import type {ITcpDetail} from "@/types/targets/tcpType.ts";
+import type {IWebsocketDetail} from "@/types/targets/wsType.ts";
 
 interface SubjectLeftComponentProps {
     data: ITargetList
-    onAdd: (item: ITargetFolder) => void;
+    onAdd: (item: ITargetSave) => void;
     onClick: (item: string) => void;
+    // onSelect: (target_id: string) => void;
 }
 
 export const SubjectLeftComponent: React.FC<SubjectLeftComponentProps> = ({data,onAdd,onClick}) => {
     const [listSearch, setListSearch] = useState<string>('')
-    const userInfo = useUserInfo()
+    // const userInfo = useUserInfo()
     const authInfo = useAuthInfo()
 
-    const newApi = ():ITargetFolder => {
+    const newApi = ():ITargetSave => {
         const key = generateUid()
         return {
-            created_user_id: userInfo.user_id,
-            key: key,
-            method: 'POST',
-            name: "新建接口",
+            description: "",
+            dubbo_detail: {} as IDubboDetail,
+            env_info: {} as IEnvInfo,
+            method: "post",
+            mqtt_detail: {}as IMqttDetail,
+            name: "new api",
+            old_target_id: "",
+            old_parent_id: "",
             parent_id: "0",
-            recent_user_id: userInfo.user_id,
+            request: {} as ITargetRequest,
             sort: data.total + 1,
             source: 0,
+            // source_id?: string, //暂时用不上
+            sql_detail: {} as ISqlDetail,
             target_id: key,
-            target_type: 'api',
+            target_type: "api",
+            tcp_detail: {} as ITcpDetail,
             team_id: authInfo.teamId as string,
             type_sort: 0,
             url: "",
-            version: 1
+            version: 1,
+            websocket_detail: {} as IWebsocketDetail,
         }
     }
     const handleCreateHttp = () => {
@@ -80,7 +94,7 @@ export const SubjectLeftComponent: React.FC<SubjectLeftComponentProps> = ({data,
             </Splitter>
 
             {data && data.targets.map((item) => (
-                <div key={item.key} onClick={()=>handleClick(item.target_id)}>
+                <div key={item.target_id} onClick={()=>handleClick(item.target_id)}>
                     {listSearch === '' ? item.name : item.name.includes(listSearch)}
                 </div>
             ))}
